@@ -1,24 +1,5 @@
-# README
+# Open Source Ventilator Remote Monitor Project
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Our goal is to quickly develop a remote monitoring interface for low-cost rapidly-manufactured ventilators currently being developed to provide emergency relief in the Covid-19 Pandemic.
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Check out the [live demo/concept](https://boiling-meadow-53703.herokuapp.com/).
