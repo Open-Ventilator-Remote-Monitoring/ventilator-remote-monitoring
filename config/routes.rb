@@ -5,6 +5,6 @@ Rails.application.routes.draw do
 
   get '/about', to: 'static_pages#about', as: 'about'
   get '/home', to: 'static_pages#index', as: 'home'
-
+  get '/demo', to: 'static_pages#demo', as: 'demo'
 
 end
