@@ -80,7 +80,8 @@ document.addEventListener('turbolinks:load', () => {
 					context: this,
 					success: function(result) {
 						console.log('Success connecting to: ' + hostname);
-						console.log('result: ' + JSON.stringify(result.ventilator[0].tidalVolume));
+						console.log('result: ' + JSON.stringify(result));
+						// console.log('result: ' + JSON.stringify(result.ventilator[0].tidalVolume));
 						var tidalVolume = result.ventilator[0].tidalVolume;
 						var respiratoryRate = result.ventilator[0].respiratoryRate;
 						var peakInspiratoryPressure = result.ventilator[0].peakInspiratoryPressure;
@@ -107,8 +108,8 @@ document.addEventListener('turbolinks:load', () => {
 
 		ventilator1.poll();
 
-
-
+		var self = ventilator1;
+		setInterval(function() { self.poll() }, 2000);
 
 
 	}
