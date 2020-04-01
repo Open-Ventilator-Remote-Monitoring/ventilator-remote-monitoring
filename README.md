@@ -28,15 +28,15 @@ Check out the [live demo/concept](http://www.ventilatormonitor.com).
 - Requires network connection - if hospital does not have wifi it may require running an ethernet cable
 
 ## To Do's
-- Implement security (SSL)
 - Improve API
 - Document
 - Integrate with myriad of ventialtors - try to establish standard protocol
-- Improved reliability
+- Improved reliability / Security
+- Obtain/Build actual ventilator protoypes & test rigorously
 
 ## Needs
 - Software Development - Ruby on Rails, Javascript, Pyton, Raspbian OS, Arduino
-- Introductions to ventilator producers for integration needs
+- Introductions to ventilator makers for integration needs
 - Assistance building ventilator prototypes for testing
 - Assistance testing on different types of ventilators
 
