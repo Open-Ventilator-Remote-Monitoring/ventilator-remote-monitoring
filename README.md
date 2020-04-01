@@ -4,4 +4,4 @@ Our goal is to quickly develop a remote monitoring interface for low-cost rapidl
 
 This software is currently only a concept - it is neither approved nor intended to be used in any medical setting.
 
-Check out the [live demo/concept](https://boiling-meadow-53703.herokuapp.com/).
+Check out the [live demo/concept](http:www.ventilatormonitor.com).
