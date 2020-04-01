@@ -1,6 +1,6 @@
 # Open Source Ventilator Remote Monitor Project
 
-Our goal is to quickly develop a remote monitoring interface for low-cost rapidly-manufactured ventilators currently being developed to provide emergency relief in the Covid-19 Pandemic.  We strive for a lightweight, interoperable, and reliable interface.
+Our goal is to quickly develop a remote monitoring interface for low-cost rapidly-manufactured ventilators currently being developed to provide emergency relief in the Covid-19 Pandemic.  We strive for a lightweight, interoperable, and reliable interface. Currently the interface provides ventilator remote monitoring only (no control).
 
 This software is currently only a concept - it is neither approved nor intended to be used in any medical setting.
 
@@ -28,6 +28,7 @@ Check out the [live demo/concept](http://www.ventilatormonitor.com).
 - Requires network connection - if hospital does not have wifi it may require running an ethernet cable
 
 ## To Do's
+- Validation / Testing
 - Improve API
 - Document
 - Integrate with myriad of ventialtors - try to establish standard protocol
@@ -35,6 +36,7 @@ Check out the [live demo/concept](http://www.ventilatormonitor.com).
 - Obtain/Build actual ventilator protoypes & test rigorously
 
 ## Needs
+- Medical / Clinical feedback
 - Software Development - Ruby on Rails, Javascript, Pyton, Raspbian OS, Arduino
 - Introductions to ventilator makers for integration needs
 - Assistance building ventilator prototypes for testing
