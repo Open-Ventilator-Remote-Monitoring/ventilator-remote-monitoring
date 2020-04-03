@@ -9,22 +9,24 @@ Check out the [live demo/concept](http://www.ventilatormonitor.com).
 
 ## Architecture
 - Cloud Server - Ruby on Rails
-- Web Application - React / Javascript / Jquery
-- Interface Btwn Ventilator & Web Application - Raspberry Pi / Flask / Python
-- Ventilator control system - Assumed to be arduino (can interface with others' via USB Serial, SPI, I2C, UART)
+- Web Application (User Interface) - React / Javascript / Jquery
+- Interface Between Ventilator & Web Application - Raspberry Pi / Flask / Python
+- Ventilator control system - Assumed to be arduino but could also be Programmable Logic Controller (PLC). Capability to interface with other systems via USB Serial, SPI, I2C, UART
+
+![](https://docs.google.com/drawings/d/e/2PACX-1vSXvw0ErpGFBsKOZSkZQ8YRrTOmLgkKpX_AU-EcN_fl161Hc9JzWbpKGDImnNINgBIpgF3xGhZXLFLT/pub?w=960&h=720)
 
 ## Pro's & Cons of this Project
 #### Benefits
-- Rapidly deployable & scalable to hundreds of thousands of units in 1-2 weeks
+- Rapidly deployable & scalable to thousands of units in 1-2 weeks
 - Lightweight - uses minimum compute resources (data is not sent to cloud)
-- Cloud 
 - Minimum hardware requirements for desktop computer and cloud server
-- Hardware (Raspberry Pi) is low cost ($5-60), locally sourceable, and available in high volumes
+- Cloud based architecture means updates can continuously rolled out
+- Required hardware (Raspberry Pi) is low cost ($5-60), locally sourceable, and available in high volumes
 
 #### Drawbacks
 - Does not use medical grade hardware / software
-- Security - only offers consumer-grade security
-- Reliability - only offers consumer-grade reliability
+- Security - offers only consumer-grade security
+- Reliability - offers only consumer-grade reliability
 - Requires network connection - if hospital does not have wifi it may require running an ethernet cable
 
 ## To Do's
@@ -41,6 +43,3 @@ Check out the [live demo/concept](http://www.ventilatormonitor.com).
 - Introductions to ventilator makers for integration needs
 - Assistance building ventilator prototypes for testing
 - Assistance testing on different types of ventilators
-
-
-
