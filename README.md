@@ -1,9 +1,9 @@
 ## Open Source Ventilator Remote Monitor Project - Rails App
 
-This git repo is for the software on the **Heroku Cloud Server & Web Browser**
+This git repo is for the code on the **Heroku Cloud Server & Web Browser**
 
 ### Architecture Overview
-| Heroku Cloud Server & Web Browser Repo | [Raspberry Pi (Network Adapter) Repo](https://github.com/Open-Ventilator-Remote-Monitoring/remote-ventilator-monitor-pi) | [Ventilator Repo](https://github.com/Open-Ventilator-Remote-Monitoring/remote-ventilator-monitor-pi) |
+| Heroku Cloud Server & Web Browser Repo | [Raspberry Pi (Network Adapter) Repo](https://github.com/Open-Ventilator-Remote-Monitoring/remote-ventilator-monitor-pi) | [Ventilator (Arduino) Repo](https://github.com/Open-Ventilator-Remote-Monitoring/ventilator-monitor-arduino) |
 | ----------- | ----------- | ----------- |
 | Ruby on Rails | Flask | Arduino Board |
 | Javascript | Python | C++ |
