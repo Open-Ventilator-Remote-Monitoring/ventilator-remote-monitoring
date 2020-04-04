@@ -9,4 +9,7 @@ class StaticPagesController < ApplicationController
 	def demo
 	end
 
+	def contribute
+	end
+
 end
