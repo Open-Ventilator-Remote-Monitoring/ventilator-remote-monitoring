@@ -55,8 +55,9 @@ class Ventilator extends Component<IProps, IState> {
     // table to change at the same time (and will all poll at the same time).
     // This spaces them out. If we want them to update at the same time, just delete the
     // call to delay as well as the delay function below.
-    await delay(generateRandomValueBetween(0, 500))
-    this.interval = setInterval(this.tick.bind(this), 3000, this);
+    await delay(generateRandomValueBetween(0, 1500))
+    this.tick()
+    this.interval = setInterval(this.tick.bind(this), 3000, this)
   }
 
   componentWillUnmount() {
