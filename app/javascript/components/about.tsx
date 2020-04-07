@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 
 const About = () => (
   <div>
@@ -16,8 +17,10 @@ const About = () => (
     </p>
     <p>
       <strong>Contribute:</strong>
-      Send us a message on
-      <a href="https://github.com/Open-Ventilator-Remote-Monitoring">GitHub</a>
+      {' '} Send us a message on
+      {' '}<a href="https://github.com/Open-Ventilator-Remote-Monitoring">GitHub</a>
+      {' '} or fill out the form on the
+      {' '}<Link to="/contribute">Contribute</Link>tab
     </p>
 
     <h2>Architecture</h2>

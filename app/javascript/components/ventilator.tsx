@@ -64,9 +64,17 @@ class Ventilator extends Component<IProps, IState> {
     clearInterval(this.interval)
   }
 
-  tick() {
-    let update = this.props.demo ? this.getDemoUpdate() : this.pollDevice()
+  async tick() {
 
+    let update = this.props.demo
+                    ? this.getDemoUpdate()
+                    : await this.pollDevice()
+
+    // todo: once a device is disconnected, change the polling rate from 3 seconds
+    // to something like one minute. If the hostname is not available it could take 5 seconds
+    // to fail, thus creating many overlapping poll request
+
+    // todo: consider adding "polling" to state, so only one poll is executing at a time
     this.setState(state => ({
       ventilator: {...state.ventilator, ...update}
     }));
@@ -74,6 +82,7 @@ class Ventilator extends Component<IProps, IState> {
 
   getDemoUpdate(): IVentilator {
     return {
+      // for simulation purposes, a ventilator named 'Ventilator #2' will show as disconnected
       connected: this.state.ventilator.name !== 'Ventilator #2',
       tidalVolume: generateRandomValueBetween(300, 800),
       respiratoryRate: generateRandomValueBetween(8, 35),
@@ -115,7 +124,6 @@ class Ventilator extends Component<IProps, IState> {
     let statusElement = ventilator.connected
       ? <FontAwesomeIcon icon={faCircle} color={'LimeGreen'}/>
       : <FontAwesomeIcon icon={faExclamationTriangle} size="lg" color={'red'} className="flash"/>
-
 
     let result = (
       <tr key={ventilator.id}>
