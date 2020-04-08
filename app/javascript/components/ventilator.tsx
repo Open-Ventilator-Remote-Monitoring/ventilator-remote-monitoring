@@ -101,7 +101,7 @@ class Ventilator extends Component<IProps, IState> {
     if (response.ok) {
       // rather than just return whatever we get, limit the fields
       // todo: validate the data within some range ?
-      let v = response.parsedBody[0]
+      let v = response.parsedBody.ventilator[0]
       const update : IVentilator = {
         connected: true,
         tidalVolume: v.tidalVolume,
