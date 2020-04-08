@@ -6,7 +6,7 @@ export interface IVentilator {
   // from database
   id?: number
   name?: string
-  url?: string
+  hostname?: string
   created_at?: string
   updated_at?: string
 

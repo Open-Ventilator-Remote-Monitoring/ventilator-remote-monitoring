@@ -56,7 +56,7 @@ class Ventilator extends Component<IProps, IState> {
       ventilator: {
         id: props.ventilator.id,
         name: props.ventilator.name,
-        url: props.ventilator.url,
+        hostname: props.ventilator.hostname,
         connected: true
       }
     }
@@ -106,7 +106,7 @@ class Ventilator extends Component<IProps, IState> {
   }
 
   async pollDevice(): Promise<IVentilator> {
-    let url = this.state.ventilator.url + "/api/ventilator"
+    let url = `http://${this.state.ventilator.hostname}/api/ventilator`
 
     // todo: check on why this returns an array
     let response = await get<IResponse>(url)
@@ -114,6 +114,7 @@ class Ventilator extends Component<IProps, IState> {
     if (response.ok) {
       // rather than just return whatever we get, limit the fields
       // todo: validate the data within some range ?
+      // todo: Why is this an array and will there ever be more than one item?
       let v = response.parsedBody.ventilator[0]
       const update : IVentilator = {
         connected: true,
