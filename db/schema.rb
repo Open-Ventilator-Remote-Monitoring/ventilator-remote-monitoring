@@ -45,10 +45,12 @@ ActiveRecord::Schema.define(version: 2020_04_08_164834) do
     t.datetime "remember_created_at"
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.bigint "organization_id", null: false
+    t.bigint "organization_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["email"], name: "index_users_on_email"
     t.index ["organization_id"], name: "index_users_on_organization_id"
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token"
   end
 
   create_table "ventilators", force: :cascade do |t|

@@ -29,7 +29,7 @@ class ClustersController < ApplicationController
 
     respond_to do |format|
       if @cluster.save
-        format.html { redirect_to organization_clusters_path(@organization), notice: 'Cluster was successfully created.' }
+        format.html { redirect_to organization_path(@organization), notice: 'Cluster was successfully created.' }
         format.json { render :show, status: :created, location: @cluster }
       else
         format.html { render :new }

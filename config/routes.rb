@@ -17,6 +17,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get '/test' => 'home#test'
+
   # home#index will deliver the single page app bundle
   # So, any URLs that are in the app/javascript/routes
   # should all get home#index

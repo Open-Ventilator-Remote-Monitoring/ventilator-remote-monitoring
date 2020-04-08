@@ -14,9 +14,12 @@ class CreateUsers < ActiveRecord::Migration[6.0]
       t.datetime :remember_created_at
       t.datetime :current_sign_in_at
       t.datetime :last_sign_in_at
-      t.references :organization, null: false, foreign_key: true
+      t.references :organization, foreign_key: true
 
       t.timestamps
     end
+
+    add_index(:users, :email)
+    add_index(:users, :reset_password_token)
   end
 end
