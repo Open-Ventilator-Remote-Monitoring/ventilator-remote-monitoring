@@ -32,6 +32,19 @@ interface IState {
   ventilator: IVentilator
 }
 
+// this is the shape of the response from the polled device
+interface IResponse {
+  ventilator: [
+    {
+      tidalVolume: number
+      respiratoryRate: number
+      peakInspiratoryPressure: number
+      ieRatio: string
+      peep: number
+    }
+  ]
+}
+
 class Ventilator extends Component<IProps, IState> {
   interval: any
 
@@ -96,7 +109,7 @@ class Ventilator extends Component<IProps, IState> {
     let url = this.state.ventilator.url + "/api/ventilator"
 
     // todo: check on why this returns an array
-    let response = await get<IVentilator[]>(url)
+    let response = await get<IResponse>(url)
 
     if (response.ok) {
       // rather than just return whatever we get, limit the fields
