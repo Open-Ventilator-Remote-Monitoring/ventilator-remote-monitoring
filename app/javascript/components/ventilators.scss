@@ -1,0 +1,34 @@
+.demo-ventilator-table {
+  .tr-heading {
+    padding-bottom: 0px !important;
+    margin-bottom: 0px !important;
+    th {
+      padding-bottom: 0px !important;
+      margin-bottom: 0px !important;
+    }
+  }
+  .tr-subheading {
+    padding-top: 0px;
+    margin-top: 0px;
+    td {
+      border-top: 0px;
+      padding-top: 0px;
+      margin-top: 0px;
+    }
+  }
+  .status-col {
+    width: 60px;
+  }
+
+  @keyframes flash {
+    0% { opacity: 1; }
+    70% { opacity: 1; }
+    71% { opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  .flash {
+    -webkit-animation: flash linear 2s infinite;
+	  animation: flash linear 2s infinite;
+  }
+}

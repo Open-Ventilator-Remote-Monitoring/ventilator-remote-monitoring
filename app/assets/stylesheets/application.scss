@@ -14,34 +14,13 @@
  *= require_self
  */
 
-@import "bootstrap/scss/bootstrap";
+ @import "bootstrap/scss/bootstrap.scss";
 
-$fa-font-path: '@fortawesome/fontawesome-free/webfonts';
-@import '@fortawesome/fontawesome-free/scss/fontawesome';
-@import '@fortawesome/fontawesome-free/scss/solid';
-@import '@fortawesome/fontawesome-free/scss/regular';
-@import '@fortawesome/fontawesome-free/scss/brands';
-@import '@fortawesome/fontawesome-free/scss/v4-shims';
+ $fa-font-path: '@fortawesome/fontawesome-free/webfonts';
 
-.demo-ventilator-table {
-	.tr-heading {
-		padding-bottom: 0px !important;
-		margin-bottom: 0px !important;
-		th {
-			padding-bottom: 0px !important;
-			margin-bottom: 0px !important;
-		}
-	}
-	.tr-subheading {
-		padding-top: 0px;
-		margin-top: 0px;
-		td {
-			border-top: 0px;
-			padding-top: 0px;
-			margin-top: 0px;
-		}
-	}
-	.status-col {
-		width: 50px;
-	}
-}
+ @import '@fortawesome/fontawesome-free/scss/fontawesome';
+ @import '@fortawesome/fontawesome-free/scss/solid';
+ @import '@fortawesome/fontawesome-free/scss/regular';
+ @import '@fortawesome/fontawesome-free/scss/brands';
+ @import '@fortawesome/fontawesome-free/scss/v4-shims';
+
