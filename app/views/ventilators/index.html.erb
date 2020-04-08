@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Ventilators</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Serial number</th>
+      <th>Hostname</th>
+      <th>Api key</th>
+      <th>Notes</th>
+      <th>Ventilator user</th>
+      <th>Ventilator password</th>
+      <th>Cluster</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @ventilators.each do |ventilator| %>
+      <tr>
+        <td><%= ventilator.name %></td>
+        <td><%= ventilator.serial_number %></td>
+        <td><%= ventilator.hostname %></td>
+        <td><%= ventilator.api_key %></td>
+        <td><%= ventilator.notes %></td>
+        <td><%= ventilator.ventilator_user %></td>
+        <td><%= ventilator.ventilator_password %></td>
+        <td><%= ventilator.cluster_id %></td>
+        <td><%= link_to 'Show', ventilator %></td>
+        <td><%= link_to 'Edit', edit_ventilator_path(ventilator) %></td>
+        <td><%= link_to 'Destroy', ventilator, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Ventilator', new_ventilator_path %>

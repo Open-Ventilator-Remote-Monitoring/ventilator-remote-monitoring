@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @ventilator.name %>
+</p>
+
+<p>
+  <strong>Serial number:</strong>
+  <%= @ventilator.serial_number %>
+</p>
+
+<p>
+  <strong>Hostname:</strong>
+  <%= @ventilator.hostname %>
+</p>
+
+<p>
+  <strong>Api key:</strong>
+  <%= @ventilator.api_key %>
+</p>
+
+<p>
+  <strong>Notes:</strong>
+  <%= @ventilator.notes %>
+</p>
+
+<p>
+  <strong>Ventilator user:</strong>
+  <%= @ventilator.ventilator_user %>
+</p>
+
+<p>
+  <strong>Ventilator password:</strong>
+  <%= @ventilator.ventilator_password %>
+</p>
+
+<p>
+  <strong>Cluster:</strong>
+  <%= @ventilator.cluster_id %>
+</p>
+
+<%= link_to 'Edit', edit_ventilator_path(@ventilator) %> |
+<%= link_to 'Back', ventilators_path %>

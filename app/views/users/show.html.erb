@@ -1,0 +1,74 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @user.email %>
+</p>
+
+<p>
+  <strong>Encrypted password:</strong>
+  <%= @user.encrypted_password %>
+</p>
+
+<p>
+  <strong>Reset password token:</strong>
+  <%= @user.reset_password_token %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @user.name %>
+</p>
+
+<p>
+  <strong>Bio:</strong>
+  <%= @user.bio %>
+</p>
+
+<p>
+  <strong>Sign in count:</strong>
+  <%= @user.sign_in_count %>
+</p>
+
+<p>
+  <strong>Current sign in ip:</strong>
+  <%= @user.current_sign_in_ip %>
+</p>
+
+<p>
+  <strong>Last sign in ip:</strong>
+  <%= @user.last_sign_in_ip %>
+</p>
+
+<p>
+  <strong>Role:</strong>
+  <%= @user.role %>
+</p>
+
+<p>
+  <strong>Reset password sent at:</strong>
+  <%= @user.reset_password_sent_at %>
+</p>
+
+<p>
+  <strong>Remember created at:</strong>
+  <%= @user.remember_created_at %>
+</p>
+
+<p>
+  <strong>Current sign in at:</strong>
+  <%= @user.current_sign_in_at %>
+</p>
+
+<p>
+  <strong>Last sign in at:</strong>
+  <%= @user.last_sign_in_at %>
+</p>
+
+<p>
+  <strong>Organization:</strong>
+  <%= @user.organization_id %>
+</p>
+
+<%= link_to 'Edit', edit_user_path(@user) %> |
+<%= link_to 'Back', users_path %>

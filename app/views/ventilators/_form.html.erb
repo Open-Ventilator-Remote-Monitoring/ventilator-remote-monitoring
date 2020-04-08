@@ -1,0 +1,57 @@
+<%= form_with(model: ventilator, local: true) do |form| %>
+  <% if ventilator.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(ventilator.errors.count, "error") %> prohibited this ventilator from being saved:</h2>
+
+      <ul>
+        <% ventilator.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :serial_number %>
+    <%= form.text_field :serial_number %>
+  </div>
+
+  <div class="field">
+    <%= form.label :hostname %>
+    <%= form.text_field :hostname %>
+  </div>
+
+  <div class="field">
+    <%= form.label :api_key %>
+    <%= form.text_field :api_key %>
+  </div>
+
+  <div class="field">
+    <%= form.label :notes %>
+    <%= form.text_area :notes %>
+  </div>
+
+  <div class="field">
+    <%= form.label :ventilator_user %>
+    <%= form.text_field :ventilator_user %>
+  </div>
+
+  <div class="field">
+    <%= form.label :ventilator_password %>
+    <%= form.text_field :ventilator_password %>
+  </div>
+
+  <div class="field">
+    <%= form.label :cluster_id %>
+    <%= form.text_field :cluster_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
