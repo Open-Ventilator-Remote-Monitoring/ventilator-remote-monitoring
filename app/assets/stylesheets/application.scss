@@ -24,9 +24,11 @@ $fa-font-path: '@fortawesome/fontawesome-free/webfonts';
 @import '@fortawesome/fontawesome-free/scss/brands';
 @import '@fortawesome/fontawesome-free/scss/v4-shims';
 
-crud {
-	margin: 2rem;
+.container {
+	margin-top: 2rem;
+}
 
+.crud {
 	.field * {
 		vertical-align: top;
 		margin: .6rem;

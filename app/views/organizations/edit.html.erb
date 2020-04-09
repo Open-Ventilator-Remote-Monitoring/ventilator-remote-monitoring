@@ -1,14 +1,16 @@
-<h1>Editing Organization</h1>
+<div class="crud">
+  <h1>Editing Organization</h1>
 
-<%= render 'form', organization: @organization %>
+  <%= render 'form', organization: @organization %>
 
-<%= button_to "Delete This Organization",
-  {
-    controller: :organizations,
-    action: 'destroy',
-    id: @organization.id
-  },
-  method: :delete,
-  data: { confirm: 'Are you sure you want to delete this organization? This action cannot be undone.' },
-  class: "btn btn-danger"
-%>
+  <%= button_to "Delete This Organization",
+    {
+      controller: :organizations,
+      action: 'destroy',
+      id: @organization.id
+    },
+    method: :delete,
+    data: { confirm: 'Are you sure you want to delete this organization? This action cannot be undone.' },
+    class: "btn btn-danger"
+  %>
+<div class="crud">

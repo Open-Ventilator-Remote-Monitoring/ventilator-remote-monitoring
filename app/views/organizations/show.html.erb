@@ -1,70 +1,72 @@
-<p id="notice"><%= notice %></p>
+<div class="crud">
+  <p id="notice"><%= notice %></p>
 
-<h1>
-  Organization: <%= @organization.name %>
-</h1>
+  <h1>
+    Organization: <%= @organization.name %>
+  </h1>
 
-<h4>
-  <%= @organization.description %>
-</h4>
+  <h4>
+    <%= @organization.description %>
+  </h4>
 
-<a href="<%= edit_organization_path %>">
-  <button class="btn btn-primary">
-    Edit This Organization
-  </button>
-</a>
-
-<section>
-  <h3>Clusters in this organization</h3>
-  <table>
-    <thead>
-      <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @organization.clusters.each do |cluster| %>
-        <tr>
-          <td>
-            <%= cluster.id %>
-          </td>
-          <td>
-            <%= link_to cluster.name, cluster %>
-          </td>
-          <td>
-            <%= cluster.description %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-
-  <a href="<%= new_cluster_path %>">
+  <a href="<%= edit_organization_path %>">
     <button class="btn btn-primary">
-      + Add New Cluster
+      Edit This Organization
     </button>
   </a>
-</section>
 
-<section>
-  <h4>Users in this organization:</h4>
+  <section>
+    <h3>Clusters in this organization</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @organization.clusters.each do |cluster| %>
+          <tr>
+            <td>
+              <%= cluster.id %>
+            </td>
+            <td>
+              <%= link_to cluster.name, cluster %>
+            </td>
+            <td>
+              <%= cluster.description %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-  <% if @users %>
-    <% @users.each do |user| %>
-      <div><%= link_to user.email, user %><div>
+    <a href="<%= new_cluster_path %>">
+      <button class="btn btn-primary">
+        + Add New Cluster
+      </button>
+    </a>
+  </section>
+
+  <section>
+    <h4>Users in this organization:</h4>
+
+    <% if @users %>
+      <% @users.each do |user| %>
+        <div><%= link_to user.email, user %><div>
+      <% end %>
+    <% else %>
+      <p>Sorry, this organization doesn't have any users yet</p>
     <% end %>
-  <% else %>
-    <p>Sorry, this organization doesn't have any users yet</p>
-  <% end %>
 
-  <a href="<%= new_user_path %>">
-    <button class="btn btn-primary" type="button">
-      + Add New User
-    </button>
-  </a>
-</section>
+    <a href="<%= new_user_path %>">
+      <button class="btn btn-primary" type="button">
+        + Add New User
+      </button>
+    </a>
+  </section>
+</div>
 
 
 

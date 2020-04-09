@@ -1,35 +1,37 @@
-<p id="notice"><%= notice %></p>
+<div class="crud">
+  <p id="notice"><%= notice %></p>
 
-<h1>Organizations</h1>
+  <h1>Organizations</h1>
 
-<section>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @organizations.each do |organization| %>
+  <section>
+    <table>
+      <thead>
         <tr>
-          <td><%= link_to organization.name, organization %></td>
-          <td><%= organization.description %></td>
-          <td>
-            <a href="<%= edit_organization_path(organization) %>">
-              <button class="btn btn-secondary">
-                Settings
-              </button>
-            </a>
-          </td>
+          <th>Name</th>
+          <th>Description</th>
+          <th></th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
 
-  <a href="<%= new_organization_path %>">
-    <button class="btn btn-primary">+ Add New Organization</button>
-  </a>
-</section>
+      <tbody>
+        <% @organizations.each do |organization| %>
+          <tr>
+            <td><%= link_to organization.name, organization %></td>
+            <td><%= organization.description %></td>
+            <td>
+              <a href="<%= edit_organization_path(organization) %>">
+                <button class="btn btn-secondary">
+                  Settings
+                </button>
+              </a>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <a href="<%= new_organization_path %>">
+      <button class="btn btn-primary">+ Add New Organization</button>
+    </a>
+  </section>
+</div>
