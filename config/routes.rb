@@ -1,16 +1,11 @@
 Rails.application.routes.draw do
-  namespace :api do
-    namespace :v1 do
-      resources :ventilators
-    end
-  end
+  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
-  # home#index will deliver the single page app bundle
-  # So, any URLs that are in the app/javascript/routes
-  # should all get home#index
-  root 'home#index'
-  get '/about' => 'home#index'
-  get '/contribute' => 'home#index'
-  get '/demo' => 'home#index'
-  get '/' => 'home#index'
+  root 'static_pages#index'
+
+  get '/about', to: 'static_pages#about', as: 'about'
+  get '/home', to: 'static_pages#index', as: 'home'
+  get '/demo', to: 'static_pages#demo', as: 'demo'
+  get '/contribute', to: 'static_pages#contribute', as: 'contribute'
+
 end

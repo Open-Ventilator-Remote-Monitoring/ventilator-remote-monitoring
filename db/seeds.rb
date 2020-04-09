@@ -5,11 +5,3 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-6.times do |i|
-  Ventilator.create(
-    {
-      name: "Ventilator ##{i + 1}",
-      url: "http://ventilator-#{i + 1}.local"
-    }
-  )
-end

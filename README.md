@@ -23,17 +23,12 @@ Check out the [live demo/concept](http://www.ventilatormonitor.com).
 4. Install postgres: `brew install postgres`
 5. Clone this repo: `git clone https://github.com/Open-Ventilator-Remote-Monitoring/ventilator-remote-monitoring.git`
 6. `cd ventilator-remote-monitoring`
-7. Run bundler: `bundle install`
-8. Run yarn: `yarn`
-9. Create the rails database: `rails db:create`
-10. Migrate the database: `rails db:migrate`
-11. If the database has no data, then seed the database: `rails db:seed`
-13. Start a rails development server: `rails s`
-14. If you will be changing any javascript, open a second tab/window, go to the same
-directory and run the webpack development server. This will automatically re-pack the changes:
-`./bin/webpack-dev-server`
-14. You should now be able to navigate to `http://localhost:3000` and view the live rails site
+7. Create the rails database: `rails db:create`
+8. Run bundler: `bundle install`
+9. Migrate the database: `rails db:migrate`
+10. Start a rails development server: `rails s`
+11. You should now be able to navigate to `http://localhost:3000` and view the live rails site
 
-Note: the javascript app that runs in the web browser is currently located in `app/javascript/custom/demo.js`
+Note: the javascript app that runs in the web browser is currently located in `app/javascript/custom/demo.js` 
 
 **Having problems?** Post on the Slack Channel and we'll help you out
