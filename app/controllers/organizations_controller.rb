@@ -10,6 +10,8 @@ class OrganizationsController < ApplicationController
   # GET /organizations/1
   # GET /organizations/1.json
   def show
+    @clusters = @organization.clusters
+    @users = @organization.users
   end
 
   # GET /organizations/new
@@ -28,7 +30,7 @@ class OrganizationsController < ApplicationController
 
     respond_to do |format|
       if @organization.save
-        format.html { redirect_to organizations_url, notice: 'Organization was successfully created.' }
+        format.html { redirect_to @organizations, notice: 'Organization was successfully created.' }
         format.json { render :show, status: :created, location: @organization }
       else
         format.html { render :new }

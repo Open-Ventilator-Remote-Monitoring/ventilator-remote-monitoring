@@ -22,8 +22,8 @@
   </div>
 
   <div class="field">
-    <%= form.label :organization_id %>
-    <%= form.text_field :organization_id %>
+    <label>Belongs to organization:</label>
+    <%= form.collection_select( :organization_id, Organization.all, :id, :name, {}, { class: "form-control" })  %>
   </div>
 
   <div class="actions">

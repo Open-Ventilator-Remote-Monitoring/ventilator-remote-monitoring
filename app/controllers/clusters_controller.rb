@@ -1,6 +1,5 @@
 class ClustersController < ApplicationController
   before_action :set_cluster, only: [:show, :edit, :update, :destroy]
-  before_action :get_organization
 
   # GET /clusters
   # GET /clusters.json
@@ -11,6 +10,7 @@ class ClustersController < ApplicationController
   # GET /clusters/1
   # GET /clusters/1.json
   def show
+    @ventilators = @cluster.ventilators
   end
 
   # GET /clusters/new
@@ -25,7 +25,7 @@ class ClustersController < ApplicationController
   # POST /clusters
   # POST /clusters.json
   def create
-    @cluster = @organization.clusters.build(cluster_params)
+    @cluster = Cluster.new(cluster_params)
 
     respond_to do |format|
       if @cluster.save
@@ -63,10 +63,6 @@ class ClustersController < ApplicationController
   end
 
   private
-
-    def get_organization
-      @organization = Organization.find(params[:organization_id])
-    end
 
     # Use callbacks to share common setup or constraints between actions.
     def set_cluster

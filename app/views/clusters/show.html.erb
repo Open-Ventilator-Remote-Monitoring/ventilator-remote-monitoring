@@ -1,19 +1,51 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @cluster.name %>
-</p>
+<h1>
+  Cluster: <%= @cluster.name %>
+</h1>
 
-<p>
-  <strong>Description:</strong>
+<h4>
   <%= @cluster.description %>
 </p>
 
-<p>
-  <strong>Organization:</strong>
-  <%= @cluster.organization_id %>
-</p>
+<a href="<%= edit_cluster_path %>">
+  <button class="btn btn-primary">
+    Edit This Cluster
+  </button>
+</a>
 
-<%= link_to 'Edit', edit_cluster_path(@cluster) %> |
-<%= link_to 'Back', clusters_path %>
+<section>
+  <h3>Ventilators in this cluster</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Hostname</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @cluster.ventilators.each do |ventilator| %>
+        <tr>
+          <td>
+            <%= ventilator.id %>
+          </td>
+          <td>
+            <%= link_to ventilator.name, ventilator %>
+          </td>
+          <td>
+            <%= ventilator.hostname %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <a href="<%= new_ventilator_path %>">
+    <button class="btn btn-primary">
+      + Add New Ventilator
+    </button>
+  </a>
+</section>
+
+

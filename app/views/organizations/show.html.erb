@@ -1,72 +1,74 @@
 <p id="notice"><%= notice %></p>
 
-<table>
-  <thead>
-    <tr>
-      <th>Id</th>
-      <th>Name</th>
-      <th>Discription</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td><%= @organization.id %></td>
-        <td><%= @organization.name %></td>
-        <td><%= @organization.description %></td>
-      </tr>
-  </tbody>
-</table>
+<h1>
+  Organization: <%= @organization.name %>
+</h1>
 
-<h2>Clusters</h2>
-<table>
-  <thead>
-    <tr>
-      <th>Id</th>
-      <th>Name</th>
-      <th>Description</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @organization.clusters.each do |cluster| %>
+<h4>
+  <%= @organization.description %>
+</h4>
+
+<a href="<%= edit_organization_path %>">
+  <button class="btn btn-primary">
+    Edit This Organization
+  </button>
+</a>
+
+<section>
+  <h3>Clusters in this organization</h3>
+  <table>
+    <thead>
       <tr>
-        <td>
-          <%= cluster.id %>
-        </td>
-        <td>
-          <%= cluster.name %>
-        </td>
-        <td>
-          <%= cluster.description %>
-        </td>
-        <td>
-          <%= link_to 'Show', cluster %>
-        </td>
-        <td>
-          <%= link_to 'Edit', edit_organization_cluster_path(cluster) %>
-        </td>
-        <td>
-          <%= link_to 'Destroy', cluster, method: :delete, data: { confirm: 'Are you sure?' } %>
-        </td>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Description</th>
       </tr>
+    </thead>
+    <tbody>
+      <% @organization.clusters.each do |cluster| %>
+        <tr>
+          <td>
+            <%= cluster.id %>
+          </td>
+          <td>
+            <%= link_to cluster.name, cluster %>
+          </td>
+          <td>
+            <%= cluster.description %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <a href="<%= new_cluster_path %>">
+    <button class="btn btn-primary">
+      + Add New Cluster
+    </button>
+  </a>
+</section>
+
+<section>
+  <h4>Users in this organization:</h4>
+
+  <% if @users %>
+    <% @users.each do |user| %>
+      <div><%= link_to user.email, user %><div>
     <% end %>
-  </tbody>
-</table>
+  <% else %>
+    <p>Sorry, this organization doesn't have any users yet</p>
+  <% end %>
 
-<h2>Add a Cluster:</h2>
-<%= form_with(model: [ @organization, @organization.clusters.build ], local: true) do |form| %>
-  <p>
-    <%= form.label :name %><br>
-    <%= form.text_field :name %>
-  </p>
-  <p>
-    <%= form.label :description %><br>
-    <%= form.text_area :description %>
-  </p>
-  <p>
-    <%= form.submit %>
-  </p>
-<% end %>
+  <a href="<%= new_user_path %>">
+    <button class="btn btn-primary" type="button">
+      + Add New User
+    </button>
+  </a>
+</section>
 
-<%= link_to 'Edit', edit_organization_path(@organization) %> |
-<%= link_to 'Back', organizations_path %>
+
+
+
+
+
+

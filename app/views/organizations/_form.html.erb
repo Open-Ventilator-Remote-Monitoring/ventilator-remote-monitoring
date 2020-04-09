@@ -18,10 +18,10 @@
 
   <div class="field">
     <%= form.label :description %>
-    <%= form.text_area :description %>
+    <%= form.text_area :description, size: "30x2" %>
   </div>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit "Update Organization", class: "btn btn-primary" %>
   </div>
 <% end %>

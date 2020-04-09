@@ -2,5 +2,13 @@
 
 <%= render 'form', organization: @organization %>
 
-<%= link_to 'Show', @organization %> |
-<%= link_to 'Back', organizations_path %>
+<%= button_to "Delete This Organization",
+  {
+    controller: :organizations,
+    action: 'destroy',
+    id: @organization.id
+  },
+  method: :delete,
+  data: { confirm: 'Are you sure you want to delete this organization? This action cannot be undone.' },
+  class: "btn btn-danger"
+%>

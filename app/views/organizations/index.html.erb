@@ -2,30 +2,34 @@
 
 <h1>Organizations</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>id</th>
-      <th>Name</th>
-      <th>Description</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @organizations.each do |organization| %>
+<section>
+  <table>
+    <thead>
       <tr>
-        <td><%= organization.id %></td>
-        <td><%= organization.name %></td>
-        <td><%= organization.description %></td>
-        <td><%= link_to 'Show', organization %></td>
-        <td><%= link_to 'Edit', edit_organization_path(organization) %></td>
-        <td><%= link_to 'Destroy', organization, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <th>Name</th>
+        <th>Description</th>
+        <th></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
 
-<br>
+    <tbody>
+      <% @organizations.each do |organization| %>
+        <tr>
+          <td><%= link_to organization.name, organization %></td>
+          <td><%= organization.description %></td>
+          <td>
+            <a href="<%= edit_organization_path(organization) %>">
+              <button class="btn btn-secondary">
+                Settings
+              </button>
+            </a>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-<%= link_to 'New Organization', new_organization_path %>
+  <a href="<%= new_organization_path %>">
+    <button class="btn btn-primary">+ Add New Organization</button>
+  </a>
+</section>
