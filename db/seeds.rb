@@ -32,5 +32,6 @@ end
 org1.users.create({
   email: "user1@gmail.com",
   name: "User 1",
+  encrypted_password: "thisisnotanencryptedpassword",
   role: 1
 })
