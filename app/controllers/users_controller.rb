@@ -32,6 +32,16 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+    if current_user.admin? 
+      @user = User.find(params[:id])
+    elsif (current_user.org_admin? && (current_user.organization.users.include?(User.find(params[:id])))) || (current_user.org_admin? && (User.find(params[:id]).organization_id == nil))
+      @user = User.find(params[:id])
+      @user.organization_id = current_user.organization.id
+    else
+      flash[:error] = "You must be an administrator to edit other users"
+      redirect_to root_url
+    end
+
   end
 
   # POST /users
