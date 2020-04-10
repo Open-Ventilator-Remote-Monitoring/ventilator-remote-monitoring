@@ -1,10 +1,21 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :require_admin, except: [ :index ]
 
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
+    if current_user.admin?
+      @users = User.all.paginate(:page => params[:page], :per_page => 10)
+      @unassigned_users = User.where("organization_id IS NULL").order(created_at: :desc).last(5)
+    elsif current_user.org_admin?
+      @users = current_user.organization.users.paginate(:page => params[:page], :per_page => 10)
+      #@unassigned_users = User.all.where("role = ? AND organization_id = ?", 0, nil)
+      @unassigned_users = User.where("organization_id IS NULL").order(created_at: :desc).last(5)
+    else
+      flash[:error] = "You must be an administrator to view other users"
+      redirect_to root_url      
+    end
   end
 
   # GET /users/1
@@ -71,4 +82,12 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:email, :encrypted_password, :reset_password_token, :name, :bio, :sign_in_count, :current_sign_in_ip, :last_sign_in_ip, :role, :reset_password_sent_at, :remember_created_at, :current_sign_in_at, :last_sign_in_at, :organization_id)
     end
+
+    def require_admin
+      unless current_user.admin?
+        flash[:error] = "You must be an administrator to access this section"
+        redirect_to root_url
+      end
+    end
+
 end
