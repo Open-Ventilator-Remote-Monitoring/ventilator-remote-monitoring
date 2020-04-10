@@ -1,74 +1,86 @@
-<p id="notice"><%= notice %></p>
+<h4>User Profile: <%= @user.email %></h4>
 
-<p>
-  <strong>Email:</strong>
-  <%= @user.email %>
-</p>
+<% if current_user == @user %>
+  <a href="<%= edit_user_registration_path %>">
+    <button class="btn btn-info">
+      <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Change Password
+    </button>
+  </a>
+  <a href="<%= edit_user_path(current_user) %>">
+    <button class="btn btn-info">
+      <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Edit My Profile
+    </button>
+  </a>
+<% elsif current_user.admin? %>
+  <a href="<%= edit_user_path(@user) %>">
+    <button class="btn btn-info">
+      <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Edit User Profile
+    </button>
+  </a>
+<% end %>
 
-<p>
-  <strong>Encrypted password:</strong>
-  <%= @user.encrypted_password %>
-</p>
+<br><br>
+<table class="table user-show">
+  <tr>
+    <th>Username:</th>
+    <td><%= @user.name.present? ? @user.name : "" %></td>
+  </tr>
+  <tr>
+    <th>Email:</th>
+    <td><%= @user.email %></td>
+  </tr>
+  <tr>
+    <th>Role:</th>
+    <td><%= @user.role %></td>
+  </tr>
+  <tr>
+    <th>Bio:</th>
+    <td><%= @user.bio %></td>
+  </tr>
+  <tr>
+    <th>Organization:</th>
+    <td><%= @user.organization ? @user.organization.name : "" %></td>
+  </tr>
+</table>
+<br>
 
-<p>
-  <strong>Reset password token:</strong>
-  <%= @user.reset_password_token %>
-</p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @user.name %>
-</p>
-
-<p>
-  <strong>Bio:</strong>
-  <%= @user.bio %>
-</p>
-
-<p>
-  <strong>Sign in count:</strong>
-  <%= @user.sign_in_count %>
-</p>
-
-<p>
-  <strong>Current sign in ip:</strong>
-  <%= @user.current_sign_in_ip %>
-</p>
-
-<p>
-  <strong>Last sign in ip:</strong>
-  <%= @user.last_sign_in_ip %>
-</p>
-
-<p>
-  <strong>Role:</strong>
-  <%= @user.role %>
-</p>
-
-<p>
-  <strong>Reset password sent at:</strong>
-  <%= @user.reset_password_sent_at %>
-</p>
-
-<p>
-  <strong>Remember created at:</strong>
-  <%= @user.remember_created_at %>
-</p>
-
-<p>
-  <strong>Current sign in at:</strong>
-  <%= @user.current_sign_in_at %>
-</p>
-
-<p>
-  <strong>Last sign in at:</strong>
-  <%= @user.last_sign_in_at %>
-</p>
-
-<p>
-  <strong>Organization:</strong>
-  <%= @user.organization_id %>
-</p>
-
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+<h4>Stats:</h4>
+<table class="table user-show">
+  <tr>
+    <th>reset_password_sent_at</th>
+    <td><%= @user.reset_password_sent_at %></td>
+  </tr>
+  <tr>
+    <th>remember_created_at</th>
+    <td><%= @user.remember_created_at %></td>
+  </tr>
+  <tr>
+    <th>sign_in_count</th>
+    <td><%= @user.sign_in_count %></td>
+  </tr>
+  <tr>
+    <th>current_sign_in_at</th>
+    <td><%= @user.current_sign_in_at %></td>
+  </tr>
+  <tr>
+    <th>last_sign_in_at</th>
+    <td><%= @user.last_sign_in_at %></td>
+  </tr>
+  <tr>
+    <th>current_sign_in_ip</th>
+    <td><%= @user.current_sign_in_ip %></td>
+  </tr>
+  <tr>
+    <th>created_at</th>
+    <td><%= @user.created_at %></td>
+  </tr>
+  <tr>
+    <th>last_sign_in_ip</th>
+    <td><%= @user.last_sign_in_ip %></td>
+  </tr>
+  <tr>
+    <th>updated_at</th>
+    <td><%= @user.updated_at %></td>
+  </tr>
+</table>
