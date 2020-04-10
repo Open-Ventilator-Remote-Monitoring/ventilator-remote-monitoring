@@ -10,14 +10,20 @@
   </p>
 
   <a href="<%= edit_cluster_path %>">
-    <button class="btn btn-primary">
+    <button class="btn btn-secondary">
+      <i class="fas fa-cog"></i>
       Edit This Cluster
+    </button>
+  </a>
+  <a href="<%= new_ventilator_path %>">
+    <button class="btn btn-secondary">
+      + Add New Ventilator
     </button>
   </a>
 
   <section>
     <h3>Ventilators in this cluster</h3>
-    <table>
+    <table class="table">
       <thead>
         <tr>
           <th>Id</th>
@@ -42,10 +48,5 @@
       </tbody>
     </table>
 
-    <a href="<%= new_ventilator_path %>">
-      <button class="btn btn-primary">
-        + Add New Ventilator
-      </button>
-    </a>
   </section>
 </div>
