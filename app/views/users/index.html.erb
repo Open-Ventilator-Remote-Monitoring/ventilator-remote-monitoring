@@ -1,53 +1,27 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Users</h1>
+<h2>Users</h2>
 
-<table>
+<table class="table">
   <thead>
     <tr>
+      <th>Id</th>
       <th>Email</th>
-      <th>Encrypted password</th>
-      <th>Reset password token</th>
       <th>Name</th>
-      <th>Bio</th>
-      <th>Sign in count</th>
-      <th>Current sign in ip</th>
-      <th>Last sign in ip</th>
       <th>Role</th>
-      <th>Reset password sent at</th>
-      <th>Remember created at</th>
-      <th>Current sign in at</th>
-      <th>Last sign in at</th>
       <th>Organization</th>
-      <th colspan="3"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @users.each do |user| %>
       <tr>
-        <td><%= user.email %></td>
-        <td><%= user.encrypted_password %></td>
-        <td><%= user.reset_password_token %></td>
+        <td><%= user.id %></td>
+        <td><%= link_to user.email, user %></td>
         <td><%= user.name %></td>
-        <td><%= user.bio %></td>
-        <td><%= user.sign_in_count %></td>
-        <td><%= user.current_sign_in_ip %></td>
-        <td><%= user.last_sign_in_ip %></td>
         <td><%= user.role %></td>
-        <td><%= user.reset_password_sent_at %></td>
-        <td><%= user.remember_created_at %></td>
-        <td><%= user.current_sign_in_at %></td>
-        <td><%= user.last_sign_in_at %></td>
         <td><%= user.organization_id %></td>
-        <td><%= link_to 'Show', user %></td>
-        <td><%= link_to 'Edit', edit_user_path(user) %></td>
-        <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New User', new_user_path %>
