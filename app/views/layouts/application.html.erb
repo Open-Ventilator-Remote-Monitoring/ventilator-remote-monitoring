@@ -29,6 +29,19 @@
         <li class="nav-item">
           <a class="nav-link" href="/contribute">Contribute</a>
         </li>
+        <% if user_signed_in? %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Account
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <%= link_to "My Profile", user_path(current_user), class: "dropdown-item" %>
+              <%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: "dropdown-item" %>
+            </div>
+          </li>
+        <% else %>
+          <li class="nav-item"><%= link_to "Sign In", new_user_session_path, class: "nav-link" %></li>
+        <% end %>
       </ul>
     </div>
   </nav>  
