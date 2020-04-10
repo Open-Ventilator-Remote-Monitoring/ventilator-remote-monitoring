@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   get '/demo', to: 'static_pages#demo', as: 'demo'
   get '/contribute', to: 'static_pages#contribute', as: 'contribute'
 
-  resources :users
+  resources :users, controller: "users", only: [:index, :edit, :update, :show]
   resources :clusters
   resources :organizations
   resources :ventilators
