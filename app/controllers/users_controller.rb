@@ -47,6 +47,23 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+    unless current_user.admin?
+
+      # puts "*** Debugging ***"
+      # puts "current_user.org_admin?: #{current_user.org_admin?}" 
+      # puts "current_user.organization.users.include?(User.find(params[:id])): #{current_user.organization.users.include?(User.find(params[:id]))}"
+      # puts "User.find(params[:id]).organization_id == nil: #{User.find(params[:id]).organization_id == nil}"
+      # puts "((user_params[:role] == org_admin) || (user_params[:role] == student) || (user_params[:role] == unassigned)): #{((user_params[:role] == "org_admin") || (user_params[:role] == "student") || (user_params[:role] == "unassigned"))}"
+      # puts "current_user.organization.id == user_params[:organization_id]: #{current_user.organization.id.to_s == user_params[:organization_id]}"
+      # puts "current_user.organization.id: #{current_user.organization.id.to_s.class}"
+      # puts "user_params[:organization_id]: #{user_params[:organization_id].class}"
+
+      #      I am an org_admin      AND ((The organization includes said user)                              OR (Said user does not belong to an organization)) AND (I am requesting to make the user an org_admin, or unassigned)                    AND (I am a member of the organization to which I am assigning said user)
+      unless current_user.org_admin? && (((current_user.organization.users.include?(User.find(params[:id]))) || (User.find(params[:id]).organization_id == nil)) && ((user_params[:role] == "org_admin") || (user_params[:role] == "unassigned")) && (current_user.organization.id.to_s == user_params[:organization_id]))
+        flash[:error] = "You must be an administrator to perform those updates on that user "
+        redirect_to root_url and return
+      end
+    end
     respond_to do |format|
       if @user.update(user_params)
         format.html { redirect_to @user, notice: 'User was successfully updated.' }
