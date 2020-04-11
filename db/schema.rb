@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_10_023846) do
+ActiveRecord::Schema.define(version: 2020_04_11_175756) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,7 @@ ActiveRecord::Schema.define(version: 2020_04_10_023846) do
     t.bigint "cluster_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["cluster_id", "hostname"], name: "by_cluster_hostname", unique: true
     t.index ["cluster_id"], name: "index_ventilators_on_cluster_id"
   end
 

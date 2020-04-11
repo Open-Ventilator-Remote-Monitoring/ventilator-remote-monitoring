@@ -77,7 +77,7 @@ label {
     margin-top: 2rem;
 }
 
-.field {
+td > .field {
   vertical-align: top;
   margin: .6rem;
 }
@@ -98,7 +98,7 @@ button {
   margin: .5rem 0;
 }
 
-input:not(.btn),
+td > input:not(.btn),
 textarea,
 select {
   width: 100%;
@@ -109,4 +109,8 @@ select {
   padding: 2px;
   background-color: red;
   display: block;
+}
+
+.actions {
+  margin-top: 1rem;
 }
