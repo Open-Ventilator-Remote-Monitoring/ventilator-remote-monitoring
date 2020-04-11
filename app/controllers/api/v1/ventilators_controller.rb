@@ -1,6 +1,6 @@
 class Api::V1::VentilatorsController < ApplicationController
   def index
-    vs = Ventilator.all.order(name: :asc)
+    vs = Ventilator.all.order(:name)
     render json: vs
   end
 

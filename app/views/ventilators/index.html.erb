@@ -1,14 +1,20 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Ventilators</h1>
+<h6>
+  <a href="/organizations/<%=current_user.organization.id%>">
+    <%= current_user.organization.name %>
+  </a>
+</h6>
 
-<table>
+<h4>Ventilators</h4>
+
+<table class="table">
   <thead>
     <tr>
+      <th>Cluster</th>
       <th>Name</th>
       <th>Hostname</th>
       <th>Organization</th>
-      <th>Cluster</th>
       <th colspan="1"></th>
     </tr>
   </thead>
@@ -16,10 +22,10 @@
   <tbody>
     <% @ventilators.each do |ventilator| %>
       <tr>
+        <td><%= ventilator.cluster.name %></td>
         <td><%= ventilator.name %></td>
         <td><%= ventilator.hostname %></td>
         <td><%= ventilator.cluster.organization.name %></td>
-        <td><%= ventilator.cluster.name %></td>
         <td><%= link_to 'Settings', edit_ventilator_path(ventilator) %></td>
       </tr>
     <% end %>

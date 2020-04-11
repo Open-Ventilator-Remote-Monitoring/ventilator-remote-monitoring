@@ -1,8 +1,8 @@
 <p id="notice"><%= notice %></p>
 
-<h2>
+<h4>
   Organization: <%= @organization.name %>
-</h2>
+</h4>
 
 <h5>
   <%= @organization.description %>
@@ -20,8 +20,9 @@
 </section>
 
 <section>
-  <h3>Clusters in this organization</h3>
+  <h4>Clusters in: <%=@organization.name %></h3>
   <table class="table">
+    <col style="width:25%">
     <thead>
       <tr>
         <th>Name</th>
@@ -29,7 +30,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @organization.clusters.each do |cluster| %>
+      <% @organization.clusters.order(:name).each do |cluster| %>
         <tr>
           <td>
             <%= link_to cluster.name, cluster %>
@@ -52,11 +53,29 @@
 </section>
 
 <section>
-  <h4>Users in this organization:</h4>
+  <h4>Users in: <%=@organization.name %></h4>
 
-  <% @organization.users.each do |user| %>
-    <div><%= link_to user.email, user %><div>
-  <% end %>
+  <table class="table">
+    <col style="width:40%">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @organization.users.order(:email).each do |user| %>
+        <tr>
+          <td>
+            <%= link_to user.email, user %>
+          </td>
+          <td>
+            <%= user.name %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </section>
 
 

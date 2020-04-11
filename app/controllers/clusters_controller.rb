@@ -6,10 +6,12 @@ class ClustersController < ApplicationController
   # GET /clusters
   # GET /clusters.json
   def index
-    p current_user.organization
     if current_user.organization.present?
-      @clusters = current_user.organization.clusters
+      @organization = current_user.organization
+      @clusters = current_user.organization.clusters.order(:name)
+      p @clusters
     else
+      @organization = nil
       @clusters = nil
     end
   end
@@ -17,6 +19,7 @@ class ClustersController < ApplicationController
   # GET /clusters/1
   # GET /clusters/1.json
   def show
+    @organization = @cluster.organization
   end
 
   # GET /clusters/new

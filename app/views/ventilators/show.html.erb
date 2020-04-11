@@ -1,14 +1,20 @@
 <p id="notice"><%= notice %></p>
 
 <h6>
-  <%= @ventilator.cluster.organization.name %>
+  <a href="/organizations/<%=@ventilator.cluster.organization.id%>">
+    <%= @ventilator.cluster.organization.name %>
+  </a>
 </h6>
+
 <h6>
-  <%= @ventilator.cluster.name %>
+  <a href="/clusters/<%=@ventilator.cluster.id%>">
+    <%= @ventilator.cluster.name %>
+  </a>
 </h6>
-<h2>
+
+<h4>
   Ventilator: <%= @ventilator.name %>
-</h2>
+</h4>
 
 <section>
   <a href="<%= edit_ventilator_path %>">
@@ -17,10 +23,11 @@
       Ventilator Settings
     </button>
   </a>
-</section?>
+</section>
 
 <section>
   <table class="table">
+    <col style="width:25%">
     <tbody>
         <tr>
           <td>Serial number:</td>
@@ -50,11 +57,6 @@
         <tr>
           <td>Ventilator password:</td>
           <td><%= @ventilator.ventilator_password %></td>
-        </tr>
-
-        <tr>
-          <td>Cluster:</td>
-          <td><%= @ventilator.cluster.name %></td>
         </tr>
     </tbody>
   </table>

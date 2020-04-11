@@ -1,15 +1,17 @@
 <p id="notice"><%= notice %></p>
 
 <h6>
-  <%= @cluster.organization.name %>
+  <a href=<%=organization_path%>>
+    <%= @organization.name %>
+  </a>
 </h6>
 
-<h2>
+<h4>
   Cluster: <%= @cluster.name %>
-</h2>
+</h4>
 
 <h5>
-  Description: <%= @cluster.description %>
+  <%= @cluster.description %>
 </h5>
 
 <section>
@@ -22,8 +24,9 @@
 </section>
 
 <section>
-  <h3>Ventilators in this cluster</h3>
+  <h4>Ventilators in cluster: <%=@cluster.name %></h4>
   <table class="table">
+    <col style="width:25%">
     <thead>
       <tr>
         <th>Name</th>
@@ -31,7 +34,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @cluster.ventilators.each do |ventilator| %>
+      <% @cluster.ventilators.order(:name).each do |ventilator| %>
         <tr>
           <td>
             <%= link_to ventilator.name, ventilator %>

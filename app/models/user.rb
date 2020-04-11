@@ -12,4 +12,8 @@ class User < ApplicationRecord
   	self.role ||= :user
   end
 
+  validates :email, email: true
+
+  validates :name, length: { minimum: 5 }
+
 end

@@ -27,23 +27,23 @@
 <section>
   <table class="table user-show">
     <tr>
-      <th>Username:</th>
+      <td>Username:</td>
       <td><%= @user.name.present? ? @user.name : "" %></td>
     </tr>
     <tr>
-      <th>Email:</th>
+      <td>Email:</td>
       <td><%= @user.email %></td>
     </tr>
     <tr>
-      <th>Role:</th>
+      <td>Role:</td>
       <td><%= @user.role %></td>
     </tr>
     <tr>
-      <th>Bio:</th>
+      <td>Bio:</td>
       <td><%= @user.bio %></td>
     </tr>
     <tr>
-      <th>Organization:</th>
+      <td>Organization:</td>
       <td><%= @user.organization ? @user.organization.name : "" %></td>
     </tr>
   </table>
@@ -54,39 +54,39 @@
   <h4>Stats:</h4>
   <table class="table user-show">
     <tr>
-      <th>reset_password_sent_at</th>
+      <td>reset_password_sent_at</td>
       <td><%= @user.reset_password_sent_at %></td>
     </tr>
     <tr>
-      <th>remember_created_at</th>
+      <td>remember_created_at</td>
       <td><%= @user.remember_created_at %></td>
     </tr>
     <tr>
-      <th>sign_in_count</th>
+      <td>sign_in_count</td>
       <td><%= @user.sign_in_count %></td>
     </tr>
     <tr>
-      <th>current_sign_in_at</th>
+      <td>current_sign_in_at</td>
       <td><%= @user.current_sign_in_at %></td>
     </tr>
     <tr>
-      <th>last_sign_in_at</th>
+      <td>last_sign_in_at</td>
       <td><%= @user.last_sign_in_at %></td>
     </tr>
     <tr>
-      <th>current_sign_in_ip</th>
+      <td>current_sign_in_ip</td>
       <td><%= @user.current_sign_in_ip %></td>
     </tr>
     <tr>
-      <th>created_at</th>
+      <td>created_at</td>
       <td><%= @user.created_at %></td>
     </tr>
     <tr>
-      <th>last_sign_in_ip</th>
+      <td>last_sign_in_ip</td>
       <td><%= @user.last_sign_in_ip %></td>
     </tr>
     <tr>
-      <th>updated_at</th>
+      <td>updated_at</td>
       <td><%= @user.updated_at %></td>
     </tr>
   </table>

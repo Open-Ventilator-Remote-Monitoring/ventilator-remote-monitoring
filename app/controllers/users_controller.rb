@@ -22,8 +22,9 @@ class UsersController < ApplicationController
   # GET /users/1.json
   def show
     if (current_user.admin? ||
-       (current_user.org_admin? && (User.find(params[:id]).organization_id == current_user.organization_id)) || current_user == User.find(params[:id]))
-      @user = User.find(params[:id])
+       (current_user.org_admin? && (@user.organization_id == current_user.organization_id)) ||
+       current_user == @user)
+        # continue
     else
       flash[:error] = "You must be an administrator to view other users"
       redirect_to root_url

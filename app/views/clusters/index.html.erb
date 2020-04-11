@@ -1,24 +1,30 @@
 <p id="notice"><%= notice %></p>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Organization</th>
-    </tr>
-  </thead>
+<h4>
+  <%= @organization.name %>
+</h4>
 
-  <tbody>
-    <% @clusters.each do |cluster| %>
+<h4>Clusters</h4>
+
+<section>
+  <table class="table">
+    <thead>
       <tr>
-        <td><%= link_to cluster.name, cluster %></td>
-        <td><%= cluster.description %></td>
-        <td><%= cluster.organization.name %></td>
+        <th>Name</th>
+        <th>Description</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+
+    <tbody>
+      <% @clusters.each do |cluster| %>
+        <tr>
+          <td><%= link_to cluster.name, cluster %></td>
+          <td><%= cluster.description %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</section>
 
 <a href="<%= new_cluster_path %>">
   <button class="btn btn-info">+ Add New Cluster</button>

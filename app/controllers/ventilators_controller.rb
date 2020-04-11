@@ -6,7 +6,7 @@ class VentilatorsController < ApplicationController
   # GET /ventilators.json
   def index
     if current_user.organization.present?
-      @ventilators = current_user.organization.ventilators
+      @ventilators = current_user.organization.ventilators.order("clusters.name, name")
     else
       @ventilators = nil
     end

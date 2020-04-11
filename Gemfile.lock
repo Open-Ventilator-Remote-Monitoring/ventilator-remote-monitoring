@@ -86,6 +86,8 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    email_validator (2.0.1)
+      activemodel
     erubi (1.9.0)
     execjs (2.7.0)
     ffi (1.12.2)
@@ -193,6 +195,9 @@ GEM
     turbolinks-source (5.2.0)
     tzinfo (1.2.6)
       thread_safe (~> 0.1)
+    validates_hostname (1.0.10)
+      activerecord (>= 3.0)
+      activesupport (>= 3.0)
     warden (1.2.8)
       rack (>= 2.0.6)
     web-console (4.0.1)
@@ -225,6 +230,7 @@ DEPENDENCIES
   byebug
   capybara (>= 2.15)
   devise
+  email_validator (~> 2.0.1)
   jbuilder (~> 2.7)
   listen (>= 3.0.5, < 3.2)
   pg (>= 0.18, < 2.0)
@@ -236,6 +242,7 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   turbolinks (~> 5)
   tzinfo-data
+  validates_hostname (~> 1.0.10)
   web-console (>= 3.3.0)
   webdrivers
   webpacker (~> 4.0)

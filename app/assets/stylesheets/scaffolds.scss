@@ -25,7 +25,11 @@ a:hover {
   background-color: #000; }
 
 td {
-  padding: .5rem;
+  padding: .5rem .5rem .5rem 0;
+}
+
+table {
+  width: 100%;
 }
 
 .table th {
@@ -87,9 +91,22 @@ a:hover {
 }
 
 section {
-  margin: 2rem 0;
+  margin: 1.5rem 0;
 }
 
 button {
   margin: .5rem 0;
+}
+
+input:not(.btn),
+textarea,
+select {
+  width: 100%;
+  max-width: 50%;
+}
+
+.field_with_errors {
+  padding: 2px;
+  background-color: red;
+  display: block;
 }
