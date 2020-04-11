@@ -1,8 +1,16 @@
-<div class="crud">
-  <h1>Editing Cluster</h1>
+<h1>Editing Cluster</h1>
 
+<section>
   <%= render 'form', cluster: @cluster %>
+</section>
 
-  <%= link_to 'Show', @cluster %> |
-  <%= link_to 'Back', clusters_path %>
-</div>
+<%= button_to "Delete This Cluster",
+  {
+    controller: :clusters,
+    action: 'destroy',
+    id: @cluster.id
+  },
+  method: :delete,
+  data: { confirm: 'Are you sure you want to delete this cluster? This action cannot be undone.' },
+  class: "btn btn-danger"
+%>

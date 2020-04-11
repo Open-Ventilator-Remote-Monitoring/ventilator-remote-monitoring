@@ -1,21 +1,32 @@
 class ClustersController < ApplicationController
+  before_action :require_admin_or_org_admin
   before_action :set_cluster, only: [:show, :edit, :update, :destroy]
+
 
   # GET /clusters
   # GET /clusters.json
   def index
-    @clusters = Cluster.all
+    p current_user.organization
+    if current_user.organization.present?
+      @clusters = current_user.organization.clusters
+    else
+      @clusters = nil
+    end
   end
 
   # GET /clusters/1
   # GET /clusters/1.json
   def show
-    @ventilators = @cluster.ventilators
   end
 
   # GET /clusters/new
   def new
     @cluster = Cluster.new
+    if(params[:organization_id])
+      if current_user.admin? || (current_user.org_admin? && current_user.organization.id == params[:organization_id])
+        @cluster.organization_id = params[:organization_id]
+      end
+    end
   end
 
   # GET /clusters/1/edit
@@ -27,9 +38,14 @@ class ClustersController < ApplicationController
   def create
     @cluster = Cluster.new(cluster_params)
 
+    # non-admin users are only allowed to create clusters in thier own organization
+    unless current_user.admin?
+      @cluster.organization_id = current_user.organization.id
+    end
+
     respond_to do |format|
       if @cluster.save
-        format.html { redirect_to organization_path(@organization), notice: 'Cluster was successfully created.' }
+        format.html { redirect_to organization_path(@cluster.organization_id), notice: 'Cluster was successfully created.' }
         format.json { render :show, status: :created, location: @cluster }
       else
         format.html { render :new }
@@ -41,6 +57,11 @@ class ClustersController < ApplicationController
   # PATCH/PUT /clusters/1
   # PATCH/PUT /clusters/1.json
   def update
+    # non-admin users are only allowed to create clusters in thier own organization
+    unless current_user.admin?
+      @cluster.organization_id = current_user.organization.id
+    end
+
     respond_to do |format|
       if @cluster.update(cluster_params)
         format.html { redirect_to @cluster, notice: 'Cluster was successfully updated.' }
@@ -66,7 +87,14 @@ class ClustersController < ApplicationController
 
     # Use callbacks to share common setup or constraints between actions.
     def set_cluster
+      # Allow the current request if the user is an admin or if the cluster belongs to the users' organization
       @cluster = Cluster.find(params[:id])
+      if current_user.admin? || (current_user.organization && (current_user.organization.id == @cluster.organization.id))
+        # ok
+      else
+        flash[:error] = "You do not have permission to view this cluster"
+        redirect_to clusters_url
+      end
     end
 
     # Only allow a list of trusted parameters through.

@@ -1,33 +1,27 @@
-<div class="crud">
-  <p id="notice"><%= notice %></p>
+<p id="notice"><%= notice %></p>
 
-  <h1>Clusters in <%= current_user.organization.name %></h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Organization</th>
+    </tr>
+  </thead>
 
-  <table class="table">
-    <thead>
+  <tbody>
+    <% @clusters.each do |cluster| %>
       <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Belongs to Organization</th>
-        <th colspan="3"></th>
+        <td><%= link_to cluster.name, cluster %></td>
+        <td><%= cluster.description %></td>
+        <td><%= cluster.organization.name %></td>
       </tr>
-    </thead>
+    <% end %>
+  </tbody>
+</table>
 
-    <tbody>
-      <% @clusters.each do |cluster| %>
-        <tr>
-          <td><%= cluster.id %></td>
-          <td><%= link_to cluster.name, cluster %></td>
-          <td><%= cluster.description %></td>
-          <td><%= cluster.organization.name %></td>
-          <td><%= link_to 'Edit', edit_cluster_path(cluster) %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+<a href="<%= new_cluster_path %>">
+  <button class="btn btn-info">+ Add New Cluster</button>
+</a>
 
-  <br>
 
-  <%= link_to 'New Cluster', new_cluster_path %>
-</div>

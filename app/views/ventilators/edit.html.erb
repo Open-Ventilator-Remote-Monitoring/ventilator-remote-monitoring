@@ -1,8 +1,17 @@
-<div class="crud">
-  <h1>Editing Ventilator</h1>
+<h1>Editing Ventilator</h1>
 
+<section>
   <%= render 'form', ventilator: @ventilator %>
+</section>
 
-  <%= link_to 'Show', @ventilator %> |
-  <%= link_to 'Back', ventilators_path %>
-</div>
+<%= button_to "Delete This Ventilator",
+  {
+    controller: :ventilators,
+    action: 'destroy',
+    id: @ventilator.id
+  },
+  method: :delete,
+  data: { confirm: 'Are you sure you want to delete this ventilator? This action cannot be undone.' },
+  class: "btn btn-danger"
+%>
+

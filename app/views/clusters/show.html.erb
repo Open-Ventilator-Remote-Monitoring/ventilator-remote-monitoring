@@ -1,52 +1,54 @@
-<div class="crud">
-  <p id="notice"><%= notice %></p>
+<p id="notice"><%= notice %></p>
 
-  <h1>
-    Cluster: <%= @cluster.name %>
-  </h1>
+<h6>
+  <%= @cluster.organization.name %>
+</h6>
 
-  <h4>
-    <%= @cluster.description %>
-  </p>
+<h2>
+  Cluster: <%= @cluster.name %>
+</h2>
 
+<h5>
+  Description: <%= @cluster.description %>
+</h5>
+
+<section>
   <a href="<%= edit_cluster_path %>">
-    <button class="btn btn-secondary">
+    <button class="btn btn-info">
       <i class="fas fa-cog"></i>
-      Edit This Cluster
+      Cluster Settings
     </button>
   </a>
-  <a href="<%= new_ventilator_path %>">
-    <button class="btn btn-secondary">
+</section>
+
+<section>
+  <h3>Ventilators in this cluster</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Hostname</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @cluster.ventilators.each do |ventilator| %>
+        <tr>
+          <td>
+            <%= link_to ventilator.name, ventilator %>
+          </td>
+          <td>
+            <%= ventilator.hostname %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <a href="/ventilators/new?cluster_id=<%= @cluster.id %>">
+    <button class="btn btn-info">
       + Add New Ventilator
     </button>
   </a>
-
-  <section>
-    <h3>Ventilators in this cluster</h3>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Id</th>
-          <th>Name</th>
-          <th>Hostname</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @cluster.ventilators.each do |ventilator| %>
-          <tr>
-            <td>
-              <%= ventilator.id %>
-            </td>
-            <td>
-              <%= link_to ventilator.name, ventilator %>
-            </td>
-            <td>
-              <%= ventilator.hostname %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-
-  </section>
-</div>
+</section>

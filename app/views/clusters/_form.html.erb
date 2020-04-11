@@ -11,22 +11,32 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
-  </div>
+  <table>
+    <tr class="field">
+      <td>Belongs to organization</td>
+      <td>
+        <% if current_user.admin? %>
+          <%= form.collection_select( :organization_id, Organization.all, :id, :name, {}, { class: "form-control" })  %>
+        <% else  %>
+          <input value="<%= current_user.organization.name %>" class="form-control" disabled></input>
+        <% end %>
+      </td>
+    </tr>
 
-  <div class="field">
-    <%= form.label :description %>
-    <%= form.text_area :description %>
-  </div>
+    <tr class="field">
+      <td><%= form.label :name %></td>
+      <td><%= form.text_field :name %></td>
+    </tr>
 
-  <div class="field">
-    <label>Belongs to organization:</label>
-    <%= form.collection_select( :organization_id, Organization.all, :id, :name, {}, { class: "form-control" })  %>
-  </div>
+    <tr class="field">
+      <td><%= form.label :description %></td>
+      <td><%= form.text_area :description %></td>
+    </tr>
+  </table>
 
-  <div class="actions">
-    <%= form.submit %>
-  </div>
+  <section>
+    <div class="actions">
+      <%= form.submit class: "btn btn-info"%>
+    </div>
+  </section>
 <% end %>

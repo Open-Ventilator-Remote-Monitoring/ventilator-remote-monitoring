@@ -15,43 +15,11 @@
  */
 
 
-@import "bootstrap/scss/bootstrap";
+ @import "bootstrap/scss/bootstrap";
 
-$fa-font-path: '@fortawesome/fontawesome-free/webfonts';
-@import '@fortawesome/fontawesome-free/scss/fontawesome';
-@import '@fortawesome/fontawesome-free/scss/solid';
-@import '@fortawesome/fontawesome-free/scss/regular';
-@import '@fortawesome/fontawesome-free/scss/brands';
-@import '@fortawesome/fontawesome-free/scss/v4-shims';
-
-.container {
-	margin-top: 2rem;
-}
-
-.crud {
-	.field * {
-		vertical-align: top;
-		margin: .6rem;
-	}
-
-	a:visited {
-		color: #007bff;
-	}
-
-	a:hover {
-		background-color: yellow;
-	}
-
-	section {
-		margin: 1.5rem 0;
-	}
-
-	button {
-		margin: .5rem 0;
-	}
-}
-
-
-
-
-
+ $fa-font-path: '@fortawesome/fontawesome-free/webfonts';
+ @import '@fortawesome/fontawesome-free/scss/fontawesome';
+ @import '@fortawesome/fontawesome-free/scss/solid';
+ @import '@fortawesome/fontawesome-free/scss/regular';
+ @import '@fortawesome/fontawesome-free/scss/brands';
+ @import '@fortawesome/fontawesome-free/scss/v4-shims';

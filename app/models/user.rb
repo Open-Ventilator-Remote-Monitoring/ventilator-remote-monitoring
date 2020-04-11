@@ -5,11 +5,11 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
   belongs_to :organization, optional: true
 
-  enum role: [:unassigned, :org_admin, :admin]
+  enum role: [:user, :org_admin, :admin]
   after_initialize :set_default_role, :if => :new_record?
 
   def set_default_role
-  	self.role ||= :unassigned
+  	self.role ||= :user
   end
 
 end

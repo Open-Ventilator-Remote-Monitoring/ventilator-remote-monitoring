@@ -1,46 +1,61 @@
-<div class="crud">
-  <p id="notice"><%= notice %></p>
+<p id="notice"><%= notice %></p>
 
-  <p>
-    <strong>Name:</strong>
-    <%= @ventilator.name %>
-  </p>
+<h6>
+  <%= @ventilator.cluster.organization.name %>
+</h6>
+<h6>
+  <%= @ventilator.cluster.name %>
+</h6>
+<h2>
+  Ventilator: <%= @ventilator.name %>
+</h2>
 
-  <p>
-    <strong>Serial number:</strong>
-    <%= @ventilator.serial_number %>
-  </p>
+<section>
+  <a href="<%= edit_ventilator_path %>">
+    <button class="btn btn-info">
+      <i class="fas fa-cog"></i>
+      Ventilator Settings
+    </button>
+  </a>
+</section?>
 
-  <p>
-    <strong>Hostname:</strong>
-    <%= @ventilator.hostname %>
-  </p>
+<section>
+  <table class="table">
+    <tbody>
+        <tr>
+          <td>Serial number:</td>
+          <td><%= @ventilator.serial_number %></td>
+        </tr>
 
-  <p>
-    <strong>Api key:</strong>
-    <%= @ventilator.api_key %>
-  </p>
+        <tr>
+          <td>Hostname:</td>
+          <td><%= @ventilator.hostname %></td>
+        </tr>
 
-  <p>
-    <strong>Notes:</strong>
-    <%= @ventilator.notes %>
-  </p>
+        <tr>
+          <td>Api key:</td>
+          <td><%= @ventilator.api_key %></td>
+        </tr>
 
-  <p>
-    <strong>Ventilator user:</strong>
-    <%= @ventilator.ventilator_user %>
-  </p>
+        <tr>
+          <td>Notes:</td>
+          <td><%= @ventilator.notes %></td>
+        </tr>
 
-  <p>
-    <strong>Ventilator password:</strong>
-    <%= @ventilator.ventilator_password %>
-  </p>
+        <tr>
+          <td>Ventilator user:</td>
+          <td><%= @ventilator.ventilator_user %></td>
+        </tr>
 
-  <p>
-    <strong>Cluster:</strong>
-    <%= @ventilator.cluster_id %>
-  </p>
+        <tr>
+          <td>Ventilator password:</td>
+          <td><%= @ventilator.ventilator_password %></td>
+        </tr>
 
-  <%= link_to 'Edit', edit_ventilator_path(@ventilator) %> |
-  <%= link_to 'Back', ventilators_path %>
-</div>
+        <tr>
+          <td>Cluster:</td>
+          <td><%= @ventilator.cluster.name %></td>
+        </tr>
+    </tbody>
+  </table>
+</section>

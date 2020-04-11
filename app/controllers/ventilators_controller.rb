@@ -1,10 +1,15 @@
 class VentilatorsController < ApplicationController
+  before_action :require_admin_or_org_admin, except: [:index, :show]
   before_action :set_ventilator, only: [:show, :edit, :update, :destroy]
 
   # GET /ventilators
   # GET /ventilators.json
   def index
-    @ventilators = Ventilator.all
+    if current_user.organization.present?
+      @ventilators = current_user.organization.ventilators
+    else
+      @ventilators = nil
+    end
   end
 
   # GET /ventilators/1
@@ -15,6 +20,12 @@ class VentilatorsController < ApplicationController
   # GET /ventilators/new
   def new
     @ventilator = Ventilator.new
+
+    if(params[:cluster_id])
+      if current_user.admin? || (current_user.organization.clusters.any?{ |cluster| cluster.id == params[:cluster_id] })
+        @ventilator.cluster_id = params[:cluster_id]
+      end
+    end
   end
 
   # GET /ventilators/1/edit
@@ -26,9 +37,19 @@ class VentilatorsController < ApplicationController
   def create
     @ventilator = Ventilator.new(ventilator_params)
 
+    # non-admin users are only allowed to create ventilators in any cluster in their own organization
+    if current_user.org_admin?
+      if current_user.organization.clusters.any?{ |cluster| cluster.id == @ventilator.cluster_id }
+        # ventilator was added to a cluster within user's org
+      else
+        flash[:error] = "You do not have permission to add a Ventilator to this cluster"
+        redirect_to ventilator_url
+      end
+    end
+
     respond_to do |format|
       if @ventilator.save
-        format.html { redirect_to @ventilator, notice: 'Ventilator was successfully created.' }
+        format.html { redirect_to cluster_path(@ventilator.cluster_id), notice: 'Ventilator was successfully created.' }
         format.json { render :show, status: :created, location: @ventilator }
       else
         format.html { render :new }
@@ -42,7 +63,7 @@ class VentilatorsController < ApplicationController
   def update
     respond_to do |format|
       if @ventilator.update(ventilator_params)
-        format.html { redirect_to @ventilator, notice: 'Ventilator was successfully updated.' }
+        format.html { redirect_to cluster_path(@ventilator.cluster_id), notice: 'Ventilator was successfully updated.' }
         format.json { render :show, status: :ok, location: @ventilator }
       else
         format.html { render :edit }
@@ -64,7 +85,12 @@ class VentilatorsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_ventilator
-      @ventilator = Ventilator.find(params[:id])
+      if current_user.admin? || (current_user.organization && (current_user.organization.ventilators.include? Ventilator.find(params[:id])))
+        @ventilator = Ventilator.find(params[:id])
+      else
+        flash[:error] = "You do not have permission to view this ventilator"
+        redirect_to ventilators_url
+      end
     end
 
     # Only allow a list of trusted parameters through.

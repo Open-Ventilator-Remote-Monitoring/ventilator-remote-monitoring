@@ -11,17 +11,23 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
-  </div>
+  <section>
+    <table>
+      <tr class="field">
+        <td><%= form.label :name %></td>
+        <td><%= form.text_field :name %></td>
+      </tr>
 
-  <div class="field">
-    <%= form.label :description %>
-    <%= form.text_area :description, size: "30x2" %>
-  </div>
+      <tr class="field">
+        <td><%= form.label :description %></td>
+        <td><%= form.text_area :description, size: "30x2" %></td>
+      </tr>
+    </table>
+  </section>
 
-  <div class="actions">
-    <%= form.submit "Update Organization", class: "btn btn-primary" %>
-  </div>
+  <section>
+    <div class="actions">
+      <%= form.submit class: "btn btn-info" %>
+    </div>
+  </section>
 <% end %>

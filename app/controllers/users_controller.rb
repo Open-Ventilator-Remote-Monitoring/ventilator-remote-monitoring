@@ -14,14 +14,15 @@ class UsersController < ApplicationController
       @unassigned_users = User.where("organization_id IS NULL").order(created_at: :desc).last(5)
     else
       flash[:error] = "You must be an administrator to view other users"
-      redirect_to root_url      
+      redirect_to root_url
     end
   end
 
   # GET /users/1
   # GET /users/1.json
   def show
-    if (current_user.admin? || (current_user.org_admin? && (User.find(params[:id]).organization_id == current_user.organization_id)) || current_user == User.find(params[:id]))
+    if (current_user.admin? ||
+       (current_user.org_admin? && (User.find(params[:id]).organization_id == current_user.organization_id)) || current_user == User.find(params[:id]))
       @user = User.find(params[:id])
     else
       flash[:error] = "You must be an administrator to view other users"
@@ -32,7 +33,7 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    if current_user.admin? 
+    if current_user.admin?
       @user = User.find(params[:id])
     elsif (current_user.org_admin? && (current_user.organization.users.include?(User.find(params[:id])))) || (current_user.org_admin? && (User.find(params[:id]).organization_id == nil))
       @user = User.find(params[:id])
@@ -50,7 +51,7 @@ class UsersController < ApplicationController
     unless current_user.admin?
 
       # puts "*** Debugging ***"
-      # puts "current_user.org_admin?: #{current_user.org_admin?}" 
+      # puts "current_user.org_admin?: #{current_user.org_admin?}"
       # puts "current_user.organization.users.include?(User.find(params[:id])): #{current_user.organization.users.include?(User.find(params[:id]))}"
       # puts "User.find(params[:id]).organization_id == nil: #{User.find(params[:id]).organization_id == nil}"
       # puts "((user_params[:role] == org_admin) || (user_params[:role] == student) || (user_params[:role] == unassigned)): #{((user_params[:role] == "org_admin") || (user_params[:role] == "student") || (user_params[:role] == "unassigned"))}"

@@ -1,4 +1,5 @@
 class OrganizationsController < ApplicationController
+  before_action :require_admin, except: :show
   before_action :set_organization, only: [:show, :edit, :update, :destroy]
 
   # GET /organizations
@@ -10,8 +11,12 @@ class OrganizationsController < ApplicationController
   # GET /organizations/1
   # GET /organizations/1.json
   def show
-    @clusters = @organization.clusters
-    @users = @organization.users
+    if current_user.admin? || (current_user.org_admin? && (params[:id].to_i == current_user.organization.id))
+      # show
+    else
+      flash[:error] = "You must be an administrator to access this section"
+      redirect_to root_url
+    end
   end
 
   # GET /organizations/new
@@ -30,7 +35,7 @@ class OrganizationsController < ApplicationController
 
     respond_to do |format|
       if @organization.save
-        format.html { redirect_to @organizations, notice: 'Organization was successfully created.' }
+        format.html { redirect_to organizations_path, notice: 'Organization was successfully created.' }
         format.json { render :show, status: :created, location: @organization }
       else
         format.html { render :new }
@@ -73,4 +78,5 @@ class OrganizationsController < ApplicationController
     def organization_params
       params.require(:organization).permit(:name, :description)
     end
+
 end

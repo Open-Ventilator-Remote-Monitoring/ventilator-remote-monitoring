@@ -11,47 +11,57 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
-  </div>
+  <table>
+    <tr class="field">
+      <td>Belongs to cluster</td>
+      <td>
+        <% if current_user.admin? %>
+          <%= form.collection_select( :cluster_id, Cluster.all, :id, :name, {}, { class: "form-control" })  %>
+        <% else %>
+          <%= form.collection_select( :cluster_id, current_user.organization.clusters, :id, :name, {}, { class: "form-control" })  %>
+        <% end %>
+      </td>
+    </tr>
 
-  <div class="field">
-    <%= form.label :serial_number %>
-    <%= form.text_field :serial_number %>
-  </div>
+    <tr class="field">
+      <td><%= form.label :name %></td>
+      <td><%= form.text_field :name %></td>
+    </tr>
 
-  <div class="field">
-    <%= form.label :hostname %>
-    <%= form.text_field :hostname %>
-  </div>
+    <tr class="field">
+      <td><%= form.label :serial_number %></td>
+      <td><%= form.text_field :serial_number %></td>
+    </tr>
 
-  <div class="field">
-    <%= form.label :api_key %>
-    <%= form.text_field :api_key %>
-  </div>
+    <tr class="field">
+      <td><%= form.label :hostname %></td>
+      <td><%= form.text_field :hostname %></td>
+    </tr>
 
-  <div class="field">
-    <%= form.label :notes %>
-    <%= form.text_area :notes %>
-  </div>
+    <tr class="field">
+      <td><%= form.label :api_key %></td>
+      <td><%= form.text_field :api_key %></td>
+    </tr>
 
-  <div class="field">
-    <%= form.label :ventilator_user %>
-    <%= form.text_field :ventilator_user %>
-  </div>
+    <tr class="field">
+      <td><%= form.label :notes %></td>
+      <td><%= form.text_area :notes %></td>
+    </tr>
 
-  <div class="field">
-    <%= form.label :ventilator_password %>
-    <%= form.text_field :ventilator_password %>
-  </div>
+    <tr class="field">
+      <td><%= form.label :ventilator_user %></td>
+      <td><%= form.text_field :ventilator_user %></td>
+    </tr>
 
-  <div class="field">
-    <%= form.label :cluster_id %>
-    <%= form.text_field :cluster_id %>
-  </div>
+    <tr class="field">
+      <td><%= form.label :ventilator_password %></td>
+      <td><%= form.text_field :ventilator_password %></td>
+    </tr>
+  </table>
 
-  <div class="actions">
-    <%= form.submit %>
-  </div>
+  <section>
+      <div class="actions">
+        <%= form.submit class: "btn btn-info"%>
+      </div>
+    </section>
 <% end %>

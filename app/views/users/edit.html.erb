@@ -1,11 +1,9 @@
 <h3>Edit User</h3>
-<div class="row row-centered">
-  <div class="col-md-6 col-sm-6 col-xs-12 col-centered">
+
     <%= form_with(model: @user, local: true) do |form| %>
       <% if @user.errors.any? %>
         <div id="error_explanation">
           <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
-
           <ul>
           <% @user.errors.full_messages.each do |message| %>
             <li><%= message %></li>
@@ -14,45 +12,51 @@
         </div>
       <% end %>
 
-      <div class="field">
-        <%= form.label :name %>
-        <%= form.text_field :name, id: :user_name, class: "form-control" %>
-      </div>
+      <table>
+        <tr class="field">
+          <td><%= form.label :name %></td>
+          <td><%= form.text_field :name, id: :user_name, class: "form-control" %></td>
+        </tr>
 
-      <div class="field">
-        <%= form.label :email %>
-        <%= form.text_field :email, id: :user_email, class: "form-control" %>
-      </div>
+        <tr class="field">
+          <td><%= form.label :email %></td>
+          <td><%= form.text_field :email, id: :user_email, class: "form-control" %></td>
+        </tr>
 
-      <div class="field">
-        <%= form.label :bio %>
-        <%= form.text_area :bio, id: :user_bio, class: "form-control" %>
-      </div>
+        <tr class="field">
+          <td><%= form.label :bio %></td>
+          <td><%= form.text_area :bio, id: :user_bio, class: "form-control" %></td>
+        </tr>
 
-      <div class="field">
-        <label>Belongs to organization:</label>
+        <tr class="field">
+          <td><label>Belongs to organization:</label></td>
 
-        <% if current_user.admin? %>
-          <%= form.collection_select( :organization_id, Organization.all, :id, :name, {}, { class: "form-control" })  %>
-        <% elsif current_user.org_admin? %>
-          <%= form.collection_select( :organization_id, Organization.all, :id, :name, {}, { class: "form-control", style: "pointer-events: none;" })  %>
-        <% end %>
+          <td>
+            <% if current_user.admin? %>
+              <%= form.collection_select( :organization_id, Organization.all, :id, :name, {}, { class: "form-control" })  %>
+            <% elsif current_user.org_admin? %>
+              <input value="<%= current_user.organization.name %>" class="form-control" disabled />
+            <% end %>
+          </td>
+        </tr>
 
-      </div>
+        <tr class="field">
+          <td><label>Role (permissions level):</label></td>
 
-      <div class="field">
-        <label>Role (permissions level):</label>
-        <% if current_user.admin? %>
-          <%= form.select :role, User.roles.map { |key, value| [key.humanize, key] }, {}, { class: "form-control" } %>
-        <% else %>
-          <%= form.select :role, { "Org Admin": :org_admin, "Unassigned": :unassigned}, {}, { class: "form-control" } %>
-        <% end %>
-      </div>
+          <td>
+            <% if current_user.admin? %>
+              <%= form.select :role, User.roles.map { |key, value| [key.humanize, key] }, {}, { class: "form-control" } %>
+            <% else %>
+              <%= form.select :role, { "Org Admin": :org_admin, "Unassigned": :unassigned}, {}, { class: "form-control" } %>
+            <% end %>
+          </td>
+        </tr>
+      </table>
 
-      <br>
-      <div class="actions">
-        <%= form.submit "Update User", class: "btn btn-primary" %>
-      </div>
+      <section>
+        <div class="actions">
+          <%= form.submit "Update User", class: "btn btn-info" %>
+        </div>
+      </section>
     <% end %>
-  </div>
-</div>
+
