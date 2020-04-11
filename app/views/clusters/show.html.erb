@@ -1,10 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<h6>
-  <a href=<%=organization_path%>>
-    <%= @organization.name %>
-  </a>
-</h6>
+<%= render 'shared/link_to_org', organization: @organization %>
 
 <h4>
   Cluster: <%= @cluster.name %>
@@ -14,14 +10,16 @@
   <%= @cluster.description %>
 </h5>
 
-<section>
-  <a href="<%= edit_cluster_path %>">
-    <button class="btn btn-info">
-      <i class="fas fa-cog"></i>
-      Cluster Settings
-    </button>
-  </a>
-</section>
+<% if current_user.admin? || current_user.org_admin? %>
+  <section>
+    <a href="<%= edit_cluster_path %>">
+      <button class="btn btn-info">
+        <i class="fas fa-cog"></i>
+        Cluster Settings
+      </button>
+    </a>
+  </section>
+<% end %>
 
 <section>
   <h4>Ventilators in cluster: <%=@cluster.name %></h4>
@@ -48,10 +46,12 @@
   </table>
 </section>
 
-<section>
-  <a href="/ventilators/new?cluster_id=<%= @cluster.id %>">
-    <button class="btn btn-info">
-      + Add New Ventilator
-    </button>
-  </a>
-</section>
+<% if current_user.admin? || current_user.org_admin? %>
+  <section>
+    <a href="/ventilators/new?cluster_id=<%= @cluster.id %>">
+      <button class="btn btn-info">
+        + Add New Ventilator
+      </button>
+    </a>
+  </section>
+<% end %>

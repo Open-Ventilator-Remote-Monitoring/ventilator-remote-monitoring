@@ -2,7 +2,6 @@
   <% if ventilator.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(ventilator.errors.count, "error") %> prohibited this ventilator from being saved:</h2>
-
       <ul>
         <% ventilator.errors.full_messages.each do |message| %>
           <li><%= message %></li>

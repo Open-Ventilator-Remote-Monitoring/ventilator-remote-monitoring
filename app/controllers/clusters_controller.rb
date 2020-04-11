@@ -1,7 +1,5 @@
 class ClustersController < ApplicationController
-  before_action :require_admin_or_org_admin
   before_action :set_cluster, only: [:show, :edit, :update, :destroy]
-
 
   # GET /clusters
   # GET /clusters.json
@@ -9,7 +7,6 @@ class ClustersController < ApplicationController
     if current_user.organization.present?
       @organization = current_user.organization
       @clusters = current_user.organization.clusters.order(:name)
-      p @clusters
     else
       @organization = nil
       @clusters = nil
@@ -24,12 +21,15 @@ class ClustersController < ApplicationController
 
   # GET /clusters/new
   def new
+    require_admin_or_org_admin
+
     @cluster = Cluster.new
     if(params[:organization_id])
       if current_user.admin? || (current_user.org_admin? && current_user.organization.id == params[:organization_id])
         @cluster.organization_id = params[:organization_id]
       end
     end
+
   end
 
   # GET /clusters/1/edit
@@ -39,6 +39,8 @@ class ClustersController < ApplicationController
   # POST /clusters
   # POST /clusters.json
   def create
+    require_admin_or_org_admin
+
     @cluster = Cluster.new(cluster_params)
 
     # non-admin users are only allowed to create clusters in thier own organization
@@ -92,9 +94,7 @@ class ClustersController < ApplicationController
     def set_cluster
       # Allow the current request if the user is an admin or if the cluster belongs to the users' organization
       @cluster = Cluster.find(params[:id])
-      if current_user.admin? || (current_user.organization && (current_user.organization.id == @cluster.organization.id))
-        # ok
-      else
+      unless current_user.admin? || (current_user.organization && (current_user.organization.id == @cluster.organization.id))
         flash[:error] = "You do not have permission to view this cluster"
         redirect_to clusters_url
       end

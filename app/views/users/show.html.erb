@@ -8,12 +8,14 @@
         Change Password
       </button>
     </a>
-    <a href="<%= edit_user_path(current_user) %>">
-      <button class="btn btn-info">
-        <i class="fas fa-cog"></i>
-        Edit My Profile
-      </button>
-    </a>
+    <% if current_user.admin? || current_user.org_admin? %>
+      <a href="<%= edit_user_path(current_user) %>">
+        <button class="btn btn-info">
+          <i class="fas fa-cog"></i>
+          Edit My Profile
+        </button>
+      </a>
+    <% end %>
   <% elsif current_user.admin? %>
     <a href="<%= edit_user_path(@user) %>">
       <button class="btn btn-info">
@@ -27,7 +29,7 @@
 <section>
   <table class="table user-show">
     <tr>
-      <td>Username:</td>
+      <td>Name:</td>
       <td><%= @user.name.present? ? @user.name : "" %></td>
     </tr>
     <tr>

@@ -1,10 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<h6>
-  <a href="/organizations/<%=current_user.organization.id%>">
-    <%= current_user.organization.name %>
-  </a>
-</h6>
+<%= render 'shared/link_to_org', organization: current_user.organization %>
 
 <h4>Ventilators</h4>
 
@@ -14,7 +10,6 @@
       <th>Cluster</th>
       <th>Name</th>
       <th>Hostname</th>
-      <th>Organization</th>
       <th colspan="1"></th>
     </tr>
   </thead>
@@ -23,16 +18,21 @@
     <% @ventilators.each do |ventilator| %>
       <tr>
         <td><%= ventilator.cluster.name %></td>
-        <td><%= ventilator.name %></td>
+        <td><%= link_to ventilator.name, ventilator %></td>
         <td><%= ventilator.hostname %></td>
-        <td><%= ventilator.cluster.organization.name %></td>
         <td><%= link_to 'Settings', edit_ventilator_path(ventilator) %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<br>
-
-<%= link_to 'New Ventilator', new_ventilator_path %>
+<% if current_user.admin? || current_user.org_admin? %>
+  <section>
+    <a href="/ventilators/new">
+      <button class="btn btn-info">
+        + Add New Ventilator
+      </button>
+    </a>
+  </section>
+<% end %>
 

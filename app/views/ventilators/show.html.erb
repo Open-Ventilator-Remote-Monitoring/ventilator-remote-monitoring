@@ -1,16 +1,8 @@
 <p id="notice"><%= notice %></p>
 
-<h6>
-  <a href="/organizations/<%=@ventilator.cluster.organization.id%>">
-    <%= @ventilator.cluster.organization.name %>
-  </a>
-</h6>
+<%= render 'shared/link_to_org', organization: @organization %>
 
-<h6>
-  <a href="/clusters/<%=@ventilator.cluster.id%>">
-    <%= @ventilator.cluster.name %>
-  </a>
-</h6>
+<%= render 'shared/link_to_cluster', cluster: @ventilator.cluster %>
 
 <h4>
   Ventilator: <%= @ventilator.name %>

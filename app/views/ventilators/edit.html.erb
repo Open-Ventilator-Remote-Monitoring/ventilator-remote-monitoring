@@ -1,10 +1,6 @@
 <h4>Editing Ventilator</h4>
 
-<h6>
-  <a href="/organizations/<%=@ventilator.cluster.organization.id%>">
-    <%= @ventilator.cluster.organization.name %>
-  </a>
-</h6>
+<%= render 'shared/link_to_org', organization: @ventilator.cluster.organization %>
 
 <section>
   <%= render 'form', ventilator: @ventilator %>

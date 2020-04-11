@@ -29,15 +29,12 @@
                 <%= link_to "Users", users_path, class: "dropdown-item" %>
               </div>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/clusters">My Clusters</a>
-            </li>
-          <% elsif current_user.org_admin? %>
-            <li class="nav-item">
-              <a class="nav-link" href="/clusters">My Clusters</a>
-            </li>
           <% end %>
         <% end %>
+
+        <li class="nav-item">
+            <a class="nav-link" href="/clusters">My Clusters</a>
+        </li>
 
         <li class="nav-item">
           <a class="nav-link" href="/demo">Demo</a>

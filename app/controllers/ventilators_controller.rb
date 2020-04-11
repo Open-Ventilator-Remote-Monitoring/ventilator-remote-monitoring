@@ -15,16 +15,24 @@ class VentilatorsController < ApplicationController
   # GET /ventilators/1
   # GET /ventilators/1.json
   def show
+
   end
 
   # GET /ventilators/new
   def new
     @ventilator = Ventilator.new
 
+    # If coming from a cluster list, we set the cluster_id where the ventilator will be added.
+    # We also show an Organization breadcrumb at the top. When we don't come from a cluster,
+    # we just set it to the user's organization
+
     if(params[:cluster_id])
       if current_user.admin? || (current_user.organization.clusters.any?{ |cluster| cluster.id == params[:cluster_id] })
         @ventilator.cluster_id = params[:cluster_id]
+        @organization = @ventilator.cluster.organization
       end
+    else
+      @organization = current_user.organization
     end
   end
 
@@ -85,8 +93,11 @@ class VentilatorsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_ventilator
-      if current_user.admin? || (current_user.organization && (current_user.organization.ventilators.include? Ventilator.find(params[:id])))
+      if current_user.admin? ||
+         (current_user.organization.present? &&
+           (current_user.organization.ventilators.include? Ventilator.find(params[:id])))
         @ventilator = Ventilator.find(params[:id])
+        @organization = @ventilator.cluster.organization
       else
         flash[:error] = "You do not have permission to view this ventilator"
         redirect_to ventilators_url
