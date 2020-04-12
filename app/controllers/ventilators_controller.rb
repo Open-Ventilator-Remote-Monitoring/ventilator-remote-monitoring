@@ -83,9 +83,10 @@ class VentilatorsController < ApplicationController
   # DELETE /ventilators/1
   # DELETE /ventilators/1.json
   def destroy
+    cluster = @ventilator.cluster
     @ventilator.destroy
     respond_to do |format|
-      format.html { redirect_to ventilators_url, notice: 'Ventilator was successfully destroyed.' }
+      format.html { redirect_to cluster_path cluster, notice: 'Ventilator was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

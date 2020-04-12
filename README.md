@@ -59,7 +59,7 @@ Here is an example of the JSON returned:
     "id": "3",
     "type": "organization",
     "attributes": {
-      "name": "Org 3"
+      "name": "Honnah Lee Medical Center"
     },
     "relationships": {
       "clusters": {
@@ -81,7 +81,7 @@ Here is an example of the JSON returned:
       "id": "6",
       "type": "cluster",
       "attributes": {
-        "name": "O3 C1"
+        "name": "East Wing"
       },
       "relationships": {
         "ventilators": {
@@ -106,7 +106,7 @@ Here is an example of the JSON returned:
       "id": "7",
       "type": "cluster",
       "attributes": {
-        "name": "O3 C2"
+        "name": "West Wing"
       },
       "relationships": {
         "ventilators": {
@@ -128,7 +128,7 @@ Here is an example of the JSON returned:
       "type": "ventilator",
       "attributes": {
         "id": 15,
-        "name": "O3 C1 V1",
+        "name": "Room E-1 Bed 1",
         "hostname": null
       }
     },
@@ -137,7 +137,7 @@ Here is an example of the JSON returned:
       "type": "ventilator",
       "attributes": {
         "id": 16,
-        "name": "O3 C1 V2",
+        "name": "Room E-2 Bed 1",
         "hostname": null
       }
     },
@@ -146,7 +146,7 @@ Here is an example of the JSON returned:
       "type": "ventilator",
       "attributes": {
         "id": 17,
-        "name": "O3 C1 V3",
+        "name": "Room E-3 Bed 1",
         "hostname": null
       }
     },
@@ -155,7 +155,7 @@ Here is an example of the JSON returned:
       "type": "ventilator",
       "attributes": {
         "id": 18,
-        "name": "O3 C2 V1",
+        "name": "Room W-1 Bed 1",
         "hostname": null
       }
     },
@@ -164,7 +164,7 @@ Here is an example of the JSON returned:
       "type": "ventilator",
       "attributes": {
         "id": 19,
-        "name": "OS C2 V2",
+        "name": "Room W-1 Bed 1",
         "hostname": null
       }
     }
@@ -176,4 +176,73 @@ Here is an example of the JSON returned:
 
 This project uses fast_jsonapi from Netflix for JSON serialization in Ruby. Netflix is no longer
 maintaining the libray and the commuinity has taken over. That project is
-(here)[https://github.com/fast-jsonapi/fast_jsonapi]. If you encounter any issue, it may be best to move to that project.
+(here)[https://github.com/fast-jsonapi/fast_jsonapi]. If you encounter any issue,
+it may be best to move to that project.
+
+## Deserialization
+
+On the clint, these few lines of code will deserialize the data above:
+
+```javascript
+  import Jsona from 'jsona'
+
+  const dataFormatter = new Jsona()
+  const organization = dataFormatter.deserialize(response.parsedBody)
+```
+
+This results in something we can more easily work with (`relationshipNames` keys have been removed):
+
+```json
+{
+  "type": "organization",
+  "id": "3",
+  "name": "Honnah Lee Medical Center",
+  "clusters": [
+    {
+      "type": "cluster",
+      "id": "6",
+      "name": "East Wing",
+      "ventilators": [
+        {
+          "type": "ventilator",
+          "id": 15,
+          "name": "Room E-1 Bed 1",
+          "hostname": null
+        },
+        {
+          "type": "ventilator",
+          "id": 16,
+          "name": "Room E-2 Bed 1",
+          "hostname": null
+        },
+        {
+          "type": "ventilator",
+          "id": 17,
+          "name": "Room E-3 Bed 1",
+          "hostname": null
+        }
+      ]
+    },
+    {
+      "type": "cluster",
+      "id": "7",
+      "name": "West Wing",
+      "ventilators": [
+        {
+          "type": "ventilator",
+          "id": 18,
+          "name": "Room W-1 Bed 1",
+          "hostname": null
+        },
+        {
+          "type": "ventilator",
+          "id": 19,
+          "name": "Room W-1 Bed 2",
+          "hostname": null
+        }
+      ]
+    }
+  ]
+}
+```
+
