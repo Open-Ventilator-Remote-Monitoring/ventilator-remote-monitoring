@@ -28,13 +28,13 @@ class Cluster extends Component<IProps, null> {
               <th>PEEP</th>
             </tr>
             <tr className="tr-subheading">
-              <td></td>
-              <td></td>
-              <td>mL/Breath</td>
-              <td>breaths/min</td>
-              <td>cm H2O</td>
-              <td></td>
-              <td>cm H2O</td>
+              <th></th>
+              <th></th>
+              <th>mL/Breath</th>
+              <th>breaths/min</th>
+              <th>cm H2O</th>
+              <th></th>
+              <th>cm H2O</th>
             </tr>
           </thead>
           <tbody>

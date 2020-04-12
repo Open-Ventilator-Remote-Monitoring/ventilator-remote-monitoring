@@ -1,0 +1,22 @@
+.select-row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: flex-start;
+}
+
+.label {
+  max-width: 200px;
+  font-size: 1.25rem;
+}
+
+.select {
+  min-width: 300px;
+  max-width: 500px;
+  margin-left: 10px;
+}
+
+

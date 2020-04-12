@@ -30,6 +30,7 @@ class VentilatorTree extends Component<IProps, IState> {
     let response = await get<any>('/api/v1/ventilators')
 
     if (response.ok) {
+      // todo: try-catch
       const dataFormatter = new Jsona()
       const organization = dataFormatter.deserialize(response.parsedBody)
       this.setState({
@@ -50,20 +51,19 @@ class VentilatorTree extends Component<IProps, IState> {
 
     const spinner = (
       //<FontAwesomeIcon icon={faSpinner} size="4x" spin />
-      <i className="fas fa-lg fa-spinner" />
+      //<i className="fas fa-lg fa-spinner" />
+      <div>Spinning</div>
     )
 
-    return (
-      <div>
-        {
-          loading
-            ? spinner
-            : errMsg
-              ? (<div className="error">{errMsg}</div>)
-              : <Organization organization={organization} demo={demo} />
-        }
-      </div>
-    );
+    if (loading) {
+      return spinner
+    }
+
+    if (errMsg) {
+      return (<div className="error">{errMsg}</div>)
+    }
+
+    return (<Organization organization={organization} demo={demo} />)
   }
 }
 
