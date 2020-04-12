@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   # todo: determine what to do for super users
   namespace :api do
     namespace :v1 do
-      resources :ventilators
+      resources :ventilators, controller: "ventilators", only: [:index]
     end
   end
 end

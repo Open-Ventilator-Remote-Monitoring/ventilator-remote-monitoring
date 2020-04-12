@@ -64,4 +64,6 @@ gem 'validates_hostname', '~> 1.0.10'
 gem 'email_validator', '~> 2.0.1'
 
 # there is a unique index on (cluster_is, hostname), so unused hostnames must be nill
-gem 'nilify_blanks', '~>1.3.0'
+gem 'nilify_blanks', '~> 1.3.0'
+
+gem 'fast_jsonapi'

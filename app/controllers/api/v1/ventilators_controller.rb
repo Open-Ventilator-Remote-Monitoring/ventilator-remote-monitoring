@@ -1,38 +1,21 @@
-class Api::V1::VentilatorsController < ApplicationController
+class Api::V1::VentilatorsController < ApiController
+
+  @@serialize_options = {
+    # clusters.ventilators also includes clusters, but just in case that changes
+    # https://github.com/Netflix/fast_jsonapi/issues/276
+    :include => [:clusters, 'clusters.ventilators']
+  }
+
   def index
-    vs = Ventilator.all.order(:name)
-    render json: vs
-  end
-
-  def create
-    ventilator = Ventilator.create!(ventilator_params)
-    if ventilator
-      render json: ventilator
-    else
-      render json: ventilator.errors
+    if user_signed_in?
+      if current_user.organization.present?
+        org = Organization.includes(:clusters, :ventilators).find(current_user.organization.id)
+        render json: OrganizationSerializer.new(org, @@serialize_options)
+        return
+      end
     end
-  end
 
-  def show
-    if ventilator
-      render json: ventilator
-    else
-      render json: ventilator.errors
-    end
-  end
-
-  def destroy
-    ventilator&.destroy
-    render json: { message: 'Ventilator deleted!' }
-  end
-
-  private
-
-  def ventilator_params
-    params.permit(:name)
-  end
-
-  def ventilator
-    @ventilator ||= Ventilator.find(params[:id])
+    render :json => {"error" => "User is not logged in or is not associated with an Organization."}
   end
 end
+
