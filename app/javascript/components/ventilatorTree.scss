@@ -1,27 +1,5 @@
 .demo-ventilator-table {
-  /*
-  .tr-heading {
-    padding-bottom: 0px !important;
-    margin-bottom: 0px !important;
-    th {
-      padding-bottom: 0px !important;
-      margin-bottom: 0px !important;
-    }
-  }
-  .tr-subheading {
-    padding-top: 0px;
-    margin-top: 0px;
-    td {
-      border-top: 0px;
-      padding-top: 0px;
-      margin-top: 0px;
-    }
-  }
-  .status-col {
-    width: 60px;
-  }
-*/
-
+  // used to flash the red triangle
   @keyframes flash {
     0% { opacity: 1; }
     70% { opacity: 1; }
@@ -32,5 +10,40 @@
   .flash {
     -webkit-animation: flash linear 2s infinite;
 	  animation: flash linear 2s infinite;
+  }
+
+  // Used to flash a field when the value changes
+  .flashing {
+    background-color: transparent;
+    transition: background-color 500ms;
+  }
+
+  .active {
+    background-color:yellow;
+  }
+
+  .tr-subheading th {
+    font-weight: 300;
+  }
+
+  thead {
+    background-color: rgb(203, 232, 241);
+  }
+
+  tr {
+    border-bottom: 1px solid #ddd;
+  }
+
+  td {
+    text-align: center;
+    border-right: 1px solid #ddd;
+  }
+
+  td:first-child {
+    border-left: 1px solid #ddd;
+  }
+
+  th {
+    text-align: center;
   }
 }

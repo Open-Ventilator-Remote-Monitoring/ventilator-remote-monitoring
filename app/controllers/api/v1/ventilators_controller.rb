@@ -1,8 +1,10 @@
 class Api::V1::VentilatorsController < ApiController
 
   @@serialize_options = {
-    # clusters.ventilators also includes clusters, but just in case that changes
+    # 'clusters.ventilators' in the array below should also force the inclusion of cluster.
+    # But, just in case that changes
     # https://github.com/Netflix/fast_jsonapi/issues/276
+
     :include => [:clusters, 'clusters.ventilators']
   }
 

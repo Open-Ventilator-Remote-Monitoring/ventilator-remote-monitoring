@@ -29,13 +29,6 @@ table {
   text-align: left;
 }
 
-.table tr:nth-child(2) th {
-  padding: .5rem;
-  text-align: left;
-  font-weight: normal;
-  vertical-align: top;
-}
-
 .table tr {
   border-bottom: 1px solid #ddd;
 }
@@ -129,13 +122,4 @@ select {
   border: 1px solid red;
   margin: 20px auto;
   padding: 10px;
-}
-
-.flashing {
-  background-color: transparent;
-  transition: background-color 500ms;
-}
-
-.flashing.active {
-  background-color:yellow;
 }

@@ -40,18 +40,20 @@ class Cluster extends Component<IProps, null> {
     if (ventilators.length == 0) {
       return (
         <h6>
-          There are ventilator in this cluster,
+          There are ventilators in this cluster,
           but none of them have been configured
           with a hostname.
         </h6>
       )
     }
 
+    // table demo-ventilator-table
+
     return (
-      <table className="table demo-ventilator-table">
+      <table className='demo-ventilator-table'>
         <thead>
           <tr className="tr-heading">
-            <th></th>
+            <th>Status</th>
             <th>Unit</th>
             <th>Tidal Volume </th>
             <th>Respiratory Rate</th>

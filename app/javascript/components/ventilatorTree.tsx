@@ -3,9 +3,10 @@ import Jsona from 'jsona'
 import { get } from '../api'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+import Organization from "./organization"
 
 import "./ventilatorTree.scss"
-import Organization from "./organization";
+
 
 interface IProps {
   // If true, all ventilators will generate random data every 3 seconds
