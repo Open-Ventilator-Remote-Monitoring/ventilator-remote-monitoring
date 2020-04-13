@@ -14,12 +14,46 @@ import { IVentilator, IVentilatorPollResult, IVentilatorPollValues } from '../ty
 import { get } from '../api'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
+import FlashChange from '@avinlab/react-flash-change';
 
 // When the device is connected, poll this often
 const GOOD_POLL_PERIOD_MS = 3000
 
 // When the device is disconnected, poll this often
 const BAD_POLL_PERIOD_MS = 60000
+
+interface IColumn {
+  min: number,
+  max: number,
+  make: (x :number) => any // convert the measurement to what will be displayed
+}
+
+const columns : {[key: string]: IColumn} = {
+   tidalVolume: {min: 300, max: 800, make: x => x},
+   respiratoryRate: {min: 8, max: 35, make: x => x},
+   peakInspiratoryPressure: {min: 60, max: 80, make: x => x},
+   ieRatio: {min: 1, max: 4, make: x => "1:" + x},
+   peep: {min: 5, max: 10, make: x => x},
+}
+
+const columnNames = Object.keys(columns)
+
+const IE_RATIO_INDEX = 3
+
+const Flash = (value) => {
+  return (
+    <FlashChange
+        value={value}
+        className="flashing"
+        flashClassName="active"
+        compare={(prevProps, nextProps) => {
+            return nextProps.value !== prevProps.value;
+        }}
+    >
+        {value}
+    </FlashChange>
+  )
+}
 
 interface IProps {
   ventilator: IVentilator
@@ -88,17 +122,44 @@ class Ventilator extends Component<IProps, IState> {
 
   async simulatePollDevice(): Promise<IVentilatorPollResult> {
     await delay(generateRandomValueBetween(0, 500))
-    return {
-      // for simulation purposes, a ventilator named 'EW Room2' will show as disconnected
-      connected: this.props.ventilator.name !== 'EW Room 2',
-      result: {
-        tidalVolume: generateRandomValueBetween(300, 800),
-        respiratoryRate: generateRandomValueBetween(8, 35),
-        peakInspiratoryPressure: generateRandomValueBetween(60, 80),
-        ieRatio: "1:" + generateRandomValueBetween(1,4),
-        peep: generateRandomValueBetween(5, 10)
+
+    // If there is no result in state, then this is the first call, so return random values for all fields
+    if (! this.state.pollResult.result) {
+      let result = {
+        // for simulation purposes, a ventilator named 'EW Room2' will show as disconnected
+        connected: this.props.ventilator.name !== 'EW Room 2',
+        result: {
+          tidalVolume: generateRandomColumnValue('tidalVolume'),
+          respiratoryRate: generateRandomColumnValue('respiratoryRate'),
+          peakInspiratoryPressure: generateRandomColumnValue('peakInspiratoryPressure'),
+          ieRatio: generateRandomColumnValue('ieRatio'),
+          peep: generateRandomColumnValue('peep')
+        }
       }
+      return result
     }
+
+    // otherwise, pick one field to change, pick up or down, and adjust that field
+    // to simplify, we will not change ieRatio. Just pick n-1 numbers and adjust
+    let columnIndx = generateRandomValueBetween(0, columnNames.length - 2)
+    columnIndx = columnIndx == IE_RATIO_INDEX ? IE_RATIO_INDEX + 1 : columnIndx
+
+    let upDown = generateRandomValueBetween(0,1)
+
+    console.assert(columnIndx >= 0 && columnIndx < 5  && columnIndx != IE_RATIO_INDEX && upDown >= 0 && upDown < 2,
+      `columnIndx ${columnIndx} upDown ${upDown}`)
+
+    let key = columnNames[columnIndx]
+    let value = this.state.pollResult.result[key]
+    value = upDown == 1 ? value + 1 : value - 1
+    value = clamp(value, columns[key].min, columns[key].max)
+
+    let pollResultValue = {...this.state.pollResult.result, [key]: value}
+    let result = {
+      connected: this.props.ventilator.name !== 'EW Room 2',
+      result: pollResultValue
+    }
+    return result
   }
 
   async pollDevice(): Promise<IVentilatorPollResult> {
@@ -145,11 +206,11 @@ class Ventilator extends Component<IProps, IState> {
           }
         </td>
         <td>{ventilator.name}</td>
-        <td>{display(pollResult, "tidalVolume")}</td>
-        <td>{display(pollResult, "respiratoryRate")}</td>
-        <td>{display(pollResult, "peakInspiratoryPressure")}</td>
-        <td>{display(pollResult, "ieRatio")}</td>
-        <td>{display(pollResult, "peep")}</td>
+        <td>{Flash(display(pollResult, "tidalVolume"))}</td>
+        <td>{Flash(display(pollResult, "respiratoryRate"))}</td>
+        <td>{Flash(display(pollResult, "peakInspiratoryPressure"))}</td>
+        <td>{Flash(display(pollResult, "ieRatio"))}</td>
+        <td>{Flash(display(pollResult, "peep"))}</td>
       </tr>
     )
 
@@ -168,8 +229,19 @@ const delay = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
+const generateRandomColumnValue = (key: string) : any => {
+  let column = columns[key]
+  let value = generateRandomValueBetween(column.min, column.max)
+  let display = column.make(value)
+  return display
+}
+
 const generateRandomValueBetween = (lower, upper) => {
   return Math.round(Math.random()*(upper-lower)+lower)
+}
+
+const clamp = (num: number, min: number, max: number) : number => {
+  return Math.min(Math.max(num, min), max)
 }
 
 export default Ventilator

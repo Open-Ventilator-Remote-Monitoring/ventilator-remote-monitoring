@@ -2,6 +2,7 @@
   "name": "remote_ventilator_monitor",
   "private": true,
   "dependencies": {
+    "@avinlab/react-flash-change": "^1.2.0",
     "@babel/preset-react": "^7.9.4",
     "@fortawesome/fontawesome-free": "^5.13.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.28",

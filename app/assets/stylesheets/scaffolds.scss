@@ -98,8 +98,6 @@ a:hover {
   background-color: gray;
 }
 
-
-
 button {
   margin: .5rem 0;
 }
@@ -131,4 +129,13 @@ select {
   border: 1px solid red;
   margin: 20px auto;
   padding: 10px;
+}
+
+.flashing {
+  background-color: transparent;
+  transition: background-color 500ms;
+}
+
+.flashing.active {
+  background-color:yellow;
 }
