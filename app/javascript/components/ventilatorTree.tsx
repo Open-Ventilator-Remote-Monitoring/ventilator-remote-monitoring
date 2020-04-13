@@ -1,6 +1,8 @@
 import React, { Component } from "react"
 import Jsona from 'jsona'
 import { get } from '../api'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import "./ventilatorTree.scss"
 import Organization from "./organization";
@@ -50,9 +52,7 @@ class VentilatorTree extends Component<IProps, IState> {
     const { demo } = this.props
 
     const spinner = (
-      //<FontAwesomeIcon icon={faSpinner} size="4x" spin />
-      //<i className="fas fa-lg fa-spinner" />
-      <div>Spinning</div>
+      <FontAwesomeIcon icon={faSpinner} size="4x" spin />
     )
 
     if (loading) {
@@ -63,7 +63,11 @@ class VentilatorTree extends Component<IProps, IState> {
       return (<div className="error">{errMsg}</div>)
     }
 
-    return (<Organization organization={organization} demo={demo} />)
+    return (
+      <section>
+        <Organization organization={organization} demo={demo} />
+      </section>
+    )
   }
 }
 

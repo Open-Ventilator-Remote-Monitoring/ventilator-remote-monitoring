@@ -12,21 +12,27 @@ If the Demo prop is false:
 import React, { Component } from "react"
 import { IVentilator, IVentilatorPollResult, IVentilatorPollValues } from '../types'
 import { get } from '../api'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircle, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
+
+// When the device is connected, poll this often
+const GOOD_POLL_PERIOD_MS = 3000
+
+// When the device is disconnected, poll this often
+const BAD_POLL_PERIOD_MS = 60000
 
 interface IProps {
   ventilator: IVentilator
   demo: boolean
 }
 
-// The id, name and endpoint of the ventilator given in the prop
-// will be copied into state.ventilator, then the additional values polled
-// from the monitor (or simulated) will be stored in state.ventilator
 interface IState {
   pollResult: IVentilatorPollResult
 }
 
 class Ventilator extends Component<IProps, IState> {
-  interval: any
+  interval: any = null
+  pollingPeriod: number = GOOD_POLL_PERIOD_MS
 
   constructor(props: IProps) {
     super(props);
@@ -45,33 +51,46 @@ class Ventilator extends Component<IProps, IState> {
     // table to change at the same time (and will all poll at the same time).
     // This spaces them out. If we want them to update at the same time, just delete the
     // call to delay as well as the delay function below.
+
     await delay(generateRandomValueBetween(0, 1500))
-    this.tick()
-    this.interval = setInterval(this.tick.bind(this), 3000, this)
+
+    let connected = await this.poll()
+    this.pollingPeriod = connected
+        ? GOOD_POLL_PERIOD_MS
+        : BAD_POLL_PERIOD_MS
+    this.interval = setInterval(this.poll.bind(this), this.pollingPeriod)
   }
 
   componentWillUnmount() {
     clearInterval(this.interval)
   }
 
-  async tick() {
+  async poll() : Promise<boolean> {
 
     let pollResult = this.props.demo
-                    ? this.getDemoUpdate()
-                    : await this.pollDevice()
+                      ? await this.simulatePollDevice()
+                      : await this.pollDevice()
 
-    // todo: once a device is disconnected, change the polling rate from 3 seconds
-    // to something like one minute. If the hostname is not available it could take 5 seconds
-    // to fail, thus creating many overlapping poll request
-
-    // todo: consider adding "polling" to state, so only one poll is executing at a time
     this.setState({pollResult})
+
+    var newPollingPeriod = pollResult.connected
+                              ? GOOD_POLL_PERIOD_MS
+                              : BAD_POLL_PERIOD_MS
+
+    if (newPollingPeriod != this.pollingPeriod) {
+      clearInterval(this.interval)
+      this.interval = setInterval(this.poll.bind(this), newPollingPeriod)
+      this.pollingPeriod = newPollingPeriod
+    }
+
+    return pollResult.connected
   }
 
-  getDemoUpdate(): IVentilatorPollResult {
+  async simulatePollDevice(): Promise<IVentilatorPollResult> {
+    await delay(generateRandomValueBetween(0, 500))
     return {
-      // for simulation purposes, a ventilator named 'Ventilator #2' will show as disconnected
-      connected: this.props.ventilator.name !== 'Ventilator #2',
+      // for simulation purposes, a ventilator named 'EW Room2' will show as disconnected
+      connected: this.props.ventilator.name !== 'EW Room 2',
       result: {
         tidalVolume: generateRandomValueBetween(300, 800),
         respiratoryRate: generateRandomValueBetween(8, 35),
@@ -115,8 +134,8 @@ class Ventilator extends Component<IProps, IState> {
     const { pollResult } = this.state
 
     let statusElement = pollResult.connected
-      ? <i className="fas fa-lg fa-circle" style={{color: "limeGreen"}} />
-      : <i className="fas fa-lg fa-exclamation-triangle flash" style={{color: "red"}} />
+      ? <FontAwesomeIcon icon={faCircle} size="lg" color={'LimeGreen'}/>
+      : <FontAwesomeIcon icon={faExclamationTriangle} size="lg" color={'red'} className="flash"/>
 
     let result = (
       <tr key={ventilator.id}>
@@ -126,7 +145,6 @@ class Ventilator extends Component<IProps, IState> {
           }
         </td>
         <td>{ventilator.name}</td>
-
         <td>{display(pollResult, "tidalVolume")}</td>
         <td>{display(pollResult, "respiratoryRate")}</td>
         <td>{display(pollResult, "peakInspiratoryPressure")}</td>

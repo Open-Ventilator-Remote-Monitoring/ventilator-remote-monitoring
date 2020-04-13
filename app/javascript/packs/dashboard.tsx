@@ -4,11 +4,22 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import DashBoardApp from '../components/dashboardApp'
+import VentilatorTree from '../components/ventilatorTree'
 
-document.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(
-    <DashBoardApp />,
-    document.getElementById('index-demo-container')
-  )
-})
+let launch = () => {
+  let element = document.getElementById('index-demo-container')
+
+  if (element) {
+    ReactDOM.render(
+      <VentilatorTree demo={true}/>,
+      element
+    )
+  }
+}
+
+if (document.readyState == 'loading') {
+  document.addEventListener('DOMContentLoaded', launch)
+} else {
+  launch()
+}
+
