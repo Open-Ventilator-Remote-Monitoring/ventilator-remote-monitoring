@@ -51,6 +51,22 @@ td > .field {
   color: green;
 }
 
+.new_user .field {
+  margin-top: 20px;
+}
+
+.new_user .field input {
+  display: block;
+}
+
+.edit_user .field {
+  margin-top: 20px;
+}
+
+.edit_user .field input {
+  display: block;
+}
+
 .field_with_errors {
   padding: 2px;
   background-color: red;

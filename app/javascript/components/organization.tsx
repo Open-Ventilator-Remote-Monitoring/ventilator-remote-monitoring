@@ -95,8 +95,8 @@ class Organization extends Component<IProps, IState> {
 
 const sortOptions = (options) => {
   options.sort((a, b) => {
-    var nameA = a.name.toUpperCase(); // ignore upper and lowercase
-    var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+    var nameA = a.label.toUpperCase(); // ignore upper and lowercase
+    var nameB = b.label.toUpperCase(); // ignore upper and lowercase
     if (nameA < nameB) {
       return -1;
     }
