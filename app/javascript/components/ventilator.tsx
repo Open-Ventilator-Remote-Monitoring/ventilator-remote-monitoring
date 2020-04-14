@@ -10,54 +10,71 @@ If the Demo prop is false:
 */
 
 import React, { Component } from "react"
-import { IVentilator } from '../types'
+import { IVentilator, IVentilatorPollResult, IVentilatorPollValues } from '../types'
 import { get } from '../api'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
+import FlashChange from '@avinlab/react-flash-change';
 
+// When the device is connected, poll this often
+const GOOD_POLL_PERIOD_MS = 3000
+
+// When the device is disconnected, poll this often
+const BAD_POLL_PERIOD_MS = 60000
+
+interface IColumn {
+  min: number,
+  max: number,
+  make: (x :number) => any // convert the measurement to what will be displayed
+}
+
+const columns : {[key: string]: IColumn} = {
+   tidalVolume: {min: 300, max: 800, make: x => x},
+   respiratoryRate: {min: 8, max: 35, make: x => x},
+   peakInspiratoryPressure: {min: 60, max: 80, make: x => x},
+   ieRatio: {min: 1, max: 4, make: x => "1:" + x},
+   peep: {min: 5, max: 10, make: x => x},
+}
+
+const columnNames = Object.keys(columns)
+
+const IE_RATIO_INDEX = 3
+
+const Flash = (value) => {
+  return (
+    <FlashChange
+        value={value}
+        className="flashing"
+        flashClassName="active"
+        compare={(prevProps, nextProps) => {
+            return nextProps.value !== prevProps.value;
+        }}
+    >
+        {value}
+    </FlashChange>
+  )
+}
 
 interface IProps {
-  // Parent will pass in a ventilator object with
-  // just the id, name and endpoint
   ventilator: IVentilator
-
-  // If true, random data generated every 3 seconds
   demo: boolean
 }
 
-// The id, name and endpoint of the ventilator given in the prop
-// will be copied into state.ventilator, then the additional values polled
-// from the monitor (or simulated) will be stored in state.ventilator
 interface IState {
-  ventilator: IVentilator
-}
-
-// this is the shape of the response from the polled device
-interface IResponse {
-  ventilator: [
-    {
-      tidalVolume: number
-      respiratoryRate: number
-      peakInspiratoryPressure: number
-      ieRatio: string
-      peep: number
-    }
-  ]
+  pollResult: IVentilatorPollResult
 }
 
 class Ventilator extends Component<IProps, IState> {
-  interval: any
+  interval: any = null
+  pollingPeriod: number = GOOD_POLL_PERIOD_MS
 
   constructor(props: IProps) {
     super(props);
 
     this.state = {
-      // not using spread operator on purpose
-      ventilator: {
-        id: props.ventilator.id,
-        name: props.ventilator.name,
-        url: props.ventilator.url,
-        connected: true
+      pollResult: {
+        connected: false,
+        result: null
       }
     }
   }
@@ -68,87 +85,132 @@ class Ventilator extends Component<IProps, IState> {
     // table to change at the same time (and will all poll at the same time).
     // This spaces them out. If we want them to update at the same time, just delete the
     // call to delay as well as the delay function below.
+
     await delay(generateRandomValueBetween(0, 1500))
-    this.tick()
-    this.interval = setInterval(this.tick.bind(this), 3000, this)
+
+    let connected = await this.poll()
+    this.pollingPeriod = connected
+        ? GOOD_POLL_PERIOD_MS
+        : BAD_POLL_PERIOD_MS
+    this.interval = setInterval(this.poll.bind(this), this.pollingPeriod)
   }
 
   componentWillUnmount() {
     clearInterval(this.interval)
   }
 
-  async tick() {
+  async poll() : Promise<boolean> {
 
-    let update = this.props.demo
-                    ? this.getDemoUpdate()
-                    : await this.pollDevice()
+    let pollResult = this.props.demo
+                      ? await this.simulatePollDevice()
+                      : await this.pollDevice()
 
-    // todo: once a device is disconnected, change the polling rate from 3 seconds
-    // to something like one minute. If the hostname is not available it could take 5 seconds
-    // to fail, thus creating many overlapping poll request
+    this.setState({pollResult})
 
-    // todo: consider adding "polling" to state, so only one poll is executing at a time
-    this.setState(state => ({
-      ventilator: {...state.ventilator, ...update}
-    }));
-  }
+    var newPollingPeriod = pollResult.connected
+                              ? GOOD_POLL_PERIOD_MS
+                              : BAD_POLL_PERIOD_MS
 
-  getDemoUpdate(): IVentilator {
-    return {
-      // for simulation purposes, a ventilator named 'Ventilator #2' will show as disconnected
-      connected: this.state.ventilator.name !== 'Ventilator #2',
-      tidalVolume: generateRandomValueBetween(300, 800),
-      respiratoryRate: generateRandomValueBetween(8, 35),
-      peakInspiratoryPressure: generateRandomValueBetween(60, 80),
-      ieRatio: "1:" + generateRandomValueBetween(1,4),
-      peep: generateRandomValueBetween(5, 10)
+    if (newPollingPeriod != this.pollingPeriod) {
+      clearInterval(this.interval)
+      this.interval = setInterval(this.poll.bind(this), newPollingPeriod)
+      this.pollingPeriod = newPollingPeriod
     }
+
+    return pollResult.connected
   }
 
-  async pollDevice(): Promise<IVentilator> {
-    let url = this.state.ventilator.url + "/api/ventilator"
+  async simulatePollDevice(): Promise<IVentilatorPollResult> {
+    await delay(generateRandomValueBetween(0, 500))
+
+    // If there is no result in state, then this is the first call, so return random values for all fields
+    if (! this.state.pollResult.result) {
+      let result = {
+        // for simulation purposes, a ventilator named 'EW Room2' will show as disconnected
+        connected: this.props.ventilator.name !== 'East-2',
+        result: {
+          tidalVolume: generateRandomColumnValue('tidalVolume'),
+          respiratoryRate: generateRandomColumnValue('respiratoryRate'),
+          peakInspiratoryPressure: generateRandomColumnValue('peakInspiratoryPressure'),
+          ieRatio: generateRandomColumnValue('ieRatio'),
+          peep: generateRandomColumnValue('peep')
+        }
+      }
+      return result
+    }
+
+    // Otherwise, pick one field to change, pick up or down, and adjust that field, ensuring it stays in range.
+    // To simplify, we will not change ieRatio. Just pick n-1 numbers and adjust
+    let columnIndx = generateRandomValueBetween(0, columnNames.length - 2)
+    columnIndx = columnIndx == IE_RATIO_INDEX ? IE_RATIO_INDEX + 1 : columnIndx
+
+    let upDown = generateRandomValueBetween(0,1)
+
+    console.assert(columnIndx >= 0 && columnIndx < 5  && columnIndx != IE_RATIO_INDEX && upDown >= 0 && upDown < 2,
+      `columnIndx ${columnIndx} upDown ${upDown}`)
+
+    let key = columnNames[columnIndx]
+    let value = this.state.pollResult.result[key]
+    value = upDown == 1 ? value + 1 : value - 1
+    value = clamp(value, columns[key].min, columns[key].max)
+
+    let pollResultValue = {...this.state.pollResult.result, [key]: value}
+    let result = {
+      connected: this.props.ventilator.name !== 'EW Room 2',
+      result: pollResultValue
+    }
+    return result
+  }
+
+  async pollDevice(): Promise<IVentilatorPollResult> {
+    let url = `http://${this.props.ventilator.hostname}/api/ventilator`
 
     // todo: check on why this returns an array
-    let response = await get<IResponse>(url)
+    let response = await get<IVentilatorPollValues[]>(url)
 
     if (response.ok) {
-      // rather than just return whatever we get, limit the fields
       // todo: validate the data within some range ?
-      let v = response.parsedBody.ventilator[0]
-      const update : IVentilator = {
+      let v = response.parsedBody[0]
+      const update : IVentilatorPollResult = {
         connected: true,
-        tidalVolume: v.tidalVolume,
-        respiratoryRate: v.respiratoryRate,
-        peakInspiratoryPressure: v.peakInspiratoryPressure,
-        ieRatio: v.ieRatio,
-        peep: v.peep
+        result: {
+          tidalVolume: v.tidalVolume,
+          respiratoryRate: v.respiratoryRate,
+          peakInspiratoryPressure: v.peakInspiratoryPressure,
+          ieRatio: v.ieRatio,
+          peep: v.peep
+        }
       }
       return update
     }
 
     return {
-      connected: false
+      connected: false,
+      result: null
     }
   }
 
   render() {
-    const { ventilator } = this.state
+    const { ventilator } = this.props
+    const { pollResult } = this.state
 
-    let statusElement = ventilator.connected
-      ? <FontAwesomeIcon icon={faCircle} color={'LimeGreen'}/>
+    let statusElement = pollResult.connected
+      ? <FontAwesomeIcon icon={faCircle} size="lg" color={'LimeGreen'}/>
       : <FontAwesomeIcon icon={faExclamationTriangle} size="lg" color={'red'} className="flash"/>
 
     let result = (
       <tr key={ventilator.id}>
         <td className="status-col">
-          {statusElement}
+          {
+            statusElement
+          }
         </td>
         <td>{ventilator.name}</td>
-        <td>{ventilator.tidalVolume}</td>
-        <td>{ventilator.respiratoryRate}</td>
-        <td>{ventilator.peakInspiratoryPressure}</td>
-        <td>{ventilator.ieRatio}</td>
-        <td>{ventilator.peep}</td>
+        <td>{Flash(display(pollResult, "tidalVolume"))}</td>
+        <td>{Flash(display(pollResult, "respiratoryRate"))}</td>
+        <td>{Flash(display(pollResult, "peakInspiratoryPressure"))}</td>
+        <td>{Flash(display(pollResult, "ieRatio"))}</td>
+        <td>{Flash(display(pollResult, "peep"))}</td>
       </tr>
     )
 
@@ -156,12 +218,30 @@ class Ventilator extends Component<IProps, IState> {
   }
 }
 
+const display = (pollResult: IVentilatorPollResult, name: string) : string => {
+  if (! pollResult.connected) {
+    return "-"
+  }
+  return pollResult.result[name].toString()
+}
+
 const delay = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
+const generateRandomColumnValue = (key: string) : any => {
+  let column = columns[key]
+  let value = generateRandomValueBetween(column.min, column.max)
+  let display = column.make(value)
+  return display
+}
+
 const generateRandomValueBetween = (lower, upper) => {
   return Math.round(Math.random()*(upper-lower)+lower)
+}
+
+const clamp = (num: number, min: number, max: number) : number => {
+  return Math.min(Math.max(num, min), max)
 }
 
 export default Ventilator

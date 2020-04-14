@@ -1,11 +1,22 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
+  devise_for :users, controllers: { registrations: 'users/registrations' }
   root 'static_pages#index'
 
-  get '/about', to: 'static_pages#about', as: 'about'
   get '/home', to: 'static_pages#index', as: 'home'
-  get '/demo', to: 'static_pages#demo', as: 'demo'
+  get '/about', to: 'static_pages#about', as: 'about'
   get '/contribute', to: 'static_pages#contribute', as: 'contribute'
 
+  resources :users, controller: "users", only: [:index, :edit, :update, :show]
+  resources :clusters
+  resources :organizations
+  resources :ventilators
+
+  # will get all ventilators for the logged in user's organization
+  # todo: determine what to do for super users
+  namespace :api do
+    namespace :v1 do
+      resources :ventilators, controller: "ventilators", only: [:index]
+    end
+  end
 end

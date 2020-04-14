@@ -27,8 +27,245 @@ Check out the [live demo/concept](http://www.ventilatormonitor.com).
 8. Run bundler: `bundle install`
 9. Migrate the database: `rails db:migrate`
 10. Start a rails development server: `rails s`
-11. You should now be able to navigate to `http://localhost:3000` and view the live rails site
-
-Note: the javascript app that runs in the web browser is currently located in `app/javascript/custom/demo.js` 
+11. You should now be able to navigate to [http://localhost:3000](http://localhost:3000) and view the live rails site
 
 **Having problems?** Post on the Slack Channel and we'll help you out
+
+## Creating the first Administrator
+
+If this is your first use since the User database table was created, you will need to set up an Administrator. Here are the steps:
+
+1. Start the web server and open a browser to [http://localhost:3000](http://localhost:3000)
+2. In the top-right of the page, click on 'Sign in'
+3. On the Log In screen, click on 'Sign Up'. Type in your email address, name and the password you want to use (twice) and click 'sign up'.
+4. In the directory where the project is located, run the rails console-
+    > rails c
+5. Execute the following:
+    >me = User.find(1)
+
+    Ensure the record displayed includes your email address. If not, and you are not sure of how to find your record, stop here and ask for help.
+6. Execute the following:
+    > me.admin!
+
+    This should change your roll to admin and update the database.
+
+7. Type
+    > exit
+
+    Now when you go back to the web page and log in you should be an administrator.
+
+8. As soon as you have created your first organization, please navigate to [http://localhost:3000/users](/users), find your email address under the heading "Users awaiting Assignment to an Organization", and click the "assign" button. Select an Organization from the drop-down list and click 'update user'.
+
+## API
+
+A call to `/api/v1/ventalators` returns a single organization, all of the clusters in that organization and all of the ventilators in those clusters.
+The organization used is the organization assigned to the person who is logged in.
+If the call is made from a browser which is not logged in, or there is no organization associated with the current user, then the following is returned:
+
+```json
+{
+  "error": "User is not logged in or is not associated with an Organization."
+}
+```
+
+Note: This could change to a default 'demo' data to be used by a demo web page. But it may be better for the demo page just to provide some demo data locally.
+
+The serialization library used serializes the data as a graph using the [json:qpi spec](https://jsonapi.org/).
+
+> Note: Beware when matching nodes, in that it is not enough to match on id, as the same id numbers are used in organization, clusters and ventilators. Match on both `type` and `id`.
+
+Here is an example of the JSON returned:
+
+```json
+{
+  "data": {
+    "id": "3",
+    "type": "organization",
+    "attributes": {
+      "name": "Honnah Lee Medical Center"
+    },
+    "relationships": {
+      "clusters": {
+        "data": [
+          {
+            "id": "6",
+            "type": "cluster"
+          },
+          {
+            "id": "7",
+            "type": "cluster"
+          }
+        ]
+      }
+    }
+  },
+  "included": [
+    {
+      "id": "6",
+      "type": "cluster",
+      "attributes": {
+        "name": "East Wing"
+      },
+      "relationships": {
+        "ventilators": {
+          "data": [
+            {
+              "id": "15",
+              "type": "ventilator"
+            },
+            {
+              "id": "16",
+              "type": "ventilator"
+            },
+            {
+              "id": "17",
+              "type": "ventilator"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "7",
+      "type": "cluster",
+      "attributes": {
+        "name": "West Wing"
+      },
+      "relationships": {
+        "ventilators": {
+          "data": [
+            {
+              "id": "18",
+              "type": "ventilator"
+            },
+            {
+              "id": "19",
+              "type": "ventilator"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "15",
+      "type": "ventilator",
+      "attributes": {
+        "id": 15,
+        "name": "Room E-1 Bed 1",
+        "hostname": null
+      }
+    },
+    {
+      "id": "16",
+      "type": "ventilator",
+      "attributes": {
+        "id": 16,
+        "name": "Room E-2 Bed 1",
+        "hostname": null
+      }
+    },
+    {
+      "id": "17",
+      "type": "ventilator",
+      "attributes": {
+        "id": 17,
+        "name": "Room E-3 Bed 1",
+        "hostname": null
+      }
+    },
+    {
+      "id": "18",
+      "type": "ventilator",
+      "attributes": {
+        "id": 18,
+        "name": "Room W-1 Bed 1",
+        "hostname": null
+      }
+    },
+    {
+      "id": "19",
+      "type": "ventilator",
+      "attributes": {
+        "id": 19,
+        "name": "Room W-1 Bed 1",
+        "hostname": null
+      }
+    }
+  ]
+}
+```
+
+## fast_jsonapi
+
+This project uses fast_jsonapi from Netflix for JSON serialization in Ruby. Netflix is no longer
+maintaining the libray and the commuinity has taken over. That project is
+(here)[https://github.com/fast-jsonapi/fast_jsonapi]. If you encounter any issue,
+it may be best to move to that project.
+
+## Deserialization
+
+On the clint, these few lines of code will deserialize the data above:
+
+```javascript
+  import Jsona from 'jsona'
+
+  const dataFormatter = new Jsona()
+  const organization = dataFormatter.deserialize(response.parsedBody)
+```
+
+This results in something we can more easily work with (`relationshipNames` keys have been removed):
+
+```json
+{
+  "type": "organization",
+  "id": "3",
+  "name": "Honnah Lee Medical Center",
+  "clusters": [
+    {
+      "type": "cluster",
+      "id": "6",
+      "name": "East Wing",
+      "ventilators": [
+        {
+          "type": "ventilator",
+          "id": 15,
+          "name": "Room E-1 Bed 1",
+          "hostname": null
+        },
+        {
+          "type": "ventilator",
+          "id": 16,
+          "name": "Room E-2 Bed 1",
+          "hostname": null
+        },
+        {
+          "type": "ventilator",
+          "id": 17,
+          "name": "Room E-3 Bed 1",
+          "hostname": null
+        }
+      ]
+    },
+    {
+      "type": "cluster",
+      "id": "7",
+      "name": "West Wing",
+      "ventilators": [
+        {
+          "type": "ventilator",
+          "id": 18,
+          "name": "Room W-1 Bed 1",
+          "hostname": null
+        },
+        {
+          "type": "ventilator",
+          "id": 19,
+          "name": "Room W-1 Bed 2",
+          "hostname": null
+        }
+      ]
+    }
+  ]
+}
+```
+

@@ -1,0 +1,19 @@
+<h4>Editing Ventilator</h4>
+
+<%= render 'shared/link_to_org', organization: @ventilator.cluster.organization %>
+
+<section>
+  <%= render 'form', ventilator: @ventilator %>
+</section>
+
+<%= button_to "Delete This Ventilator",
+  {
+    controller: :ventilators,
+    action: 'destroy',
+    id: @ventilator.id
+  },
+  method: :delete,
+  data: { confirm: 'Are you sure you want to delete this ventilator? This action cannot be undone.' },
+  class: "btn btn-danger"
+%>
+

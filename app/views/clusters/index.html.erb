@@ -1,0 +1,31 @@
+<%= render 'shared/link_to_org', organization: @organization %>
+
+<h4>Clusters</h4>
+
+<section>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @clusters.each do |cluster| %>
+        <tr>
+          <td><%= link_to cluster.name, cluster %></td>
+          <td><%= cluster.description %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</section>
+
+<% if current_user.admin? || current_user.org_admin? %>
+  <a href=<%= new_cluster_path %>>
+    <button class="btn btn-info">+ Add New Cluster</button>
+  </a>
+<% end %>
+
+

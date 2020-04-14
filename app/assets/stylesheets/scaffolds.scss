@@ -1,0 +1,144 @@
+.container {
+  margin-top: 1.5rem;
+}
+
+section {
+  margin: 1.5rem 0;
+}
+
+pre {
+  background-color: #eee;
+  padding: 10px;
+  font-size: 11px;
+}
+
+table {
+  width: 100%;
+}
+
+.table thead {
+  background-color: rgb(203, 232, 241);
+}
+
+.table thead tr {
+  border-bottom: 0px;
+}
+
+.table th {
+  padding: .5rem;
+  text-align: left;
+}
+
+.table tr {
+  border-bottom: 1px solid #ddd;
+}
+
+.table td {
+  padding: .75rem;
+  padding-left: 0;
+}
+
+td {
+  padding: .5rem .5rem .5rem 0;
+}
+
+td > .field {
+  vertical-align: top;
+  margin: .5rem;
+}
+
+#notice {
+  color: green;
+}
+
+.new_user .field {
+  margin-top: 20px;
+}
+
+.new_user .field input {
+  display: block;
+}
+
+.edit_user .field {
+  margin-top: 20px;
+}
+
+.edit_user .field input {
+  display: block;
+}
+
+.field_with_errors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+#error_explanation {
+  width: 450px;
+  border: 2px solid red;
+  padding: 7px 7px 0;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+
+#error_explanation h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px -7px 0;
+  background-color: #c00;
+  color: #fff;
+}
+
+#error_explanation ul li {
+  font-size: 12px;
+  list-style: square; }
+
+label {
+  display: block;
+}
+
+a, a:visited {
+  color: #007bff;
+}
+
+a:hover {
+  background-color: gray;
+}
+
+button {
+  margin: .5rem 0;
+}
+
+td > input:not(.btn),
+textarea,
+select {
+  width: 100%;
+  max-width: 50%;
+}
+
+.field_with_errors {
+  padding: 2px;
+  background-color: red;
+  display: block;
+}
+
+.actions {
+  margin-top: 1rem;
+}
+
+.label {
+  color: lightgray;
+}
+
+.warning {
+  width: 450px;
+  color: red;
+  border: 1px solid red;
+  padding: 10px;
+}
+
+.fade-msg {
+  z-index: -100;
+}

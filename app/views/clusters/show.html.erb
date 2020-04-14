@@ -1,0 +1,56 @@
+<%= render 'shared/link_to_org', organization: @organization %>
+
+<h4>
+  <span class="label">Cluster:</span>
+  <%= @cluster.name %>
+</h4>
+
+<h5>
+  <%= @cluster.description %>
+</h5>
+
+<% if current_user.admin? || current_user.org_admin? %>
+  <section>
+    <a href="<%= edit_cluster_path %>">
+      <button class="btn btn-info">
+        <i class="fas fa-cog"></i>
+        Cluster Settings
+      </button>
+    </a>
+  </section>
+<% end %>
+
+<section>
+  <h4>Ventilators in cluster: <%=@cluster.name %></h4>
+  <table class="table">
+    <col style="width:25%">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Hostname</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @cluster.ventilators.order(:name).each do |ventilator| %>
+        <tr>
+          <td>
+            <%= link_to ventilator.name, ventilator %>
+          </td>
+          <td>
+            <%= ventilator.hostname %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</section>
+
+<% if current_user.admin? || current_user.org_admin? %>
+  <section>
+    <a href="/ventilators/new?cluster_id=<%= @cluster.id %>">
+      <button class="btn btn-info">
+        + Add New Ventilator
+      </button>
+    </a>
+  </section>
+<% end %>

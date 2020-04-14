@@ -14,7 +14,7 @@ const getMsg = (ex) : string => {
 }
 
 export async function http<T>(request: RequestInfo): Promise<ApiResponse<T>> {
-  let apiResponse : ApiResponse<T> = {ok: false}
+  let apiResponse: ApiResponse<T> = {ok: false}
 
   try {
     apiResponse.response = await fetch(request);
@@ -43,6 +43,7 @@ export async function get<T>(
   path: string,
   args: RequestInit = {
     method: "get",
+    mode: "no-cors",
     headers: {
       "Accept": "application/json; charset=UTF-8"
     }

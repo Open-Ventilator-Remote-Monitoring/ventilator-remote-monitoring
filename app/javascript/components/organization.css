@@ -1,0 +1,12 @@
+.select-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.select {
+  min-width: 300px;
+  max-width: 500px;
+  margin-left: 30px;
+
+}

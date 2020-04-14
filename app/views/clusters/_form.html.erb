@@ -1,0 +1,42 @@
+<%= form_with(model: cluster, local: true) do |form| %>
+  <% if cluster.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(cluster.errors.count, "error") %> prohibited this cluster from being saved:</h2>
+      <ul>
+        <% cluster.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <table>
+    <col style="width:25%">
+    <tr class="field">
+      <td>Belongs to organization</td>
+      <td>
+        <% if current_user.admin? %>
+          <%= form.collection_select( :organization_id, Organization.all, :id, :name, {}, { class: "form-control" })  %>
+        <% else  %>
+          <input value="<%= current_user.organization.name %>" class="form-control" disabled></input>
+        <% end %>
+      </td>
+    </tr>
+
+    <tr class="field">
+      <td><%= form.label :name %></td>
+      <td><%= form.text_field :name %></td>
+    </tr>
+
+    <tr class="field">
+      <td><%= form.label :description %></td>
+      <td><%= form.text_area :description %></td>
+    </tr>
+  </table>
+
+  <section>
+    <div class="actions">
+      <%= form.submit class: "btn btn-info"%>
+    </div>
+  </section>
+<% end %>

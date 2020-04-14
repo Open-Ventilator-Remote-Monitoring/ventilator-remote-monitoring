@@ -1,20 +1,31 @@
+export interface IOrganization {
+  id: number
+  name: string
+  clusters: ICluster[]
+}
 
-// todo: consider splitting into 2
-// One for data from DB
-// One for data from monitor device
+export interface ICluster {
+  id: number
+  name: string
+  ventilators: IVentilator[]
+}
+
 export interface IVentilator {
-  // from database
-  id?: number
-  name?: string
-  url?: string
-  created_at?: string
-  updated_at?: string
+  // from API call
+  id: number
+  name: string
+  hostname: string
+}
 
-  // from device
-  connected?: boolean
-  tidalVolume?: number
-  respiratoryRate?: number
-  peakInspiratoryPressure?: number
-  ieRatio?: string
-  peep?: number
+export interface IVentilatorPollValues {
+  tidalVolume: number
+  respiratoryRate: number
+  peakInspiratoryPressure: number
+  ieRatio: string
+  peep: number
+}
+
+export interface IVentilatorPollResult {
+  connected: boolean
+  result?: IVentilatorPollValues
 }

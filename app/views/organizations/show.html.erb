@@ -1,0 +1,86 @@
+<h4>
+  <span class="label">Organization:</span>
+  <%= @organization.name %>
+</h4>
+
+<h5>
+  <%= @organization.description %>
+</h5>
+
+<section>
+  <% if current_user.admin? %>
+    <a href="<%= edit_organization_path %>">
+      <button class="btn btn-info">
+        <i class="fas fa-cog"></i>
+        Organization Settings
+      </button>
+    </a>
+  <% end %>
+</section>
+
+<section>
+  <h4>Clusters in: <%=@organization.name %></h3>
+  <table class="table">
+    <col style="width:25%">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @organization.clusters.order(:name).each do |cluster| %>
+        <tr>
+          <td>
+            <%= link_to cluster.name, cluster %>
+          </td>
+          <td>
+            <%= cluster.description %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <% if current_user.admin? || current_user.org_admin? && (params[:id].to_i == current_user.organization.id) %>
+      <a href="/clusters/new?organization_id=<%= @organization.id %>">
+        <button class="btn btn-info">
+          + Add New Cluster
+        </button>
+      </a>
+  <% end %>
+</section>
+
+<section>
+  <h4>Users in: <%=@organization.name %></h4>
+
+  <table class="table">
+    <col style="width:40%">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @organization.users.order(:email).each do |user| %>
+        <tr>
+          <td>
+            <%= link_to user.email, user %>
+          </td>
+          <td>
+            <%= user.name %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</section>
+
+
+
+
+
+
+
+

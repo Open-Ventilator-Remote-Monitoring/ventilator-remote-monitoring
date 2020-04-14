@@ -10,38 +10,15 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *
- *= require_tree .
  *= require_self
+ *= require_tree .
  */
 
-@import "bootstrap/scss/bootstrap";
+ @import "bootstrap/scss/bootstrap";
 
-$fa-font-path: '@fortawesome/fontawesome-free/webfonts';
-@import '@fortawesome/fontawesome-free/scss/fontawesome';
-@import '@fortawesome/fontawesome-free/scss/solid';
-@import '@fortawesome/fontawesome-free/scss/regular';
-@import '@fortawesome/fontawesome-free/scss/brands';
-@import '@fortawesome/fontawesome-free/scss/v4-shims';
-
-.demo-ventilator-table {
-	.tr-heading {
-		padding-bottom: 0px !important;
-		margin-bottom: 0px !important;
-		th {
-			padding-bottom: 0px !important;
-			margin-bottom: 0px !important;
-		}
-	}
-	.tr-subheading {
-		padding-top: 0px;
-		margin-top: 0px;
-		td {
-			border-top: 0px;
-			padding-top: 0px;
-			margin-top: 0px;
-		}
-	}
-	.status-col {
-		width: 50px;
-	}
-}
+ $fa-font-path: '@fortawesome/fontawesome-free/webfonts';
+ @import '@fortawesome/fontawesome-free/scss/fontawesome';
+ @import '@fortawesome/fontawesome-free/scss/solid';
+ @import '@fortawesome/fontawesome-free/scss/regular';
+ @import '@fortawesome/fontawesome-free/scss/brands';
+ @import '@fortawesome/fontawesome-free/scss/v4-shims';

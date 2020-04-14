@@ -1,0 +1,67 @@
+<%= form_with(model: ventilator, local: true) do |form| %>
+  <% if ventilator.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(ventilator.errors.count, "error") %> prohibited this ventilator from being saved:</h2>
+      <ul>
+        <% ventilator.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <table>
+    <col style="width:25%">
+    <tr class="field">
+      <td>Belongs to cluster</td>
+      <td>
+        <% if current_user.admin? %>
+          <%= form.collection_select( :cluster_id, Cluster.all, :id, :name, {}, { class: "form-control" })  %>
+        <% else %>
+          <%= form.collection_select( :cluster_id, current_user.organization.clusters, :id, :name, {}, { class: "form-control" })  %>
+        <% end %>
+      </td>
+    </tr>
+
+    <tr class="field">
+      <td><%= form.label :name %></td>
+      <td><%= form.text_field :name %></td>
+    </tr>
+
+    <tr class="field">
+      <td><%= form.label :serial_number %></td>
+      <td><%= form.text_field :serial_number %></td>
+    </tr>
+
+    <tr class="field">
+      <td><%= form.label :hostname %></td>
+      <td><%= form.text_field :hostname %></td>
+    </tr>
+
+    <tr class="field">
+      <td><%= form.label :api_key %></td>
+      <td><%= form.text_field :api_key %></td>
+    </tr>
+
+    <tr class="field">
+      <td><%= form.label :notes %></td>
+      <td><%= form.text_area :notes %></td>
+    </tr>
+
+    <tr class="field">
+      <td><%= form.label :ventilator_user %></td>
+      <td><%= form.text_field :ventilator_user %></td>
+    </tr>
+
+    <tr class="field">
+      <td><%= form.label :ventilator_password %></td>
+      <td><%= form.text_field :ventilator_password %></td>
+    </tr>
+  </table>
+
+  <section>
+      <div class="actions">
+        <%= form.submit class: "btn btn-info"%>
+      </div>
+    </section>
+<% end %>

@@ -1,0 +1,81 @@
+<h3>Users Awaiting Assignment to an Organization (Most Recent)</h3>
+<h5 style="font-weight: normal !important;">Only assign users to your organization if you actually know and trust them</h5>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Email</th>
+      <th>Role</th>
+      <th>Belongs to Organization</th>
+      <th>Created At</th>
+      <th>Updated At</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @unassigned_users.each do |user| %>
+      <tr>
+        <td><%= user.id %></td>
+        <td><%= link_to user.email, user %></td>
+        <td><%= user.role %></td>
+        <td><%= user.organization ? user.organization.name : "" %></td>
+        <td><%= user.created_at.strftime("%m-%d-%Y, %l:%M%P") %></td>
+        <td><%= user.updated_at.strftime("%m-%d-%Y, %l:%M%P") %></td>
+        <td>
+          <a href="<%= edit_user_path(user) %>"><button class="btn btn-sm btn-secondary"></span> Assign</button></a>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<section>
+  <% if current_user.admin? %>
+    <h3>All Users</h3>
+  <% elsif current_user.org_admin? %>
+    <h3>Users in <%= current_user.organization.name %></h3>
+  <% end %>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Belongs to Organization</th>
+        <th>Created At</th>
+        <th>Updated At</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= user.id %></td>
+          <td><%= user.name.present? ? user.name : "" %></td>
+          <td><%= link_to user.email, user %></td>
+          <td><%= user.role %></td>
+          <td><%= user.organization ? user.organization.name : "" %></td>
+          <td><%= user.created_at.strftime("%m-%d-%Y, %l:%M%P") %></td>
+          <td><%= user.updated_at.strftime("%m-%d-%Y, %l:%M%P") %></td>
+          <td>
+            <a href="<%= edit_user_path(user) %>">
+              <button class="btn btn-info">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true">
+                </span> Edit</button>
+              </a>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="pagination-style" id="pagination_controls">
+    <%= will_paginate @users %>
+  </div>
+</section>
+
+

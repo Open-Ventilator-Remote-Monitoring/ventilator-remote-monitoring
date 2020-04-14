@@ -1,0 +1,95 @@
+<h4>User Profile: <%= @user.email %></h4>
+
+<section>
+  <% if current_user == @user %>
+    <a href="<%= edit_user_registration_path %>">
+      <button class="btn btn-info">
+        <i class="fas fa-cog"></i>
+        Change Password
+      </button>
+    </a>
+    <% if current_user.admin? || current_user.org_admin? %>
+      <a href="<%= edit_user_path(current_user) %>">
+        <button class="btn btn-info">
+          <i class="fas fa-cog"></i>
+          Edit My Profile
+        </button>
+      </a>
+    <% end %>
+  <% elsif current_user.admin? %>
+    <a href="<%= edit_user_path(@user) %>">
+      <button class="btn btn-info">
+        <i class="fas fa-cog"></i>
+        Edit User Profile
+      </button>
+    </a>
+  <% end %>
+</section>
+
+<section>
+  <table class="table user-show">
+    <tr>
+      <td>Name:</td>
+      <td><%= @user.name.present? ? @user.name : "" %></td>
+    </tr>
+    <tr>
+      <td>Email:</td>
+      <td><%= @user.email %></td>
+    </tr>
+    <tr>
+      <td>Role:</td>
+      <td><%= @user.role %></td>
+    </tr>
+    <tr>
+      <td>Bio:</td>
+      <td><%= @user.bio %></td>
+    </tr>
+    <tr>
+      <td>Organization:</td>
+      <td><%= @user.organization ? @user.organization.name : "Please ask an Administrator to assign you to an Organization" %></td>
+    </tr>
+  </table>
+</section>
+
+
+<section>
+  <h4>Stats:</h4>
+  <table class="table user-show">
+    <tr>
+      <td>reset_password_sent_at</td>
+      <td><%= @user.reset_password_sent_at %></td>
+    </tr>
+    <tr>
+      <td>remember_created_at</td>
+      <td><%= @user.remember_created_at %></td>
+    </tr>
+    <tr>
+      <td>sign_in_count</td>
+      <td><%= @user.sign_in_count %></td>
+    </tr>
+    <tr>
+      <td>current_sign_in_at</td>
+      <td><%= @user.current_sign_in_at %></td>
+    </tr>
+    <tr>
+      <td>last_sign_in_at</td>
+      <td><%= @user.last_sign_in_at %></td>
+    </tr>
+    <tr>
+      <td>current_sign_in_ip</td>
+      <td><%= @user.current_sign_in_ip %></td>
+    </tr>
+    <tr>
+      <td>created_at</td>
+      <td><%= @user.created_at %></td>
+    </tr>
+    <tr>
+      <td>last_sign_in_ip</td>
+      <td><%= @user.last_sign_in_ip %></td>
+    </tr>
+    <tr>
+      <td>updated_at</td>
+      <td><%= @user.updated_at %></td>
+    </tr>
+  </table>
+</section>

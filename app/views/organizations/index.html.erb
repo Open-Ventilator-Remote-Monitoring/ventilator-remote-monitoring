@@ -1,0 +1,26 @@
+<h4>Organizations</h4>
+
+<section>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @organizations.each do |organization| %>
+        <tr>
+          <td><%= link_to organization.name, organization %></td>
+          <td><%= organization.description %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <a href="<%= new_organization_path %>">
+    <button class="btn btn-info">+ Add New Organization</button>
+  </a>
+</section>
+

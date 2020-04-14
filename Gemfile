@@ -9,6 +9,8 @@ gem 'rails', '~> 6.0.2', '>= 6.0.2.2'
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
 gem 'puma', '~> 4.1'
+# Use bootstrap
+gem 'bootstrap-sass'
 # Use SCSS for stylesheets
 gem 'sass-rails', '>= 6'
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
@@ -27,6 +29,10 @@ gem 'jbuilder', '~> 2.7'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
+
+gem 'devise'
+
+gem 'will_paginate', '~> 3.1.0'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -52,3 +58,12 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+gem 'validates_hostname', '~> 1.0.10'
+
+gem 'email_validator', '~> 2.0.1'
+
+# there is a unique index on (cluster_is, hostname), so unused hostnames must be nill
+gem 'nilify_blanks', '~> 1.3.0'
+
+gem 'fast_jsonapi'
