@@ -8,16 +8,18 @@ interface ApiResponse<T> {
   errMsg?: string
 }
 
-const getMsg = (ex) : string => {
+const getMsg = (ex): string => {
   ex = ex || "Unknown Exception"
   return ex.message ? ex.message : ex.toString()
 }
 
 export async function http<T>(request: RequestInfo): Promise<ApiResponse<T>> {
-  let apiResponse: ApiResponse<T> = {ok: false}
+  let apiResponse: ApiResponse<T> = {
+    ok: false
+  }
 
   try {
-    apiResponse.response = await fetch(request);
+    apiResponse.response = await fetch(request)
   } catch(ex) {
     apiResponse.errMsg = getMsg(ex)
     return apiResponse
@@ -30,7 +32,7 @@ export async function http<T>(request: RequestInfo): Promise<ApiResponse<T>> {
 
   try {
     // may error if there is no body
-    apiResponse.parsedBody = await apiResponse.response.json();
+    apiResponse.parsedBody = await apiResponse.response.json()
   } catch(ex) {
     apiResponse.errMsg = getMsg(ex)
   }
@@ -43,13 +45,13 @@ export async function get<T>(
   path: string,
   args: RequestInit = {
     method: "get",
-    mode: "no-cors",
     headers: {
       "Accept": "application/json; charset=UTF-8"
     }
   }
 ): Promise<ApiResponse<T>> {
-  return await http<T>(new Request(path, args));
+  let result = await http<T>(new Request(path, args))
+  return result
 }
 
 export async function post<T>(

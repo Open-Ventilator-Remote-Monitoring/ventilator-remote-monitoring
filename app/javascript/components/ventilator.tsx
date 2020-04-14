@@ -167,6 +167,7 @@ class Ventilator extends Component<IProps, IState> {
 
     // todo: check on why this returns an array
     let response = await get<IVentilatorPollValues[]>(url)
+    console.log(`get response: ${JSON.stringify(response)}`)
 
     if (response.ok) {
       // todo: validate the data within some range ?
