@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <h4>User Profile: <%= @user.email %></h4>
 
 <section>
@@ -48,7 +46,7 @@
     </tr>
     <tr>
       <td>Organization:</td>
-      <td><%= @user.organization ? @user.organization.name : "" %></td>
+      <td><%= @user.organization ? @user.organization.name : "Please ask an Administrator to assign you to an Organization" %></td>
     </tr>
   </table>
 </section>

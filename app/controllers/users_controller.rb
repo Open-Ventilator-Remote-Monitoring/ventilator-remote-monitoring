@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
   before_action :require_admin, except: [ :index, :show, :edit ]
+  before_action :require_org_admin_has_org, only: [:index, :show, :edit]
 
   # GET /users
   # GET /users.json
@@ -9,11 +10,11 @@ class UsersController < ApplicationController
       @users = User.all.paginate(:page => params[:page], :per_page => 10)
       @unassigned_users = User.where("organization_id IS NULL").order(created_at: :desc).last(5)
     elsif current_user.org_admin?
-      @users = current_user.organization.users.paginate(:page => params[:page], :per_page => 10)
-      #@unassigned_users = User.all.where("role = ? AND organization_id = ?", 0, nil)
-      @unassigned_users = User.where("organization_id IS NULL").order(created_at: :desc).last(5)
+        @users = current_user.organization.users.paginate(:page => params[:page], :per_page => 10)
+        #@unassigned_users = User.all.where("role = ? AND organization_id = ?", 0, nil)
+        @unassigned_users = User.where("organization_id IS NULL").order(created_at: :desc).last(5)
     else
-      flash[:error] = "You must be an administrator to view other users"
+      flash.error = "You must be an administrator to view other users"
       redirect_to root_url
     end
   end
@@ -26,21 +27,22 @@ class UsersController < ApplicationController
        current_user == @user)
         # continue
     else
-      flash[:error] = "You must be an administrator to view other users"
+      flash.error = "You must be an administrator to view other users"
       redirect_to root_url
     end
-
   end
 
   # GET /users/1/edit
   def edit
     if current_user.admin?
       @user = User.find(params[:id])
-    elsif (current_user.org_admin? && (current_user.organization.users.include?(User.find(params[:id])))) || (current_user.org_admin? && (User.find(params[:id]).organization_id == nil))
+    elsif (current_user.org_admin? &&
+            (current_user.organization.users.include?(User.find(params[:id])))) ||
+          (current_user.org_admin? && (User.find(params[:id]).organization_id == nil))
       @user = User.find(params[:id])
       @user.organization_id = current_user.organization.id
     else
-      flash[:error] = "You must be an administrator to edit other users"
+      flash.error = "You must be an administrator to edit other users"
       redirect_to root_url
     end
 
@@ -62,7 +64,7 @@ class UsersController < ApplicationController
 
       #      I am an org_admin      AND ((The organization includes said user)                              OR (Said user does not belong to an organization)) AND (I am requesting to make the user an org_admin, or unassigned)                    AND (I am a member of the organization to which I am assigning said user)
       unless current_user.org_admin? && (((current_user.organization.users.include?(User.find(params[:id]))) || (User.find(params[:id]).organization_id == nil)) && ((user_params[:role] == "org_admin") || (user_params[:role] == "unassigned")) && (current_user.organization.id.to_s == user_params[:organization_id]))
-        flash[:error] = "You must be an administrator to perform those updates on that user "
+        flash.error = "You must be an administrator to perform those updates on that user "
         redirect_to root_url and return
       end
     end
@@ -100,9 +102,18 @@ class UsersController < ApplicationController
 
     def require_admin
       unless current_user.admin?
-        flash[:error] = "You must be an administrator to access this section"
+        flash.error = "You must be an administrator to access this section"
+        redirect_to root_url
+      end
+    end
+
+    def require_org_admin_has_org
+      if current_user.org_admin? && current_user.organization == nil
+        flash.error = "Please ask an Administrator to assign you to an Organization"
         redirect_to root_url
       end
     end
 
 end
+
+

@@ -19,22 +19,27 @@
       <ul class="navbar-nav ml-auto">
 
         <% if user_signed_in? %>
-          <% if current_user.admin? %>
+          <% if current_user.admin? || (current_user.org_admin? && current_user.organization) %>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Admin
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <%= link_to "Organizations", organizations_path, class: "dropdown-item" %>
+                <% if current_user.admin? %>
+                  <%= link_to "Organizations", organizations_path, class: "dropdown-item" %>
+                <% else %>
+                  <%= link_to "My Organization", organization_path(current_user.organization), class: "dropdown-item" %>
+                <% end %>
                 <%= link_to "Users", users_path, class: "dropdown-item" %>
               </div>
             </li>
           <% end %>
 
-
-          <li class="nav-item">
-              <a class="nav-link" href="/clusters">My Clusters</a>
-          </li>
+          <% if current_user.organization %>
+            <li class="nav-item">
+                <a class="nav-link" href="/clusters">My Clusters</a>
+            </li>
+          <% end %>
         <% end %>
 
         <li class="nav-item">
@@ -59,6 +64,20 @@
       </ul>
     </div>
   </nav>
+
+  <% if flash[:error] %>
+    <div class="alert alert-danger">
+      <%= flash[:error] %>
+    </div>
+  <% end %>
+
+  <% if flash[:notice] %>
+    <div class="alert alert-success fade-msg">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
+
+  <% flash.clear %>
 
   <div class="container">
     <%= yield %>

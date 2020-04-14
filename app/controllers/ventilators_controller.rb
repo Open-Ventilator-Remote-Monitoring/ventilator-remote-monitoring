@@ -50,7 +50,7 @@ class VentilatorsController < ApplicationController
       if current_user.organization.clusters.any?{ |cluster| cluster.id == @ventilator.cluster_id }
         # ventilator was added to a cluster within user's org
       else
-        flash[:error] = "You do not have permission to add a Ventilator to this cluster"
+        flash.error = "You do not have permission to add a Ventilator to this cluster"
         redirect_to ventilator_url
       end
     end
@@ -100,7 +100,7 @@ class VentilatorsController < ApplicationController
         @ventilator = Ventilator.find(params[:id])
         @organization = @ventilator.cluster.organization
       else
-        flash[:error] = "You do not have permission to view this ventilator"
+        flash.error = "You do not have permission to view this ventilator"
         redirect_to ventilators_url
       end
     end
