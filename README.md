@@ -27,11 +27,34 @@ Check out the [live demo/concept](http://www.ventilatormonitor.com).
 8. Run bundler: `bundle install`
 9. Migrate the database: `rails db:migrate`
 10. Start a rails development server: `rails s`
-11. You should now be able to navigate to `http://localhost:3000` and view the live rails site
-
-Note: the javascript app that runs in the web browser is currently located in `app/javascript/custom/demo.js`
+11. You should now be able to navigate to [http://localhost:3000](http://localhost:3000) and view the live rails site
 
 **Having problems?** Post on the Slack Channel and we'll help you out
+
+## Creating the first Administrator
+
+If this is your first use since the User database table was created, you will need to set up an Administrator. Here are the steps:
+
+1. Start the web server and open a browser to [http://localhost:3000](http://localhost:3000)
+2. In the top-right of the page, click on 'Sign in'
+3. On the Log In screen, click on 'Sign Up'. Type in your email address, name and the password you want to use (twice) and click 'sign up'.
+4. In the directory where the project is located, run the rails console-
+    > rails c
+5. Execute the following:
+    >me = User.find(1)
+
+    Ensure the record displayed includes your email address. If not, and you are not sure of how to find your record, stop here and ask for help.
+6. Execute the following:
+    > me.admin!
+
+    This should change your roll to admin and update the database.
+
+7. Type
+    > exit
+
+    Now when you go back to the web page and log in you should be an administrator.
+
+8. As soon as you have created your first organization, please navigate to [http://localhost:3000/users](/users), find your email address under the heading "Users awaiting Assignment to an Organization", and click the "assign" button. Select an Organization from the drop-down list and click 'update user'.
 
 ## API
 
