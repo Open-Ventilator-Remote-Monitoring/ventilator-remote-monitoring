@@ -127,7 +127,7 @@ class Ventilator extends Component<IProps, IState> {
     if (! this.state.pollResult.result) {
       let result = {
         // for simulation purposes, a ventilator named 'EW Room2' will show as disconnected
-        connected: this.props.ventilator.name !== 'EW Room 2',
+        connected: this.props.ventilator.name !== 'East-2',
         result: {
           tidalVolume: generateRandomColumnValue('tidalVolume'),
           respiratoryRate: generateRandomColumnValue('respiratoryRate'),
@@ -139,8 +139,8 @@ class Ventilator extends Component<IProps, IState> {
       return result
     }
 
-    // otherwise, pick one field to change, pick up or down, and adjust that field
-    // to simplify, we will not change ieRatio. Just pick n-1 numbers and adjust
+    // Otherwise, pick one field to change, pick up or down, and adjust that field, ensuring it stays in range.
+    // To simplify, we will not change ieRatio. Just pick n-1 numbers and adjust
     let columnIndx = generateRandomValueBetween(0, columnNames.length - 2)
     columnIndx = columnIndx == IE_RATIO_INDEX ? IE_RATIO_INDEX + 1 : columnIndx
 

@@ -43,6 +43,7 @@ export async function get<T>(
   path: string,
   args: RequestInit = {
     method: "get",
+    mode: "no-cors",
     headers: {
       "Accept": "application/json; charset=UTF-8"
     }

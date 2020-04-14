@@ -59,11 +59,12 @@ class Organization extends Component<IProps, IState> {
 
     let result = (
       <div>
-        <h3>
-          {organization.name}
-        </h3>
+
         <div className="select-row">
-          <div className="label">Select Cluster:</div>
+          <h3>
+            {organization.name}
+          </h3>
+
           <Select
             value={selectedOption}
             className="select"

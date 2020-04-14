@@ -6,7 +6,33 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import Organization from "./organization"
 
 import "./ventilatorTree.scss"
+import { IOrganization } from "../types"
 
+// create a demo org with two clusters
+let demoOrg : IOrganization = {
+  id: 1,
+  name: 'General Hospital',
+  clusters: [
+    {
+      id: 1,
+      name: 'East Wing',
+      ventilators: [
+      ]
+    },
+    {
+      id: 2,
+      name: 'West Wing',
+      ventilators: [
+      ]
+    }
+  ]
+}
+
+// Populate the clusters with 6 ventilators each
+for (let i = 0; i < 6; i ++) {
+  demoOrg.clusters[0].ventilators.push({id: i, name: `East-${i}`, hostname: 'n/a'})
+  demoOrg.clusters[1].ventilators.push({id: i, name: `West-${i}`, hostname: 'n/a'})
+}
 
 interface IProps {
   // If true, all ventilators will generate random data every 3 seconds
@@ -30,22 +56,35 @@ class VentilatorTree extends Component<IProps, IState> {
   }
 
   async componentDidMount() {
+    if (this.props.demo) {
+      this.setState({
+        loading: false,
+        organization: demoOrg
+      })
+      return
+    }
+
+    let organization = null
+    let success = false
+
     let response = await get<any>('/api/v1/ventilators')
 
     if (response.ok) {
-      // todo: try-catch
-      const dataFormatter = new Jsona()
-      const organization = dataFormatter.deserialize(response.parsedBody)
-      this.setState({
-        loading: false,
-        organization
-      })
-    } else {
-      this.setState({
-        loading: false,
-        errMsg: response.errMsg
-      })
+      try {
+        const dataFormatter = new Jsona()
+        organization = dataFormatter.deserialize(response.parsedBody)
+        success = true
+      } catch(err) {
+      }
     }
+
+    let errMsg = success ? '' : 'There was an error while getting the Organization information from the server.'
+
+    this.setState({
+      loading: false,
+      organization,
+      errMsg
+    })
   }
 
   render() {
