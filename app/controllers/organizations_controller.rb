@@ -14,7 +14,7 @@ class OrganizationsController < ApplicationController
     if current_user.admin? || (current_user.org_admin? && (params[:id].to_i == current_user.organization.id))
       # show
     else
-      flash.error = "You must be an administrator to access this section"
+      flash.alert = "You must be an administrator to access this section"
       redirect_to root_url
     end
   end

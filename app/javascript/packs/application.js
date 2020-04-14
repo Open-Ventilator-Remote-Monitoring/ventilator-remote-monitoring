@@ -9,7 +9,6 @@ require("turbolinks").start()
 require("@rails/activestorage").start()
 require("channels")
 require("bootstrap/dist/js/bootstrap")
-require("custom/demo")
 
 import "@fortawesome/fontawesome-free/js/all";
 

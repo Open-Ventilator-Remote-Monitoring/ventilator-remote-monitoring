@@ -65,15 +65,15 @@
     </div>
   </nav>
 
-  <% if flash[:error] %>
+  <% if flash.alert %>
     <div class="alert alert-danger">
-      <%= flash[:error] %>
+      <%= flash.alert %>
     </div>
   <% end %>
 
-  <% if flash[:notice] %>
+  <% if flash.notice %>
     <div class="alert alert-success fade-msg">
-      <%= flash[:notice] %>
+      <%= flash.notice %>
     </div>
   <% end %>
 

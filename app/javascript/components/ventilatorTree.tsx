@@ -78,7 +78,7 @@ class VentilatorTree extends Component<IProps, IState> {
       }
     }
 
-    let errMsg = success ? '' : 'There was an error while getting the Organization information from the server.'
+    let errMsg = success ? null : 'There was an error while getting the Organization information from the server.'
 
     this.setState({
       loading: false,
@@ -91,16 +91,16 @@ class VentilatorTree extends Component<IProps, IState> {
     const { loading, organization, errMsg } = this.state
     const { demo } = this.props
 
-    const spinner = (
-      <FontAwesomeIcon icon={faSpinner} size="4x" spin />
-    )
-
     if (loading) {
-      return spinner
+      return (
+        <FontAwesomeIcon icon={faSpinner} size="4x" spin />
+      )
     }
 
     if (errMsg) {
-      return (<div className="error">{errMsg}</div>)
+      return (
+        <div className="error">{errMsg}</div>
+      )
     }
 
     return (

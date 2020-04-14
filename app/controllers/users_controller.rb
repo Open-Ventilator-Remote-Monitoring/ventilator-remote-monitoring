@@ -14,7 +14,7 @@ class UsersController < ApplicationController
         #@unassigned_users = User.all.where("role = ? AND organization_id = ?", 0, nil)
         @unassigned_users = User.where("organization_id IS NULL").order(created_at: :desc).last(5)
     else
-      flash.error = "You must be an administrator to view other users"
+      flash.alert = "You must be an administrator to view other users"
       redirect_to root_url
     end
   end
@@ -27,7 +27,7 @@ class UsersController < ApplicationController
        current_user == @user)
         # continue
     else
-      flash.error = "You must be an administrator to view other users"
+      flash.alert = "You must be an administrator to view other users"
       redirect_to root_url
     end
   end
@@ -42,7 +42,7 @@ class UsersController < ApplicationController
       @user = User.find(params[:id])
       @user.organization_id = current_user.organization.id
     else
-      flash.error = "You must be an administrator to edit other users"
+      flash.alert = "You must be an administrator to edit other users"
       redirect_to root_url
     end
 
@@ -64,7 +64,7 @@ class UsersController < ApplicationController
 
       #      I am an org_admin      AND ((The organization includes said user)                              OR (Said user does not belong to an organization)) AND (I am requesting to make the user an org_admin, or unassigned)                    AND (I am a member of the organization to which I am assigning said user)
       unless current_user.org_admin? && (((current_user.organization.users.include?(User.find(params[:id]))) || (User.find(params[:id]).organization_id == nil)) && ((user_params[:role] == "org_admin") || (user_params[:role] == "unassigned")) && (current_user.organization.id.to_s == user_params[:organization_id]))
-        flash.error = "You must be an administrator to perform those updates on that user "
+        flash.alert = "You must be an administrator to perform those updates on that user "
         redirect_to root_url and return
       end
     end
@@ -102,14 +102,14 @@ class UsersController < ApplicationController
 
     def require_admin
       unless current_user.admin?
-        flash.error = "You must be an administrator to access this section"
+        flash.alert = "You must be an administrator to access this section"
         redirect_to root_url
       end
     end
 
     def require_org_admin_has_org
       if current_user.org_admin? && current_user.organization == nil
-        flash.error = "Please ask an Administrator to assign you to an Organization"
+        flash.alert = "Please ask an Administrator to assign you to an Organization"
         redirect_to root_url
       end
     end
