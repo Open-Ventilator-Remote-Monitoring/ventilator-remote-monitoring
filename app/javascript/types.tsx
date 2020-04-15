@@ -21,11 +21,20 @@ export interface IVentilatorPollValues {
   tidalVolume: number
   respiratoryRate: number
   peakInspiratoryPressure: number
-  ieRatio: string
+  // todo: Technically, this is the denominator of the ratio
+  // The numerator is assumed to be 1. However, I think ratios
+  // can exceed one. Suggest we send both numerator and denominator
+  ieRatio: number
   peep: number
+}
+
+export interface IVentilatorApiCallResponse {
+  // todo: why is this an array? Can it ever have more than one value?
+  ventilator: IVentilatorPollValues[]
 }
 
 export interface IVentilatorPollResult {
   connected: boolean
   result?: IVentilatorPollValues
 }
+
