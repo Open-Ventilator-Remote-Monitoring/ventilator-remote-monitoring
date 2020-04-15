@@ -1,10 +1,11 @@
 import React, { Component } from "react"
 import Jsona from 'jsona'
-import { get } from '../api'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
-import Organization from "./organization"
 
+import Organization from "./organization"
+import { get } from '../api'
+import { sortObjects } from '../utils'
 import { IOrganization } from "../types"
 
 // create a demo org with two clusters
@@ -63,7 +64,7 @@ class VentilatorTree extends Component<IProps, IState> {
       return
     }
 
-    let organization = null
+    let organization : IOrganization = null
     let success = false
 
     let response = await get<any>('/api/v1/ventilators')
@@ -71,13 +72,19 @@ class VentilatorTree extends Component<IProps, IState> {
     if (response.ok) {
       try {
         const dataFormatter = new Jsona()
-        organization = dataFormatter.deserialize(response.parsedBody)
+        organization = dataFormatter.deserialize(response.parsedBody) as IOrganization
         success = true
       } catch(err) {
       }
     }
 
     let errMsg = success ? null : 'There was an error while getting the Organization information from the server.'
+    if (success) {
+      // sort the cluster names
+      sortObjects(organization.clusters, "name")
+      // for each cluster, sort the ventilators
+      organization.clusters.forEach((c) => sortObjects(c.ventilators, "name"))
+    }
 
     this.setState({
       loading: false,

@@ -34,7 +34,6 @@ class Organization extends Component<IProps, IState> {
         }
       })
 
-      sortOptions(this.options)
     }
 
     let selectedOption = (this.options.length > 0)
@@ -90,20 +89,6 @@ class Organization extends Component<IProps, IState> {
 
     return result
   }
-}
-
-const sortOptions = (options) => {
-  options.sort((a, b) => {
-    var nameA = a.label.toUpperCase(); // ignore upper and lowercase
-    var nameB = b.label.toUpperCase(); // ignore upper and lowercase
-    if (nameA < nameB) {
-      return -1;
-    }
-    if (nameA > nameB) {
-      return 1;
-    }
-    return 0;
-  })
 }
 
 export default Organization
