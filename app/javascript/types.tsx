@@ -23,7 +23,7 @@ export interface IVentilatorPollValues {
   peakInspiratoryPressure: number
   // todo: Technically, this is the denominator of the ratio
   // The numerator is assumed to be 1. However, I think ratios
-  // can exceed one. Suggest we send both numerator and denominator
+  // can exceed one. Suggest we collect both numerator and denominator
   ieRatio: number
   peep: number
 }

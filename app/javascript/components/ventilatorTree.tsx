@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import Organization from "./organization"
 
-import "./ventilatorTree.scss"
 import { IOrganization } from "../types"
 
 // create a demo org with two clusters

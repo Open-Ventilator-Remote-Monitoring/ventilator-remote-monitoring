@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import Select from 'react-select'
 import { IOrganization } from '../types'
 import Cluster from './cluster'
-import './organization.css'
 
 interface IOption {
   value: number,

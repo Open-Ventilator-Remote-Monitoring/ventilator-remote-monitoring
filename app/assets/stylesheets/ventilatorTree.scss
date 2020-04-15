@@ -8,18 +8,7 @@
   }
 
   .flash {
-    -webkit-animation: flash linear 2s infinite;
-	  animation: flash linear 2s infinite;
-  }
-
-  // Used to flash a field when the value changes
-  .flashing {
-    background-color: transparent;
-    transition: background-color 100ms;
-  }
-
-  .active {
-    background-color:yellow;
+	  animation: flash  2s infinite;
   }
 
   .tr-subheading th {
@@ -46,4 +35,29 @@
   th {
     text-align: center;
   }
+}
+
+.select-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.select {
+  min-width: 300px;
+  max-width: 500px;
+  margin-left: 30px;
+}
+
+@keyframes pop {
+  0% {
+    background-color: yellow;
+  }
+  100% {
+    color: default;
+  }
+}
+
+.pop {
+  animation: pop 1s;
 }
