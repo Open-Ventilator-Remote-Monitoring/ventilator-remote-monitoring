@@ -42,7 +42,7 @@ export async function http<T>(request: RequestInfo): Promise<ApiResponse<T>> {
 }
 
 export async function get<T>(
-  path: string,
+  uri: string,
   args: RequestInit = {
     method: "get",
     headers: {
@@ -50,22 +50,22 @@ export async function get<T>(
     }
   }
 ): Promise<ApiResponse<T>> {
-  let result = await http<T>(new Request(path, args))
+  let result = await http<T>(new Request(uri, args))
   return result
 }
 
 export async function post<T>(
-  path: string,
+  uri: string,
   body: any,
   args: RequestInit = { method: "post", body: JSON.stringify(body) }
 ): Promise<ApiResponse<T>>  {
-  return await http<T>(new Request(path, args));
+  return await http<T>(new Request(uri, args));
 }
 
 export async function put<T>(
-  path: string,
+  uri: string,
   body: any,
   args: RequestInit = { method: "put", body: JSON.stringify(body) }
 ): Promise<ApiResponse<T>> {
-  return await http<T>(new Request(path, args));
+  return await http<T>(new Request(uri, args));
 }

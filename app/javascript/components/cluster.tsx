@@ -73,8 +73,10 @@ class Cluster extends Component<IProps, null> {
         </thead>
         <tbody>
           {
+            // Must ensure ventilator objects are not reused when switching clusters
+            // by ensuring the key has both the cluster id and ventilator id
             ventilators.map((v, i) => (
-              <Ventilator key={i} ventilator={v} demo={demo}/>
+              <Ventilator key={`${cluster.id}-${v.id}`} ventilator={v} demo={demo}/>
             ))
           }
         </tbody>
