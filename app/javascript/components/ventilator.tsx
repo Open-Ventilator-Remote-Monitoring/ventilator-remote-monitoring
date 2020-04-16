@@ -24,7 +24,10 @@ import {
 const GOOD_POLL_PERIOD_MS = 3000
 
 // When the device is disconnected, poll this often
-const BAD_POLL_PERIOD_MS = 60000
+const BAD_POLL_PERIOD_MS = 15000
+
+const API_KEY_HEADER = "Authorization"
+const API_KEY_PREFIX = 'OpenVentApiKeyV1' // followd by 1 space followed by apiKey
 
 const VENTILATOR_NAME_WITH_SIMULATED_FAILURE = "East-2"
 
@@ -193,7 +196,13 @@ class Ventilator extends Component<IProps, IState> {
 
     // todo: check on why this returns an array
     // console.log(`${this.props.ventilator.name}: Getting from: ${uri}`)
-    let response = await get<IVentilatorApiCallResponse>(uri)
+
+    let headers = {}
+    if (this.props.ventilator.apiKey) {
+      headers[API_KEY_HEADER] = `${API_KEY_PREFIX} ${this.props.ventilator.apiKey.trim()}`
+    }
+
+    let response = await get<IVentilatorApiCallResponse>(uri, headers)
     console.log(`${this.props.ventilator.name}: Response: ${JSON.stringify(response)}`)
 
     if (response.ok) {

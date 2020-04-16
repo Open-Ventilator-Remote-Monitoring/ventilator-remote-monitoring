@@ -34,8 +34,8 @@ let demoOrg : IOrganization = {
 
 // Populate the clusters with 6 ventilators each
 for (let i = 0; i < 6; i ++) {
-  demoOrg.clusters[0].ventilators.push({id: i, name: `East-${i}`, hostname: 'n/a'})
-  demoOrg.clusters[1].ventilators.push({id: i, name: `West-${i}`, hostname: 'n/a'})
+  demoOrg.clusters[0].ventilators.push({id: i, name: `East-${i}`})
+  demoOrg.clusters[1].ventilators.push({id: i, name: `West-${i}`})
 }
 
 interface IProps {
@@ -72,11 +72,13 @@ class VentilatorTree extends Component<IProps, IState> {
 
     // Normally, when the browser links to another page, all resources from the previous
     // page are cleaned up, including the React root and it's decendents and any timers
-    // they created are cleaned up.
+    // they created.
     // But we are using Turbolinks (https://github.com/turbolinks/turbolinks), which is
     // a single-page-app that requests the HTML for the next page and simply replaces
     // the existing DOM contents, leaving the previous React app and all of the timers running.
     // This event listener notifies us when the user clicks on another link (such as in the navbar)
+    // so we can unmount our root react component, causing ComponentWillUnmount to be called on
+    // all component so they can free resources.
 
     window.addEventListener('turbolinks:before-visit', this.componentCleanup);
 
@@ -97,6 +99,8 @@ class VentilatorTree extends Component<IProps, IState> {
       // console.log(`Get returned, but component was unmounted`)
       return false
     }
+
+    console.log(`response.parsedBody: ${JSON.stringify(response.parsedBody, null, 2)}`)
 
     if (response.ok) {
       try {

@@ -35,24 +35,27 @@ export async function http<T>(request: RequestInfo): Promise<ApiResponse<T>> {
     apiResponse.parsedBody = await apiResponse.response.json()
   } catch(ex) {
     apiResponse.errMsg = getMsg(ex)
+    return apiResponse
   }
 
   apiResponse.ok = true
   return apiResponse;
 }
 
-export async function get<T>(
-  uri: string,
-  args: RequestInit = {
-    method: "get",
-    headers: {
-      "Accept": "application/json; charset=UTF-8",
-      "Cache-Control": "no-cache",
+export async function get<T>(uri: string, headers: {} = null): Promise<ApiResponse<T>> {
+    let args: RequestInit = {
+      method: "get",
+      headers: {
+        "Accept": "application/json; charset=UTF-8",
+        "Cache-Control": "no-cache",
+      }
     }
-  }
-): Promise<ApiResponse<T>> {
-  let result = await http<T>(new Request(uri, args))
-  return result
+    if (headers) {
+      args.headers = {...args.headers, ...headers}
+    }
+    let request = new Request(uri, args)
+    let result = await http<T>(request)
+    return result
 }
 
 export async function post<T>(
