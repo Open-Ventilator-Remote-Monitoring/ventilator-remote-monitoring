@@ -78,6 +78,8 @@ class Ventilator extends Component<IProps, IState> {
   }
 
   componentDidMount() {
+    // console.log(`${this.props.ventilator.name}: mounted.`)
+
     // if all ventilator objects are created at the same time and mount at the same time,
     // they will all update at the same time (every 3 seconds), causing all lines in the
     // table to change at the same time (and will all poll at the same time).
@@ -92,12 +94,13 @@ class Ventilator extends Component<IProps, IState> {
 
     this._timeout = setTimeout(this.poll, delay)
 
-    // we have no results to display but we want the ventilator to at least display its table row and name
+    // we have no results to display yet, but we want the ventilator to
+    // at least display its table row and name
     this.forceUpdate()
   }
 
   componentWillUnmount() {
-    console.log(`${this.props.ventilator.name}: un-mounted.`)
+    // console.log(`${this.props.ventilator.name}: un-mounted.`)
 
     this._mounted = false
 

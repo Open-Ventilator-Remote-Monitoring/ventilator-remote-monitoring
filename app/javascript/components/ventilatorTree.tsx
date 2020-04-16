@@ -2,7 +2,6 @@ import React, { Component } from "react"
 import Jsona from 'jsona'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
-import ReactDOM from 'react-dom'
 
 import Organization from "./organization"
 import { get } from '../api'
@@ -10,7 +9,6 @@ import { sortObjects } from '../utils'
 import { IOrganization } from "../types"
 
 const VENTILATORS_API_URI = '/api/v1/ventilators'
-const DOM_ELEMENT_ID_WHERE_MOUNTED = 'index-demo-container'
 
 // create a demo org with two clusters
 let demoOrg : IOrganization = {
@@ -59,31 +57,10 @@ class VentilatorTree extends Component<IProps, IState> {
       organization: {},
       errMsg: ''
     }
-    this.componentCleanup = this.componentCleanup.bind(this);
-  }
-
-  componentCleanup() {
-    let element = document.getElementById(DOM_ELEMENT_ID_WHERE_MOUNTED)
-    if (element) {
-      console.log(`Unmounting React root`)
-      ReactDOM.unmountComponentAtNode(document.getElementById(DOM_ELEMENT_ID_WHERE_MOUNTED))
-    }
   }
 
   async componentDidMount() {
     this._mounted = true
-
-    // Normally, when the browser links to another page, all resources from the previous
-    // page are cleaned up, including the React root and it's decendents and any timers
-    // they created.
-    // But we are using Turbolinks (https://github.com/turbolinks/turbolinks), which is
-    // a single-page-app that requests the HTML for the next page and simply replaces
-    // the existing DOM contents, leaving the previous React app and all of the timers running.
-    // This event listener notifies us when the user clicks on another link (such as in the navbar)
-    // so we can unmount our root react component, causing ComponentWillUnmount to be called on
-    // all component so they can free resources.
-
-    window.addEventListener('turbolinks:before-visit', this.componentCleanup);
 
     if (this.props.demo) {
       this.setState({
@@ -131,7 +108,6 @@ class VentilatorTree extends Component<IProps, IState> {
 
   componentWillUnmount() {
     this._mounted = false
-    window.removeEventListener('beforeunload', this.componentCleanup);
   }
 
   render() {
