@@ -34,8 +34,8 @@ let demoOrg : IOrganization = {
 
 // Populate the clusters with 6 ventilators each
 for (let i = 0; i < 6; i ++) {
-  demoOrg.clusters[0].ventilators.push({id: i, name: `East-${i}`})
-  demoOrg.clusters[1].ventilators.push({id: i, name: `West-${i}`})
+  demoOrg.clusters[0].ventilators.push({id: i, name: `East-${i}`, hostname: 'n/a'})
+  demoOrg.clusters[1].ventilators.push({id: i, name: `West-${i}`, hostname: 'n/a'})
 }
 
 interface IProps {
@@ -63,8 +63,11 @@ class VentilatorTree extends Component<IProps, IState> {
   }
 
   componentCleanup() {
-    console.log('Unmounting React Root')
-    ReactDOM.unmountComponentAtNode(document.getElementById(DOM_ELEMENT_ID_WHERE_MOUNTED))
+    let element = document.getElementById(DOM_ELEMENT_ID_WHERE_MOUNTED)
+    if (element) {
+      console.log(`Unmounting React root`)
+      ReactDOM.unmountComponentAtNode(document.getElementById(DOM_ELEMENT_ID_WHERE_MOUNTED))
+    }
   }
 
   async componentDidMount() {
@@ -100,7 +103,7 @@ class VentilatorTree extends Component<IProps, IState> {
       return false
     }
 
-    console.log(`response.parsedBody: ${JSON.stringify(response.parsedBody, null, 2)}`)
+    // console.log(`response.parsedBody: ${JSON.stringify(response.parsedBody, null, 2)}`)
 
     if (response.ok) {
       try {
