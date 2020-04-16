@@ -71,6 +71,8 @@ class Ventilator extends Component<IProps, IState> {
       },
       previousValues: null
     }
+
+    this.poll = this.poll.bind(this)
   }
 
   async componentDidMount() {
@@ -86,11 +88,11 @@ class Ventilator extends Component<IProps, IState> {
     // this is only the initial polling period. It will be changed after the first poll.
     this._pollingPeriod = generateRandomValueBetween(0, 1500)
 
-    this._interval = setInterval(this.poll.bind(this), this._pollingPeriod)
+    this._interval = setInterval(this.poll, this._pollingPeriod)
   }
 
   componentWillUnmount() {
-    // console.log(`${this.props.ventilator.name}: un-mounted. Setting _mounted to false`)
+    console.log(`${this.props.ventilator.name}: un-mounted.`)
 
     this._mounted = false
 
@@ -131,7 +133,7 @@ class Ventilator extends Component<IProps, IState> {
 
     if (newPollingPeriod != this._pollingPeriod) {
       clearInterval(this._interval)
-      this._interval = setInterval(this.poll.bind(this), newPollingPeriod)
+      this._interval = setInterval(this.poll, newPollingPeriod)
       this._pollingPeriod = newPollingPeriod
     }
 

@@ -61,12 +61,12 @@ class Organization extends Component<IProps, IState> {
     if (selectedOption) {
       let cluster = organization.clusters.find(c => c.id == selectedOption.value)
       if (cluster) {
-        clusterDisplay = (<Cluster cluster={cluster} demo={demo}/>)
+        clusterDisplay = (<Cluster key={cluster.id} cluster={cluster} demo={demo}/>)
       }
     }
 
     let result = (
-      <div>
+      <section>
         <div className="select-row">
           <h3>
             {organization.name}
@@ -84,7 +84,7 @@ class Organization extends Component<IProps, IState> {
           clusterDisplay
         }
         </section>
-      </div>
+      </section>
     )
 
     return result
