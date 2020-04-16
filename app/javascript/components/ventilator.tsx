@@ -10,11 +10,15 @@ If the Demo prop is false:
 */
 
 import React, { Component } from "react"
-import { IVentilator, IVentilatorPollResult, IVentilatorApiCallResponse } from '../types'
 import { get } from '../api'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
-import FlashChange from '@avinlab/react-flash-change';
+import {
+  IVentilator,
+  IVentilatorPollValues,
+  IVentilatorPollResult,
+  IVentilatorApiCallResponse
+} from '../types'
 
 // When the device is connected, poll this often
 const GOOD_POLL_PERIOD_MS = 3000
@@ -27,37 +31,20 @@ const VENTILATOR_NAME_WITH_SIMULATED_FAILURE = "East-2"
 interface IColumn {
   min: number,
   max: number,
-  render: (x :number) => (number | string) // convert the measurement to what will be displayed
+  toDisplay: (x :number) => (number | string) // convert the measurement to what will be displayed
 }
 
-const identity = (x) => x
+const identity = (x: number) : string => x.toString()
 
 const columns : {[key: string]: IColumn} = {
-   tidalVolume:             {min: 300, max: 800, render: identity},
-   respiratoryRate:         {min: 8,   max: 35,  render: identity},
-   peakInspiratoryPressure: {min: 60,  max: 80,  render: identity},
-   ieRatio:                 {min: 1,   max: 4,   render: x => `1:${x}`},
-   peep:                    {min: 5,   max: 10,  render: identity},
+   tidalVolume:             {min: 300, max: 800, toDisplay: identity},
+   respiratoryRate:         {min: 8,   max: 35,  toDisplay: identity},
+   peakInspiratoryPressure: {min: 60,  max: 80,  toDisplay: identity},
+   ieRatio:                 {min: 1,   max: 4,   toDisplay: x => `1:${x}`},
+   peep:                    {min: 5,   max: 10,  toDisplay: identity},
 }
 
 const columnNames = Object.keys(columns)
-
-// fields flash yellow for a second whenever the value changes
-const Flash = (value) => {
-  return (
-    <FlashChange
-        value={value}
-        className="flashing"
-        flashClassName="active"
-        flashDuration="1000"
-        compare={(prevProps, nextProps) => {
-            return nextProps.value !== prevProps.value;
-        }}
-    >
-        {value}
-    </FlashChange>
-  )
-}
 
 interface IProps {
   ventilator: IVentilator
@@ -65,7 +52,8 @@ interface IProps {
 }
 
 interface IState {
-  pollResult: IVentilatorPollResult
+  pollResult: IVentilatorPollResult,
+  previousValues: IVentilatorPollValues,
 }
 
 class Ventilator extends Component<IProps, IState> {
@@ -80,8 +68,11 @@ class Ventilator extends Component<IProps, IState> {
       pollResult: {
         connected: false,
         result: null
-      }
+      },
+      previousValues: null
     }
+
+    this.poll = this.poll.bind(this)
   }
 
   async componentDidMount() {
@@ -97,15 +88,15 @@ class Ventilator extends Component<IProps, IState> {
     // this is only the initial polling period. It will be changed after the first poll.
     this._pollingPeriod = generateRandomValueBetween(0, 1500)
 
-    this._interval = setInterval(this.poll.bind(this), this._pollingPeriod)
+    this._interval = setInterval(this.poll, this._pollingPeriod)
   }
 
   componentWillUnmount() {
-    // console.log(`${this.props.ventilator.name}: un-mounted. Setting _mounted to false`)
-
-    clearInterval(this._interval)
+    console.log(`${this.props.ventilator.name}: un-mounted.`)
 
     this._mounted = false
+
+    clearInterval(this._interval)
   }
 
   async poll() : Promise<boolean> {
@@ -115,6 +106,10 @@ class Ventilator extends Component<IProps, IState> {
       // console.log(`${this.props.ventilator.name}: Interval fired, but component was unmounted`)
       return false
     }
+
+    // copy the last values (if any) over to previousValues
+    // so we can detect changes and flash the fields that changed.
+    let previousValues = {...this.state.pollResult.result}
 
     let pollResult = this.props.demo
           ? await this.pollSimulatedDevice()
@@ -127,7 +122,10 @@ class Ventilator extends Component<IProps, IState> {
       return false
     }
 
-    this.setState({pollResult})
+    this.setState({
+      pollResult,
+      previousValues
+    })
 
     var newPollingPeriod = pollResult.connected
                               ? GOOD_POLL_PERIOD_MS
@@ -135,7 +133,7 @@ class Ventilator extends Component<IProps, IState> {
 
     if (newPollingPeriod != this._pollingPeriod) {
       clearInterval(this._interval)
-      this._interval = setInterval(this.poll.bind(this), newPollingPeriod)
+      this._interval = setInterval(this.poll, newPollingPeriod)
       this._pollingPeriod = newPollingPeriod
     }
 
@@ -160,10 +158,10 @@ class Ventilator extends Component<IProps, IState> {
       return result
     }
 
-    // 66% of the time, don't change anything
-    let change = generateRandomValueBetween(0, 2)
+    // 50% of the time, don't change anything
+    let change = generateRandomValueBetween(0, 1)
 
-    if (change > 0) {
+    if (change === 0) {
       return this.state.pollResult
     }
 
@@ -226,11 +224,25 @@ class Ventilator extends Component<IProps, IState> {
     }
 
     const { ventilator } = this.props
-    const { pollResult } = this.state
+    const { pollResult, previousValues } = this.state
 
     let statusElement = pollResult.connected
       ? <FontAwesomeIcon icon={faCircle} size="lg" color={'LimeGreen'}/>
       : <FontAwesomeIcon icon={faExclamationTriangle} size="lg" color={'red'} className="flash"/>
+
+    const display = (columnName: string) : JSX.Element => {
+      if (! pollResult.connected) {
+        return (<td>---</td>)
+      }
+      let toDisplay = columns[columnName].toDisplay
+      let value = toDisplay(pollResult.result[columnName])
+      let changed = previousValues &&
+                    previousValues[columnName] &&
+                    (previousValues[columnName] !== pollResult.result[columnName])
+      return changed
+        ? <td className="pop">{value}</td>
+        : <td>{value}</td>
+    }
 
     let result = (
       <tr>
@@ -240,25 +252,16 @@ class Ventilator extends Component<IProps, IState> {
           }
         </td>
         <td>{ventilator.name}</td>
-        <td>{Flash(display(pollResult, 0))}</td>
-        <td>{Flash(display(pollResult, 1))}</td>
-        <td>{Flash(display(pollResult, 2))}</td>
-        <td>{Flash(display(pollResult, 3))}</td>
-        <td>{Flash(display(pollResult, 4))}</td>
+          { display('tidalVolume') }
+          { display('respiratoryRate') }
+          { display('peakInspiratoryPressure') }
+          { display('ieRatio') }
+          { display('peep') }
       </tr>
     )
 
     return result
   }
-}
-
-const display = (pollResult: IVentilatorPollResult, index: number) : string => {
-  if (! pollResult.connected) {
-    return "-"
-  }
-  let columnName = columnNames[index]
-  let render = columns[columnName].render
-  return render(pollResult.result[columnName]).toString()
 }
 
 const generateRandomColumnValue = (columnName: string) : any => {

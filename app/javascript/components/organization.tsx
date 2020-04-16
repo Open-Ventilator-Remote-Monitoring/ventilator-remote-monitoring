@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import Select from 'react-select'
 import { IOrganization } from '../types'
 import Cluster from './cluster'
-import './organization.css'
 
 interface IOption {
   value: number,
@@ -35,7 +34,6 @@ class Organization extends Component<IProps, IState> {
         }
       })
 
-      sortOptions(this.options)
     }
 
     let selectedOption = (this.options.length > 0)
@@ -63,12 +61,12 @@ class Organization extends Component<IProps, IState> {
     if (selectedOption) {
       let cluster = organization.clusters.find(c => c.id == selectedOption.value)
       if (cluster) {
-        clusterDisplay = (<Cluster cluster={cluster} demo={demo}/>)
+        clusterDisplay = (<Cluster key={cluster.id} cluster={cluster} demo={demo}/>)
       }
     }
 
     let result = (
-      <div>
+      <section>
         <div className="select-row">
           <h3>
             {organization.name}
@@ -86,25 +84,11 @@ class Organization extends Component<IProps, IState> {
           clusterDisplay
         }
         </section>
-      </div>
+      </section>
     )
 
     return result
   }
-}
-
-const sortOptions = (options) => {
-  options.sort((a, b) => {
-    var nameA = a.label.toUpperCase(); // ignore upper and lowercase
-    var nameB = b.label.toUpperCase(); // ignore upper and lowercase
-    if (nameA < nameB) {
-      return -1;
-    }
-    if (nameA > nameB) {
-      return 1;
-    }
-    return 0;
-  })
 }
 
 export default Organization

@@ -46,7 +46,8 @@ export async function get<T>(
   args: RequestInit = {
     method: "get",
     headers: {
-      "Accept": "application/json; charset=UTF-8"
+      "Accept": "application/json; charset=UTF-8",
+      "Cache-Control": "no-cache",
     }
   }
 ): Promise<ApiResponse<T>> {

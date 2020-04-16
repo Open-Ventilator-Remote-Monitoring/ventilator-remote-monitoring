@@ -1,12 +1,16 @@
 import React, { Component } from "react"
 import Jsona from 'jsona'
-import { get } from '../api'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
-import Organization from "./organization"
+import ReactDOM from 'react-dom'
 
-import "./ventilatorTree.scss"
+import Organization from "./organization"
+import { get } from '../api'
+import { sortObjects } from '../utils'
 import { IOrganization } from "../types"
+
+const VENTILATORS_API_URI = '/api/v1/ventilators'
+const DOM_ELEMENT_ID_WHERE_MOUNTED = 'index-demo-container'
 
 // create a demo org with two clusters
 let demoOrg : IOrganization = {
@@ -46,6 +50,8 @@ interface IState {
 }
 
 class VentilatorTree extends Component<IProps, IState> {
+  _mounted: boolean = false
+
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -53,9 +59,27 @@ class VentilatorTree extends Component<IProps, IState> {
       organization: {},
       errMsg: ''
     }
+    this.componentCleanup = this.componentCleanup.bind(this);
+  }
+
+  componentCleanup() {
+    console.log('Unmounting React Root')
+    ReactDOM.unmountComponentAtNode(document.getElementById(DOM_ELEMENT_ID_WHERE_MOUNTED))
   }
 
   async componentDidMount() {
+    this._mounted = true
+
+    // Normally, when the browser links to another page, all resources from the previous
+    // page are cleaned up, including the React root and it's decendents and any timers
+    // they created are cleaned up.
+    // But we are using Turbolinks (https://github.com/turbolinks/turbolinks), which is
+    // a single-page-app that requests the HTML for the next page and simply replaces
+    // the existing DOM contents, leaving the previous React app and all of the timers running.
+    // This event listener notifies us when the user clicks on another link (such as in the navbar)
+
+    window.addEventListener('turbolinks:before-visit', this.componentCleanup);
+
     if (this.props.demo) {
       this.setState({
         loading: false,
@@ -64,21 +88,32 @@ class VentilatorTree extends Component<IProps, IState> {
       return
     }
 
-    let organization = null
+    let organization : IOrganization = null
     let success = false
 
-    let response = await get<any>('/api/v1/ventilators')
+    let response = await get<any>(VENTILATORS_API_URI)
+
+    if (! this._mounted) {
+      // console.log(`Get returned, but component was unmounted`)
+      return false
+    }
 
     if (response.ok) {
       try {
         const dataFormatter = new Jsona()
-        organization = dataFormatter.deserialize(response.parsedBody)
+        organization = dataFormatter.deserialize(response.parsedBody) as IOrganization
         success = true
       } catch(err) {
       }
     }
 
     let errMsg = success ? null : 'There was an error while getting the Organization information from the server.'
+    if (success) {
+      // sort the cluster names
+      sortObjects(organization.clusters, "name")
+      // for each cluster, sort the ventilators
+      organization.clusters.forEach((c) => sortObjects(c.ventilators, "name"))
+    }
 
     this.setState({
       loading: false,
@@ -87,9 +122,19 @@ class VentilatorTree extends Component<IProps, IState> {
     })
   }
 
+  componentWillUnmount() {
+    this._mounted = false
+    window.removeEventListener('beforeunload', this.componentCleanup);
+  }
+
   render() {
     const { loading, organization, errMsg } = this.state
     const { demo } = this.props
+
+    if (! this._mounted) {
+      // console.log(`$Render called, but component was unmounted`)
+      return false
+    }
 
     if (loading) {
       return (
@@ -104,9 +149,9 @@ class VentilatorTree extends Component<IProps, IState> {
     }
 
     return (
-      <section>
+      <React.Fragment>
         <Organization organization={organization} demo={demo} />
-      </section>
+      </React.Fragment>
     )
   }
 }

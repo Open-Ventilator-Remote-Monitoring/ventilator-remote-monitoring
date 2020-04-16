@@ -1,0 +1,70 @@
+.fa-spinner {
+  margin-left: 35vw;
+  margin-top: 40vh;
+}
+
+.select-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.select {
+  min-width: 300px;
+  max-width: 500px;
+  margin-left: 30px;
+}
+
+.demo-ventilator-table {
+  // used to flash the red triangle
+  @keyframes flash {
+    0% { opacity: 1; }
+    70% { opacity: 1; }
+    71% { opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  .flash {
+	  animation: flash  2s infinite;
+  }
+
+  // used to flash values when they change
+  @keyframes pop {
+    0% {
+      background-color: yellow;
+    }
+    100% {
+      color: default;
+    }
+  }
+
+  .pop {
+    animation: pop 1s;
+  }
+
+  thead {
+    background-color: rgb(203, 232, 241);
+  }
+
+  tr {
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    text-align: center;
+  }
+
+  .tr-subheading th {
+    font-weight: 300;
+  }
+
+  td {
+    text-align: center;
+    border-right: 1px solid #ddd;
+  }
+
+  td:first-child {
+    border-left: 1px solid #ddd;
+  }
+}
+
