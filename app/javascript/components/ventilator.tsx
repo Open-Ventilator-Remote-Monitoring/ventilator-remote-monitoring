@@ -24,7 +24,10 @@ import {
 const GOOD_POLL_PERIOD_MS = 3000
 
 // When the device is disconnected, poll this often
-const BAD_POLL_PERIOD_MS = 60000
+const BAD_POLL_PERIOD_MS = 15000
+
+const API_KEY_HEADER = "Authorization"
+const API_KEY_PREFIX = 'OpenVentApiKeyV1' // followd by 1 space followed by apiKey
 
 const VENTILATOR_NAME_WITH_SIMULATED_FAILURE = "East-2"
 
@@ -57,8 +60,7 @@ interface IState {
 }
 
 class Ventilator extends Component<IProps, IState> {
-  _interval: any = null
-  _pollingPeriod: number = GOOD_POLL_PERIOD_MS
+  _timeout: any = null
   _mounted: boolean = false
 
   constructor(props: IProps) {
@@ -75,7 +77,9 @@ class Ventilator extends Component<IProps, IState> {
     this.poll = this.poll.bind(this)
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    // console.log(`${this.props.ventilator.name}: mounted.`)
+
     // if all ventilator objects are created at the same time and mount at the same time,
     // they will all update at the same time (every 3 seconds), causing all lines in the
     // table to change at the same time (and will all poll at the same time).
@@ -86,61 +90,57 @@ class Ventilator extends Component<IProps, IState> {
     this._mounted = true
 
     // this is only the initial polling period. It will be changed after the first poll.
-    this._pollingPeriod = generateRandomValueBetween(0, 1500)
+    let delay = generateRandomValueBetween(0, 1500)
 
-    this._interval = setInterval(this.poll, this._pollingPeriod)
+    this._timeout = setTimeout(this.poll, delay)
+
+    // we have no results to display yet, but we want the ventilator to
+    // at least display its table row and name
+    this.forceUpdate()
   }
 
   componentWillUnmount() {
-    console.log(`${this.props.ventilator.name}: un-mounted.`)
+    // console.log(`${this.props.ventilator.name}: un-mounted.`)
 
     this._mounted = false
 
-    clearInterval(this._interval)
+    clearInterval(this._timeout)
   }
 
-  async poll() : Promise<boolean> {
-    // console.log(`${this.props.ventilator.name}: Entering Poll. _mounted is: ${this._mounted}`)
+  async poll() {
+    // console.log(`${this.props.ventilator.name}: Entering Poll. _mounted is: ${this._mounted}.`)
 
     if (! this._mounted) {
       // console.log(`${this.props.ventilator.name}: Interval fired, but component was unmounted`)
-      return false
+      return
     }
-
-    // copy the last values (if any) over to previousValues
-    // so we can detect changes and flash the fields that changed.
-    let previousValues = {...this.state.pollResult.result}
 
     let pollResult = this.props.demo
           ? await this.pollSimulatedDevice()
           : await this.pollDevice()
 
-    // console.log(`${this.props.ventilator.name}: Finshed polling device. _mounted is: ${this._mounted}`)
-
     if (! this._mounted) {
-      // console.log(`${this.props.ventilator.name}: Poll returned, but component was unmounted`)
-      return false
+      console.log(`${this.props.ventilator.name}: Poll returned, but component was unmounted`)
+      return
     }
 
+    // copy the last values over to previousValues
+    // so we can detect changes and flash the fields that changed.
     this.setState({
       pollResult,
-      previousValues
+      previousValues: {...this.state.pollResult.result}
     })
 
-    var newPollingPeriod = pollResult.connected
-                              ? GOOD_POLL_PERIOD_MS
-                              : BAD_POLL_PERIOD_MS
+    var newPollingPeriod = pollResult.connected ? GOOD_POLL_PERIOD_MS : BAD_POLL_PERIOD_MS
 
-    if (newPollingPeriod != this._pollingPeriod) {
-      clearInterval(this._interval)
-      this._interval = setInterval(this.poll, newPollingPeriod)
-      this._pollingPeriod = newPollingPeriod
-    }
+    this._timeout = setTimeout(this.poll, newPollingPeriod)
 
-    return pollResult.connected
+    return
   }
 
   async pollSimulatedDevice(): Promise<IVentilatorPollResult> {
+
+    await delay(generateRandomValueBetween(0, 50))
 
     // If there is no result in state, then this is the first call, so return random values for all fields
     if (! this.state.pollResult.result) {
@@ -193,8 +193,14 @@ class Ventilator extends Component<IProps, IState> {
 
     // todo: check on why this returns an array
     // console.log(`${this.props.ventilator.name}: Getting from: ${uri}`)
-    let response = await get<IVentilatorApiCallResponse>(uri)
-    console.log(`${this.props.ventilator.name}: Response: ${JSON.stringify(response)}`)
+
+    let headers = {}
+    if (this.props.ventilator.apiKey) {
+      headers[API_KEY_HEADER] = `${API_KEY_PREFIX} ${this.props.ventilator.apiKey.trim()}`
+    }
+
+    let response = await get<IVentilatorApiCallResponse>(uri, headers)
+    // console.log(`${this.props.ventilator.name}: Response: ${JSON.stringify(response)}`)
 
     if (response.ok) {
       // todo: validate the data within some range ?
@@ -217,6 +223,7 @@ class Ventilator extends Component<IProps, IState> {
 
   render() {
     // console.log(`${this.props.ventilator.name}: Entering render. _mounted is ${this._mounted}`)
+
     if (! this._mounted) {
       // no need to do anything. The ventilator is already unmounted.
       // console.log(`${this.props.ventilator.name}: Render called, but component was unmounted`)
@@ -262,6 +269,10 @@ class Ventilator extends Component<IProps, IState> {
 
     return result
   }
+}
+
+const delay = (ms) => {
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 const generateRandomColumnValue = (columnName: string) : any => {

@@ -14,7 +14,8 @@ export interface IVentilator {
   // from API call
   id: number
   name: string
-  hostname: string
+  hostname?: string
+  apiKey?: string
 }
 
 export interface IVentilatorPollValues {

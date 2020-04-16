@@ -12,6 +12,8 @@ require("bootstrap/dist/js/bootstrap")
 
 import "@fortawesome/fontawesome-free/js/all";
 
+import '../dashboard'
+
 // This will fade out the Rails flash notice.
 // Note that it does not remove error messages
 const fadeOutFlashNotice = () => {
