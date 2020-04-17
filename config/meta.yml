@@ -1,0 +1,6 @@
+# see https://www.lewagon.com/blog/setup-meta-tags-rails
+
+meta_title: "Remote Ventilator Monitor"
+meta_product_name: "Open Source Remote Ventilator Monitoring"
+meta_description: ""
+meta_image: "cover.png" # should exist in `app/assets/images/`
