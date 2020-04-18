@@ -42,7 +42,7 @@ export abstract class BaseDevicePoller {
 
     this.handle(pollResult)
 
-    var newPollingPeriod = pollResult.connected
+    var newPollingPeriod = pollResult.apiReceiveStatus.ok
                             ? BaseDevicePoller.GOOD_POLL_PERIOD_MS
                             : BaseDevicePoller.BAD_POLL_PERIOD_MS
 
@@ -52,7 +52,7 @@ export abstract class BaseDevicePoller {
   /** Gives an opportunity for the sub-class
    *  to do something with the pollResult
    * */
-  handle(IDevicePollResult): void {
+  handle(pollResult: IDevicePollResult): void {
   }
 
   /** Actually gets the data from the device (or simulates it) */
@@ -65,7 +65,9 @@ export abstract class BaseDevicePoller {
    */
   getPollResultTemplate(): IDevicePollResult {
     let result: IDevicePollResult = {
-      connected: false,
+      apiReceiveStatus: {
+        ok: true
+      },
       apiResponse: {
         device: {
           id: `${this._device.id}-${this._device.name}`,
@@ -107,11 +109,11 @@ export abstract class BaseDevicePoller {
   }
 
   static MeasurementFieldMetadata : {[key: string]: IMeasurementFieldMeta} = {
-    ieRatio:                 {min: 1,   max: 4},
-    peakInspiratoryPressure: {min: 60,  max: 80},
-    peep:                    {min: 5,   max: 10},
-    respiratoryRate:         {min: 8,   max: 35},
-    tidalVolume:             {min: 300, max: 800},
+    ieRatio:                 {min: 1,   max: 4,   uom: 'ratio'},
+    peakInspiratoryPressure: {min: 60,  max: 80,  uom: 'CMH2O'},
+    peep:                    {min: 5,   max: 10,  uom: 'CMH2O'},
+    respiratoryRate:         {min: 8,   max: 35,  uom: 'breathsPerMinute'},
+    tidalVolume:             {min: 300, max: 800, uom: 'ml/kg'},
   }
 
   static MeasurementFieldNames = Object.keys(BaseDevicePoller.MeasurementFieldMetadata)
@@ -125,8 +127,3 @@ export namespace BaseDevicePoller {
   // a function with the signiture which is called whenever a poll has completed
   export type Callback = (deviceId: number, result: IDevicePollResult) => void
 }
-
-
-
-
-

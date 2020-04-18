@@ -21,8 +21,27 @@ export interface IVentilator {
 // Following types define the result of calling either /api/ventilator or /api/v1/device
 
 export interface IDevicePollResult {
-  connected: boolean
+  apiReceiveStatus: IApiReceiveStatus
   apiResponse?: IDeviceApiResponse
+}
+
+/** This information is only used on the bowser end to communicate
+ *  success or failure of the data. The failures all represent failures
+ *  that could happen on the receving end.
+ */
+export interface IApiReceiveStatus {
+  ok: boolean,
+  // if good is false, then at least one of the failure keys should be set
+  failures?: {
+    // Can't get a response
+    connection?: boolean,
+    // Can't validate the schema
+    schemaValidation?: boolean,
+    // Units of Measure don't match
+    uomMismatch?: boolean
+    // timestamps are too old or too far in the future
+    staleDate?: boolean
+  }
 }
 
 export interface IDeviceApiResponse {
@@ -65,8 +84,13 @@ export interface IVentilatorDataMonitor {
   alerts: {}
 }
 
-// These are only to support the "old" API
+export interface IMeasurementFieldMeta {
+  min: number,
+  max: number,
+  uom: string
+}
 
+// These are only to support the "old" API
 
 export interface IVentilatorApiV0CallResponse {
   // todo: why is this an array? Can it ever have more than one value?
@@ -80,9 +104,3 @@ export interface IVentilatorApiV0PollValues {
   ieRatio: string
   peep: string
 }
-
-export interface IMeasurementFieldMeta {
-  min: number,
-  max: number
-}
-

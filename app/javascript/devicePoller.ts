@@ -45,13 +45,13 @@ export class DevicePoller extends BaseDevicePoller {
 
     // we don't know which to use - try new then old
     let result = await this.pollNewAPI()
-    if (result.connected) {
+    if (result.apiReceiveStatus.ok) {
       this._apiVersion = 1
       return result
     }
 
     result = await this.pollOldAPI()
-    if (result.connected) {
+    if (result.apiReceiveStatus.ok) {
       this._apiVersion = 0
       return result
     }
@@ -59,7 +59,12 @@ export class DevicePoller extends BaseDevicePoller {
     // Both APIs failed - we still don't know which to use,
     // so we'll keep trying both until we do
     return {
-      connected: false
+      apiReceiveStatus: {
+        ok: false,
+        failures: {
+          connection: true
+        }
+      }
     }
   }
 
@@ -77,7 +82,7 @@ export class DevicePoller extends BaseDevicePoller {
 
     if (response.ok) {
       let result = this.getPollResultTemplate()
-      result.connected = true
+      result.apiReceiveStatus.ok = true
       let status = result.apiResponse.ventilatorDataMonitor.status
       let v = response.parsedBody.ventilator[0]
       status.tidalVolume.value = v.tidalVolume.toString()
@@ -88,7 +93,14 @@ export class DevicePoller extends BaseDevicePoller {
       return result
     }
 
-    return {connected: false}
+    return {
+      apiReceiveStatus: {
+        ok: false,
+        failures: {
+          connection: true
+        }
+      }
+    }
   }
 
   async pollNewAPI(): Promise<IDevicePollResult> {
@@ -100,17 +112,24 @@ export class DevicePoller extends BaseDevicePoller {
     }
 
     let response = await get<IDeviceApiResponse>(this._newUrl, headers)
-    console.log(`${this._device.name}: Response: ${JSON.stringify(response)}`)
+    console.log(`${this._device.name}: New API Response: ${JSON.stringify(response)}`)
 
     if (response.ok) {
       // todo: validate response: schema, roles/keys, timestamps, UOMs, etc.
       const result : IDevicePollResult = {
-        connected: true,
+        apiReceiveStatus: { ok: true },
         apiResponse: response.parsedBody
       }
       return result
     }
 
-    return {connected: false}
+    return {
+      apiReceiveStatus: {
+        ok: false,
+        failures: {
+          connection: true
+        }
+      }
+    }
   }
 }

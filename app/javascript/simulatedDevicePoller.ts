@@ -5,8 +5,8 @@ import { BaseDevicePoller } from './baseDevicePoller'
 const VENTILATOR_NAME_WITH_SIMULATED_FAILURE = "East-2"
 
 export class SimulatedDevicePoller extends BaseDevicePoller {
-  // We save the last result so we can change just one value
-  // (becasue the UI flashes whenever a field is changed
+  // We save the last result so we can change just one measurement field
+  // (because the UI flashes whenever a field is changed
   // so we don't want to change too many)
   _lastPollResult: IDevicePollResult = null
 
@@ -46,7 +46,12 @@ export class SimulatedDevicePoller extends BaseDevicePoller {
   getRandomPollResult(): IDevicePollResult {
     let result = this.getPollResultTemplate()
 
-    result.connected = this._device.name !== VENTILATOR_NAME_WITH_SIMULATED_FAILURE
+    if (this._device.name === VENTILATOR_NAME_WITH_SIMULATED_FAILURE) {
+      result.apiReceiveStatus.ok = false
+      result.apiReceiveStatus.failures = {
+        connection: true
+      }
+    }
 
     let status = result.apiResponse.ventilatorDataMonitor.status
 
@@ -63,7 +68,8 @@ export class SimulatedDevicePoller extends BaseDevicePoller {
   // for connected and ventilatorDataMonitor.status
   getFreshPollResultWithSameValues(): IDevicePollResult {
     let result = this.getPollResultTemplate()
-    result.connected = this._lastPollResult.connected
+    result.apiReceiveStatus.ok = this._lastPollResult.apiReceiveStatus.ok
+    result.apiReceiveStatus.failures = {...this._lastPollResult.apiReceiveStatus.failures}
 
     let fromStatus = this._lastPollResult.apiResponse.ventilatorDataMonitor.status
     let toStatus = result.apiResponse.ventilatorDataMonitor.status
