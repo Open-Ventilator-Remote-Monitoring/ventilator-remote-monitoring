@@ -81,3 +81,8 @@ export interface IVentilatorApiV0PollValues {
   peep: string
 }
 
+export interface IMeasurementFieldMeta {
+  min: number,
+  max: number
+}
+
