@@ -1,18 +1,17 @@
 import { IVentilator, IDevicePollResult } from './types'
 import { clamp, generateRandomValueBetween } from './utils'
 import { BaseDevicePoller } from './baseDevicePoller'
+import cloneDeep from 'lodash.clonedeep'
 
-const VENTILATOR_NAME_WITH_SIMULATED_FAILURE = "East-2"
+const VENTILATOR_NAMES_WITH_SIMULATED_COMM_FAILURE = ["East-2", "West-4"]
+const VENTILATOR_NAMES_WITH_VENTILATOR_ALARM_SOUND_MONITORING = ["East-1", "East-4", "West-3"]
+const VENTILATOR_NAMES_WITH_AUDIO_ALARM_ALERT = ["East-4"]
 
 export class SimulatedDevicePoller extends BaseDevicePoller {
   // We save the last result so we can change just one measurement field
   // (because the UI flashes whenever a field is changed
   // so we don't want to change too many)
   _lastPollResult: IDevicePollResult = null
-
-  constructor(device: IVentilator, callback: BaseDevicePoller.Callback) {
-    super(device, callback)
-  }
 
   pollDevice(): Promise<IDevicePollResult> {
     // If there is no last result, then this is the first call,
@@ -21,7 +20,7 @@ export class SimulatedDevicePoller extends BaseDevicePoller {
       return Promise.resolve(this.getRandomPollResult())
     }
 
-    let result = this.getFreshPollResultWithSameValues()
+    let result = this.getFreshPollResultWithPreviousValues()
 
     // 50% of the time, don't change anything
     let change = generateRandomValueBetween(0, 1)
@@ -46,11 +45,19 @@ export class SimulatedDevicePoller extends BaseDevicePoller {
   getRandomPollResult(): IDevicePollResult {
     let result = this.getPollResultTemplate()
 
-    if (this._device.name === VENTILATOR_NAME_WITH_SIMULATED_FAILURE) {
+    if (VENTILATOR_NAMES_WITH_SIMULATED_COMM_FAILURE.includes(this._device.name)) {
       result.apiReceiveStatus.ok = false
       result.apiReceiveStatus.alerts = {
         connection: true
       }
+    }
+
+    if (VENTILATOR_NAMES_WITH_VENTILATOR_ALARM_SOUND_MONITORING.includes(this._device.name)) {
+      result.apiResponse.device.roles.ventilatorAlarmSoundMonitor = true
+    }
+
+    if (VENTILATOR_NAMES_WITH_AUDIO_ALARM_ALERT.includes(this._device.name)) {
+      result.apiResponse.ventilatorAlarmSoundMonitor.alerts.audioAlarm = true
     }
 
     let status = result.apiResponse.ventilatorDataMonitor.status
@@ -64,22 +71,15 @@ export class SimulatedDevicePoller extends BaseDevicePoller {
     return result
   }
 
-  // get a PollResult with new timestamps, but copy over values
-  // for connected and ventilatorDataMonitor.status
-  getFreshPollResultWithSameValues(): IDevicePollResult {
-    let result = this.getPollResultTemplate()
-    result.apiReceiveStatus.ok = this._lastPollResult.apiReceiveStatus.ok
-    result.apiReceiveStatus.alerts = {...this._lastPollResult.apiReceiveStatus.alerts}
-
-    let fromStatus = this._lastPollResult.apiResponse.ventilatorDataMonitor.status
-    let toStatus = result.apiResponse.ventilatorDataMonitor.status
-
-    toStatus.tidalVolume.value = fromStatus.tidalVolume.value
-    toStatus.respiratoryRate.value = fromStatus.respiratoryRate.value
-    toStatus.peakInspiratoryPressure.value = fromStatus.peakInspiratoryPressure.value
-    toStatus.ieRatio.value = fromStatus.ieRatio.value
-    toStatus.peep.value = fromStatus.peep.value
-
+  // Make a deep clone of _lastPollResult and update all of the timestamps
+  getFreshPollResultWithPreviousValues(): IDevicePollResult {
+    let result = null
+    if (this._lastPollResult) {
+      result = cloneDeep(this._lastPollResult) as IDevicePollResult
+      result.apiResponse.device.currentTime = new Date()
+      result.apiResponse.ventilatorAlarmSoundMonitor.timestamp = new Date()
+      result.apiResponse.ventilatorDataMonitor.timestamp = new Date()
+    }
     return result
   }
 
@@ -144,7 +144,16 @@ export class SimulatedDevicePoller extends BaseDevicePoller {
             }
           },
           alerts: {}
-        }
+        },
+        ventilatorAlarmSoundMonitor: {
+            timestamp: new Date(),
+            status: {
+
+            },
+            alerts: {
+              "audioAlarm": false
+            }
+        },
       }
     }
     return result

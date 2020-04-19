@@ -15,49 +15,32 @@ const getUrl = (hostname) => {
 
 export class DevicePoller extends BaseDevicePoller {
   _url: string = null
+  _headers: {} = null
 
   constructor(device: IVentilator, callback: BaseDevicePoller.Callback) {
     super(device, callback)
 
     this._url = getUrl(this._device.hostname)
 
+    if (this._device.hostname) {
+      this._device.hostname = this._device.hostname.trim()
+    }
+
     if (this._device.apiKey) {
       this._device.apiKey = this._device.apiKey.trim()
+    }
+
+    this._headers = {}
+    if (this._device.apiKey) {
+      this._headers[API_KEY_HEADER] = `${API_KEY_PREFIX} ${this._device.apiKey}`
     }
   }
 
   async pollDevice(): Promise<IDevicePollResult> {
-    if (! this._device.hostname) {
-      return {
-        apiReceiveStatus: {
-          ok: false,
-          alerts: {
-            noHostName: true
-          }
-        }
-      }
-    }
-
-    if (! this._device.apiKey) {
-      return {
-        apiReceiveStatus: {
-          ok: false,
-          alerts: {
-            noApiKey: true
-          }
-        }
-      }
-    }
-
     // console.log(`${this._device.name}: Getting from New API at: ${this._newUrl}`)
 
-    let headers = {}
-    if (this._device.apiKey) {
-      headers[API_KEY_HEADER] = `${API_KEY_PREFIX} ${this._device.apiKey}`
-    }
-
-    let response = await get<IDeviceApiResponse>(this._url, headers)
-    console.log(`${this._device.name}: New API Response: ${JSON.stringify(response)}`)
+    let response = await get<IDeviceApiResponse>(this._url, this._headers)
+    console.log(`${this._device.name}: API Response: ${JSON.stringify(response)}`)
 
     if (response.ok) {
       // todo: validate response: schema, roles/keys, timestamps, UOMs, etc.

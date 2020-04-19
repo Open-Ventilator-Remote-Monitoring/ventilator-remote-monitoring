@@ -34,6 +34,7 @@ class Cluster extends Component<IProps, IState> {
       results: {}
     }
     this.callback = this.callback.bind(this)
+    this.checkConfigAndCreatePoller = this.checkConfigAndCreatePoller.bind(this)
   }
 
   componentDidMount() {
@@ -41,11 +42,47 @@ class Cluster extends Component<IProps, IState> {
     this._mounted = true
 
     this._pollers = []
-    this.props.cluster.ventilators.forEach((v) => {
-      let poller = this.props.demo  ? new SimulatedDevicePoller(v, this.callback)
-                                    : new DevicePoller(v, this.callback)
-      this._pollers.push(poller)
-    })
+    this.props.cluster.ventilators.forEach(this.checkConfigAndCreatePoller)
+  }
+
+  checkConfigAndCreatePoller(device: IVentilator) {
+    // Rather than start a poller for a device that has no hostname or api-key
+    // we just create the reponse and call callback just as the poller would do.
+    let response = this.checkForMissingHostnameOrToken(device)
+    if (response) {
+      this.callback(device, response)
+      return
+    }
+
+    let poller = this.props.demo  ? new SimulatedDevicePoller(device, this.callback)
+                                  : new DevicePoller(device, this.callback)
+
+    this._pollers.push(poller)
+  }
+
+  checkForMissingHostnameOrToken(device: IVentilator): IDevicePollResult {
+    if (! device.hostname || ! device.hostname.trim()) {
+      return {
+        apiReceiveStatus: {
+          ok: false,
+          alerts: {
+            noHostName: true
+          }
+        }
+      }
+    }
+
+    if (! device.apiKey || ! device.apiKey.trim()) {
+      return {
+        apiReceiveStatus: {
+          ok: false,
+          alerts: {
+            noApiKey: true
+          }
+        }
+      }
+    }
+    return null
   }
 
   componentWillUnmount() {
