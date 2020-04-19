@@ -88,17 +88,3 @@ export interface IMeasurementFieldMeta {
   uom: string
 }
 
-// These are only to support the "old" API
-
-export interface IVentilatorApiV0CallResponse {
-  // todo: why is this an array? Can it ever have more than one value?
-  ventilator: IVentilatorApiV0PollValues[]
-}
-
-export interface IVentilatorApiV0PollValues {
-  tidalVolume: string
-  respiratoryRate: string
-  peakInspiratoryPressure: string
-  ieRatio: string
-  peep: string
-}

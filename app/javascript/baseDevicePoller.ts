@@ -68,56 +68,6 @@ export abstract class BaseDevicePoller {
   /** Actually gets the data from the device (or simulates it) */
   abstract async pollDevice(): Promise<IDevicePollResult>
 
-  /**
-   * This is used by SimulatedDevicePoller to initialize the result.
-   * But it is also used by DevicePoller in the oldApi to present a response which looks like the new API.
-   * Todo: When we are no longer supporting the old API, move this to SimulatedDevicePoller
-   */
-  getPollResultTemplate(): IDevicePollResult {
-    let result: IDevicePollResult = {
-      apiReceiveStatus: {
-        ok: true
-      },
-      apiResponse: {
-        device: {
-          id: `${this._device.id}-${this._device.name}`,
-          currentTime: new Date(),
-          roles: {
-            ventilatorAlarmSoundMonitor: false,
-            ventilatorDataMonitor: true
-          }
-        },
-        ventilatorDataMonitor: {
-          timestamp: new Date(),
-          status: {
-            ieRatio: {
-              value: '',
-              uom: "ratio"
-            },
-            peakInspiratoryPressure: {
-              value: '',
-              uom: "CMH2O"
-            },
-            peep: {
-              value: '',
-              uom: "CMH2O"
-            },
-            respiratoryRate: {
-              value: '',
-              uom: "breathsPerMinute"
-            },
-            tidalVolume: {
-              value: '',
-              uom: "ml/kg"
-            }
-          },
-          alerts: {}
-        }
-      }
-    }
-    return result
-  }
-
   static MeasurementFieldMetadata : {[key: string]: IMeasurementFieldMeta} = {
     ieRatio:                 {min: 1,   max: 4,   uom: 'ratio'},
     peakInspiratoryPressure: {min: 60,  max: 80,  uom: 'CMH2O'},
