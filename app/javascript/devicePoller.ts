@@ -35,6 +35,28 @@ export class DevicePoller extends BaseDevicePoller {
   }
 
   async pollDevice(): Promise<IDevicePollResult> {
+    if (! this._device.hostname) {
+      return {
+        apiReceiveStatus: {
+          ok: false,
+          alerts: {
+            noHostName: true
+          }
+        }
+      }
+    }
+
+    if (! this._device.apiKey) {
+      return {
+        apiReceiveStatus: {
+          ok: false,
+          alerts: {
+            noApiKey: true
+          }
+        }
+      }
+    }
+
     if (this._apiVersion === 1) {
       return this.pollNewAPI()
     }
@@ -61,7 +83,7 @@ export class DevicePoller extends BaseDevicePoller {
     return {
       apiReceiveStatus: {
         ok: false,
-        failures: {
+        alerts: {
           connection: true
         }
       }
@@ -96,7 +118,7 @@ export class DevicePoller extends BaseDevicePoller {
     return {
       apiReceiveStatus: {
         ok: false,
-        failures: {
+        alerts: {
           connection: true
         }
       }
@@ -126,7 +148,7 @@ export class DevicePoller extends BaseDevicePoller {
     return {
       apiReceiveStatus: {
         ok: false,
-        failures: {
+        alerts: {
           connection: true
         }
       }

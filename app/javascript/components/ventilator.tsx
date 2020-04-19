@@ -1,97 +1,59 @@
-/**
-Ventilator represents values for a single ventilator.
-If the Demo prop is true:
-  It will update GOOD_POLL_PERIOD_MS millseconds with random values.
-  If the ventilator name is VENTILATOR_NAME_WITH_SIMULATED_FAILURE, it will simulate being disconnected
-
-If the Demo prop is false:
-  It will poll the endpoint every GOOD_POLL_PERIOD_MS millseconds
-  If the polling fails, it will show as disconnected, and poll every BAD_POLL_PERIOD_MS milliseconds
-*/
-
 import React, { Component } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
-import { DevicePoller } from '../devicePoller'
-import { SimulatedDevicePoller } from '../simulatedDevicePoller'
 import { IVentilator, IDevicePollResult } from '../types'
+import { getFirstAlert } from '../utils'
 
 interface IProps {
   ventilator: IVentilator
-  demo: boolean
+  pollResult: IDevicePollResult
 }
 
 interface IState {
-  pollResult: IDevicePollResult,
   previousPollResult: IDevicePollResult,
 }
 
 class Ventilator extends Component<IProps, IState> {
-  _mounted: boolean = false
-  _poller: any
-
   constructor(props: IProps) {
     super(props)
 
     this.state = {
-      pollResult: null,
       previousPollResult: null
     }
-
-    this.callback = this.callback.bind(this)
-
-    this._poller = this.props.demo  ? new SimulatedDevicePoller(this.props.ventilator, this.callback)
-                                    : new DevicePoller(this.props.ventilator, this.callback)
   }
 
-  componentDidMount() {
-    // console.log(`${this.props.ventilator.name}: mounted.`)
+  componentDidUpdate(prevProps: IProps) {
+    let o = prevProps?.pollResult?.apiResponse?.ventilatorDataMonitor?.status
+    let n = this.props.pollResult?.apiResponse?.ventilatorDataMonitor?.status
 
-    this._mounted = true
-
-    this.forceUpdate()
-  }
-
-  componentWillUnmount() {
-    // console.log(`${this.props.ventilator.name}: un-mounted.`)
-
-    this._mounted = false
-
-    this._poller.release()
-  }
-
-  callback(deviceId: number, pollResult: IDevicePollResult) : void {
-    // console.log(`${this.props.ventilator.name}: callback called.`)
-
-    if (! this._mounted) {
-      console.log(`${this.props.ventilator.name}: Callback called, but component was unmounted`)
+    if (!o || !n) {
       return
     }
 
-    this.setState({
-      pollResult,
-      previousPollResult: this.state.pollResult
-    })
+    if (o.ieRatio !== n.ieRatio ||
+        o.peakInspiratoryPressure !== n.peakInspiratoryPressure ||
+        o.peep !== n.peep ||
+        o.respiratoryRate !== n.respiratoryRate ||
+        o.tidalVolume !== n.tidalVolume) {
+          this.setState({previousPollResult: prevProps.pollResult})
+    }
   }
 
   render() {
-    // console.log(`${this.props.ventilator.name}: Entering render. _mounted is ${this._mounted}`)
+    // console.log(`${this.props.ventilator.name}: Entering render. `)
 
-    if (! this._mounted) {
-      // no need to do anything. The ventilator is already unmounted.
-      // console.log(`${this.props.ventilator.name}: Render called, but component was unmounted`)
-      return null
-    }
+    const { ventilator, pollResult } = this.props
+    const { previousPollResult } = this.state
 
-    const { ventilator } = this.props
-    const { pollResult, previousPollResult } = this.state
+    let alerts = pollResult?.apiResponse?.ventilatorDataMonitor?.alerts
+    let alert = getFirstAlert(alerts)
 
-    let statusElement = pollResult?.apiReceiveStatus?.ok
+    let statusJsx = ! alert
       ? <FontAwesomeIcon icon={faCircle} size="lg" color={'LimeGreen'}/>
       : <FontAwesomeIcon icon={faExclamationTriangle} size="lg" color={'red'} className="flash"/>
 
     const display = (columnName: string) : JSX.Element => {
-      if (! pollResult?.apiReceiveStatus?.ok) {
+      if (alert) {
         return (<td>---</td>)
       }
       let value = pollResult?.apiResponse?.ventilatorDataMonitor?.status[columnName]?.value
@@ -105,21 +67,23 @@ class Ventilator extends Component<IProps, IState> {
 
     let result = (
       <tr>
-        <td className="status-col">
-          {
-            statusElement
-          }
-        </td>
         <td>{ventilator.name}</td>
-          { display('tidalVolume') }
-          { display('respiratoryRate') }
-          { display('peakInspiratoryPressure') }
-          { display('ieRatio') }
-          { display('peep') }
+        <td>{statusJsx}</td>
+        { display('tidalVolume') }
+        { display('respiratoryRate') }
+        { display('peakInspiratoryPressure') }
+        { display('ieRatio') }
+        { display('peep') }
       </tr>
     )
 
     return result
+  }
+
+  getStatus = (ok: boolean) => {
+    return ok
+      ? <FontAwesomeIcon icon={faCircle} size="lg" color={'LimeGreen'}/>
+      : <FontAwesomeIcon icon={faExclamationTriangle} size="lg" color={'red'} className="flash"/>
   }
 }
 

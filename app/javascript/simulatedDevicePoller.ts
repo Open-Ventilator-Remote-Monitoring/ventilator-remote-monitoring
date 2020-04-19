@@ -48,7 +48,7 @@ export class SimulatedDevicePoller extends BaseDevicePoller {
 
     if (this._device.name === VENTILATOR_NAME_WITH_SIMULATED_FAILURE) {
       result.apiReceiveStatus.ok = false
-      result.apiReceiveStatus.failures = {
+      result.apiReceiveStatus.alerts = {
         connection: true
       }
     }
@@ -69,7 +69,7 @@ export class SimulatedDevicePoller extends BaseDevicePoller {
   getFreshPollResultWithSameValues(): IDevicePollResult {
     let result = this.getPollResultTemplate()
     result.apiReceiveStatus.ok = this._lastPollResult.apiReceiveStatus.ok
-    result.apiReceiveStatus.failures = {...this._lastPollResult.apiReceiveStatus.failures}
+    result.apiReceiveStatus.alerts = {...this._lastPollResult.apiReceiveStatus.alerts}
 
     let fromStatus = this._lastPollResult.apiResponse.ventilatorDataMonitor.status
     let toStatus = result.apiResponse.ventilatorDataMonitor.status

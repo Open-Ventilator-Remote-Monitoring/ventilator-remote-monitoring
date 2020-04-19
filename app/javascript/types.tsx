@@ -32,15 +32,13 @@ export interface IDevicePollResult {
 export interface IApiReceiveStatus {
   ok: boolean,
   // if good is false, then at least one of the failure keys should be set
-  failures?: {
-    // Can't get a response
-    connection?: boolean,
-    // Can't validate the schema
-    schemaValidation?: boolean,
-    // Units of Measure don't match
+  alerts?: {
+    noHostName?: boolean
+    noApiKey?: boolean
+    connection?: boolean
+    schemaValidation?: boolean
     uomMismatch?: boolean
-    // timestamps are too old or too far in the future
-    staleDate?: boolean
+    staleTimeStamp?: boolean
   }
 }
 

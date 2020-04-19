@@ -18,7 +18,7 @@ export abstract class BaseDevicePoller {
 
   // See other static fields at the bottom
 
-  constructor(protected device: IVentilator, protected callback: BaseDevicePoller.Callback) {
+  constructor(device: IVentilator, callback: BaseDevicePoller.Callback) {
     this._device = device
     this._callback = callback
 
@@ -29,16 +29,26 @@ export abstract class BaseDevicePoller {
   }
 
   release(): void {
-    // console.log(`${this.#device.name}: Released.`)
+    // console.log(`${this._device.name}: Released.`)
     clearInterval(this._timeout)
   }
 
   async poll(): Promise<void> {
-    // console.log(`${this.#device.name}: Entering Poll.`)
+    // console.log(`${this._device.name}: Entering Poll.`)
 
     let pollResult = await this.pollDevice()
 
-    this._callback(this._device.id, pollResult)
+    this._callback(this._device, pollResult)
+
+    if (! pollResult.apiReceiveStatus.ok &&
+          (pollResult.apiReceiveStatus.alerts.noHostName ||
+            pollResult.apiReceiveStatus.alerts.noApiKey))
+    {
+      // There is no reason to keep sending these results over and over
+      // Now that we sent them once, we'll stop polling forever
+      console.log(`${this._device.name}: noHostname or noApiKey. Done polling forever.`)
+      return
+    }
 
     this.handle(pollResult)
 
@@ -125,5 +135,5 @@ export abstract class BaseDevicePoller {
 export namespace BaseDevicePoller {
   // Any user of a subclass of BaseDevidcePoller should implement
   // a function with the signiture which is called whenever a poll has completed
-  export type Callback = (deviceId: number, result: IDevicePollResult) => void
+  export type Callback = (device: IVentilator, result: IDevicePollResult) => void
 }

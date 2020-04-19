@@ -34,3 +34,26 @@ export const clamp = (num: number, min: number, max: number) : number => {
 export const delay = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
+
+export const hasAlerts = (obj: {}): boolean => {
+  if (! obj) {
+    return false
+  }
+  return Object.keys(obj).some((k) => obj[k] === true)
+}
+
+export const getFirstAlert = (obj: {}): string => {
+  if (! obj) {
+    return null
+  }
+  return Object.keys(obj).find((k) => obj[k] === true)
+}
+
+export const camelCaseToWords = (cc: string) => {
+  if (! cc) {
+    return ''
+  }
+  let result = cc.replace( /([A-Z])/g, " $1" )
+  result = result.charAt(0).toUpperCase() + result.slice(1)
+}
+
