@@ -10,7 +10,7 @@ const API_KEY_HEADER = "Authorization"
 const API_KEY_PREFIX = 'OpenVentApiKeyV1' // followed by 1 space followed by apiKey
 
 const getUrl = (hostname) => {
-  return `http://${hostname}/api/v1/status`
+  return `https://${hostname}/api/v1/status`
 }
 
 export class DevicePoller extends BaseDevicePoller {
