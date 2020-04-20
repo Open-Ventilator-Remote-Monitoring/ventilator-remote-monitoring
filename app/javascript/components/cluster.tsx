@@ -38,7 +38,7 @@ class Cluster extends Component<IProps, IState> {
   }
 
   componentDidMount() {
-    console.log(`Component mounted !`)
+    // console.log(`Component mounted !`)
     this._mounted = true
 
     this._pollers = []
@@ -86,7 +86,7 @@ class Cluster extends Component<IProps, IState> {
   }
 
   componentWillUnmount() {
-    console.log(`Component un-mounted !`)
+    // console.log(`Component un-mounted !`)
     this._mounted = false
 
     // Call release on each poller so they can cancel their timers
@@ -146,11 +146,6 @@ class Cluster extends Component<IProps, IState> {
     }
 
     vents.forEach((v) => {
-      if (! v.hostname) {
-        split.commError.push(v)
-        return
-      }
-
       let result: IDevicePollResult = results[v.id]
 
       // If we have not received a response, it could not be sorted elsewhere

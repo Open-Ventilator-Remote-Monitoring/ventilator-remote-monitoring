@@ -27,12 +27,16 @@ class VentilatorsController < ApplicationController
     # we just set it to the user's organization
 
     if(params[:cluster_id])
-      if current_user.admin? || (current_user.organization.clusters.any?{ |cluster| cluster.id == params[:cluster_id] })
-        @ventilator.cluster_id = params[:cluster_id]
+      req_cluster_id = params[:cluster_id].to_i
+      if current_user.admin? || (current_user.organization.clusters.any?{ |cluster| cluster.id == req_cluster_id })
+        @ventilator.cluster_id = req_cluster_id
         @organization = @ventilator.cluster.organization
+      else
+        flash.alert = "You do not have permission to add a Ventilator to that cluster"
+        redirect_to clusters_url
       end
     else
-      @organization = current_user.organization
+      redirect_to clusters_url
     end
   end
 

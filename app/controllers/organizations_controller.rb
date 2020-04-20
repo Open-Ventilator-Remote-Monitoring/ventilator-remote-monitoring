@@ -11,11 +11,13 @@ class OrganizationsController < ApplicationController
   # GET /organizations/1
   # GET /organizations/1.json
   def show
-    if current_user.admin? || (current_user.org_admin? && (params[:id].to_i == current_user.organization.id))
+    p "in show"
+    req_organization_id = params[:id].to_i
+    if current_user.admin? || (current_user.org_admin? && (current_user.organization.id == req_organization_id))
       # show
     else
-      flash.alert = "You must be an administrator to access this section"
-      redirect_to root_url
+      flash.alert = "You must be an administrator to access that section"
+      redirect_to organizations_url current_user.organization.id
     end
   end
 

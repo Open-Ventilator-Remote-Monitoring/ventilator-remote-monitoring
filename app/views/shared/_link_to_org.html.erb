@@ -1,11 +1,13 @@
 <% organization = local_assigns.fetch(:organization) %>
 
-<h6>
-  <% if current_user.admin? || current_user.org_admin? %>
-    <a href=<%= organization_path organization.id %>>
+<% if organization.present? %>
+  <h6>
+    <% if current_user.admin? || current_user.org_admin? %>
+      <a href=<%= organization_path organization.id %>>
+        <%= organization.name %>
+      </a>
+    <% else %>
       <%= organization.name %>
-    </a>
-  <% else %>
-    <%= organization.name %>
-  <% end %>
-</h6>
+    <% end %>
+  </h6>
+<% end %>

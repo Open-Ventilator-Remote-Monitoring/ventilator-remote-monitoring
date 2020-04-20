@@ -25,8 +25,9 @@ class ClustersController < ApplicationController
 
     @cluster = Cluster.new
     if(params[:organization_id])
-      if current_user.admin? || (current_user.org_admin? && current_user.organization.id == params[:organization_id])
-        @cluster.organization_id = params[:organization_id]
+      req_organization_id = params[:organization_id].to_i
+      if current_user.admin? || (current_user.org_admin? && current_user.organization.id == req_organization_id)
+        @cluster.organization_id = req_organization_id
       end
     end
 
@@ -95,7 +96,7 @@ class ClustersController < ApplicationController
       # Allow the current request if the user is an admin or if the cluster belongs to the users' organization
       @cluster = Cluster.find(params[:id])
       unless current_user.admin? || (current_user.organization && (current_user.organization.id == @cluster.organization.id))
-        flash.alert = "You do not have permission to view this cluster"
+        flash.alert = "You do not have permission to view that cluster"
         redirect_to clusters_url
       end
     end
