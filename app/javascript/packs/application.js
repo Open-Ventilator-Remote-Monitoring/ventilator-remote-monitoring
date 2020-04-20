@@ -3,7 +3,6 @@
 // a relevant structure within app/javascript and only use these pack files to reference
 // that code so it'll be compiled.
 
-require("jquery")
 require("@rails/ujs").start()
 require("turbolinks").start()
 require("@rails/activestorage").start()
@@ -25,6 +24,7 @@ const fadeOutFlashNotice = () => {
   }
 }
 
+// document.addEventListener("turbolinks:load", () => {
 $( document ).ready(() => {
   fadeOutFlashNotice()
 })

@@ -13,7 +13,7 @@ import VentilatorTree from './components/ventilatorTree'
 // a single-page-app that requests the HTML for the next page and simply replaces
 // the existing DOM contents, leaving the previous React app and all of the timers running.
 
-// if the div with ID "index-demo-container" includes 'data_demo': 'true', like this:
+// If the div with ID "index-demo-container" includes 'data_demo': 'true', like this:
 // <div id="index-demo-container" data-demo="true"> </div>
 // Then the VentilatorTree will use a hard-coded organizaiton/cluster/ventilator tree
 // and simulate the polled values. Otherwise, it will read the tree from the API
@@ -25,7 +25,7 @@ import VentilatorTree from './components/ventilatorTree'
 let mount = () => {
   // if the cached version is being displayed, don't waste time mounting
   // only to unmount when the non-cached version is displayed
-  if (document.documentElement.hasAttribute("data-turbolinks-preview")) {
+  if (document.documentElement?.hasAttribute("data-turbolinks-preview")) {
     // console.log("it's only a preview")
     return
   }

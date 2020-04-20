@@ -133,10 +133,14 @@ select {
 }
 
 .warning {
-  width: 450px;
+  display: flex;
+}
+
+.warning div {
   color: red;
-  border: 1px solid red;
+  border: 2px solid red;
   padding: 10px;
+  font-weight: bold;
 }
 
 .fade-msg {

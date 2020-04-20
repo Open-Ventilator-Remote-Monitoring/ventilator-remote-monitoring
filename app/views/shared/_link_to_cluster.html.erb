@@ -1,11 +1,13 @@
 <% cluster = local_assigns.fetch(:cluster) %>
 
-<h6>
-  <% if current_user.admin? || current_user.org_admin? %>
-    <a href=<%= cluster_path cluster.id %>>
+<% if cluster.present? %>
+  <h6>
+    <% if current_user.admin? || current_user.org_admin? %>
+      <a href=<%= cluster_path cluster.id %>>
+        <%= cluster.name %>
+      </a>
+    <% else %>
       <%= cluster.name %>
-    </a>
-  <% else %>
-    <%= cluster.name %>
-  <% end %>
-</h6>
+    <% end %>
+  </h6>
+<% end %>

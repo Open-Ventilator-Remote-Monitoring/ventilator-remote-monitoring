@@ -17,6 +17,7 @@
     "bootstrap": "^4.4.1",
     "jquery": "^3.5.0",
     "jsona": "^1.5.1",
+    "lodash.clonedeep": "^4.5.0",
     "popper.js": "^1.16.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",

@@ -102,7 +102,7 @@ class UsersController < ApplicationController
 
     def require_admin
       unless current_user.admin?
-        flash.alert = "You must be an administrator to access this section"
+        flash.alert = "You must be an administrator to access that section"
         redirect_to root_url
       end
     end

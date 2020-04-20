@@ -13,17 +13,17 @@ const VENTILATORS_API_URI = '/api/v1/ventilators'
 // create a demo org with two clusters
 let demoOrg : IOrganization = {
   id: 1,
-  name: 'General Hospital',
+  name: 'DEMO Hospital',
   clusters: [
     {
       id: 1,
-      name: 'East Wing',
+      name: 'DEMO East Wing',
       ventilators: [
       ]
     },
     {
       id: 2,
-      name: 'West Wing',
+      name: 'DEMO West Wing',
       ventilators: [
       ]
     }
@@ -32,8 +32,8 @@ let demoOrg : IOrganization = {
 
 // Populate the clusters with 6 ventilators each
 for (let i = 0; i < 6; i ++) {
-  demoOrg.clusters[0].ventilators.push({id: i, name: `East-${i}`, hostname: 'n/a'})
-  demoOrg.clusters[1].ventilators.push({id: i, name: `West-${i}`, hostname: 'n/a'})
+  demoOrg.clusters[0].ventilators.push({id: i, name: `East-${i}`, hostname: 'n/a', apiKey: 'n/a'})
+  demoOrg.clusters[1].ventilators.push({id: i, name: `West-${i}`, hostname: 'n/a', apiKey: 'n/a'})
 }
 
 interface IProps {

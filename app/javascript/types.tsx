@@ -18,24 +18,73 @@ export interface IVentilator {
   apiKey?: string
 }
 
-export interface IVentilatorPollValues {
-  tidalVolume: number
-  respiratoryRate: number
-  peakInspiratoryPressure: number
-  // todo: Technically, this is the denominator of the ratio
-  // The numerator is assumed to be 1. However, I think ratios
-  // can exceed one. Suggest we collect both numerator and denominator
-  ieRatio: number
-  peep: number
+// Following types define the result of calling either /api/ventilator or /api/v1/device
+
+export interface IDevicePollResult {
+  apiReceiveStatus: IApiReceiveStatus
+  apiResponse?: IDeviceApiResponse
 }
 
-export interface IVentilatorApiCallResponse {
-  // todo: why is this an array? Can it ever have more than one value?
-  ventilator: IVentilatorPollValues[]
+/** This information is only used on the bowser end to communicate
+ *  success or failure of the data. The failures all represent failures
+ *  that could happen on the receving end.
+ */
+export interface IApiReceiveStatus {
+  ok: boolean,
+  // if good is false, then at least one of the failure keys should be set
+  alerts?: {
+    noHostName?: boolean
+    noApiKey?: boolean
+    connection?: boolean
+    schemaValidation?: boolean
+    uomMismatch?: boolean
+    staleTimeStamp?: boolean
+  }
 }
 
-export interface IVentilatorPollResult {
-  connected: boolean
-  result?: IVentilatorPollValues
+export interface IDeviceApiResponse {
+  device: IDevice
+  ventilatorAlarmSoundMonitor?: IVentilatorAlarmSoundMonitor
+  ventilatorDataMonitor?: IVentilatorDataMonitor
+}
+
+export interface IDevice {
+  id: string
+  currentTime: Date
+  roles: {
+    ventilatorAlarmSoundMonitor: boolean
+    ventilatorDataMonitor: boolean
+  }
+}
+
+export interface IVentilatorAlarmSoundMonitor {
+  timestamp: Date
+  status: {}
+  alerts: {
+    audioAlarm: boolean
+  }
+}
+
+export interface IMeasurementValue {
+  value: string,
+  uom: string
+}
+
+export interface IVentilatorDataMonitor {
+  timestamp: Date
+  status: {
+    ieRatio: IMeasurementValue
+    peakInspiratoryPressure: IMeasurementValue
+    peep: IMeasurementValue
+    respiratoryRate: IMeasurementValue
+    tidalVolume: IMeasurementValue
+  }
+  alerts: {}
+}
+
+export interface IMeasurementFieldMeta {
+  min: number,
+  max: number,
+  uom: string
 }
 
