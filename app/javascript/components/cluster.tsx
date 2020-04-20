@@ -1,9 +1,9 @@
 import React, { Component } from "react"
 import { ICluster, IVentilator, IDevicePollResult } from '../types'
-import { DevicePoller } from '../devicePoller'
-import { SimulatedDevicePoller } from '../simulatedDevicePoller'
+import { DevicePoller } from '../poller/devicePoller'
+import { SimulatedDevicePoller } from '../poller/simulatedDevicePoller'
 import Ventilator from './ventilator'
-import { BaseDevicePoller } from "../baseDevicePoller"
+import { BaseDevicePoller } from "../poller/baseDevicePoller"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import { getFirstAlert, camelCaseToWords } from "../utils"

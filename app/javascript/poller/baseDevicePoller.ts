@@ -1,5 +1,5 @@
-import { IVentilator, IDevicePollResult, IMeasurementFieldMeta } from './types'
-import { generateRandomValueBetween } from './utils'
+import { IVentilator, IDevicePollResult, IMeasurementFieldMeta } from '../types'
+import { generateRandomValueBetween } from '../utils'
 
 /** An instance of one of the subtypes of this class is
  *  responsible for polling a single device, or for simulating
@@ -16,6 +16,10 @@ export abstract class BaseDevicePoller {
   // When the device is unreachable or returning bad data, poll this often
   static BAD_POLL_PERIOD_MS = 15000
 
+  // When the poller starts up, it will pick a random number between
+  // 0 and this number of milliseconds to delay before making the first call
+  static STARTUP_DELAY = 500
+
   // See other static fields at the bottom
 
   constructor(device: IVentilator, callback: BaseDevicePoller.Callback) {
@@ -24,7 +28,7 @@ export abstract class BaseDevicePoller {
 
     this.poll = this.poll.bind(this)
 
-    let startupDelay = generateRandomValueBetween(0, BaseDevicePoller.GOOD_POLL_PERIOD_MS)
+    let startupDelay = generateRandomValueBetween(0, BaseDevicePoller.STARTUP_DELAY)
     this._timeout = setTimeout(this.poll, startupDelay)
   }
 

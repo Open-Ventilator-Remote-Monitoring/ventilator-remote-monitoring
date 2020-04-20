@@ -1,5 +1,5 @@
-import { IVentilator, IDevicePollResult } from './types'
-import { clamp, generateRandomValueBetween } from './utils'
+import { IVentilator, IDevicePollResult } from '../types'
+import { clamp, generateRandomValueBetween } from '../utils'
 import { BaseDevicePoller } from './baseDevicePoller'
 import cloneDeep from 'lodash.clonedeep'
 

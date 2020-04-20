@@ -2,8 +2,8 @@ import {
   IVentilator,
   IDevicePollResult,
   IDeviceApiResponse,
-} from './types'
-import { get } from './api'
+} from '../types'
+import { get } from '../api'
 import { BaseDevicePoller } from './baseDevicePoller'
 
 const API_KEY_HEADER = "Authorization"

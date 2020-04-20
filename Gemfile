@@ -32,6 +32,18 @@ gem 'devise'
 
 gem 'will_paginate', '~> 3.1.0'
 
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+gem 'validates_hostname', '~> 1.0.10'
+
+gem 'email_validator', '~> 2.0.1'
+
+# there is a unique index on (cluster_id, hostname), so unused hostnames must be nill
+gem 'nilify_blanks', '~> 1.3.0'
+
+gem 'fast_jsonapi'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -53,15 +65,3 @@ group :test do
   # Easy installation and use of web drivers to run system tests with browsers
   gem 'webdrivers'
 end
-
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-
-gem 'validates_hostname', '~> 1.0.10'
-
-gem 'email_validator', '~> 2.0.1'
-
-# there is a unique index on (cluster_id, hostname), so unused hostnames must be nill
-gem 'nilify_blanks', '~> 1.3.0'
-
-gem 'fast_jsonapi'
