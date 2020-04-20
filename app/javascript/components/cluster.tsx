@@ -320,7 +320,7 @@ class Cluster extends Component<IProps, IState> {
 
   static alertMapping = {
     audioAlarm: "Audio Alarm",
-    noHostname: "Missing Hostname",
+    noHostName: "Missing Hostname",
     noApiKey: "Missing API Key",
     connection: "Network Connection",
     schemaValidation: "Invalid Response",
