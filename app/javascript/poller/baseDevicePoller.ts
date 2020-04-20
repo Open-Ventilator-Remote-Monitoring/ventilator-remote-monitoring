@@ -8,7 +8,7 @@ import { generateRandomValueBetween } from '../utils'
 export abstract class BaseDevicePoller {
   _device: IVentilator = null
   _callback: BaseDevicePoller.Callback = null
-  _timeout: NodeJS.Timeout = null
+  _timeout = null
 
   // When the device is connected, poll this often
   static GOOD_POLL_PERIOD_MS = 3000
