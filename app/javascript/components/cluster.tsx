@@ -12,7 +12,7 @@ type Results = {[key: number] : IDevicePollResult}
 type Buckets = "commError"  |   // includes missing host name
                "ventAlarmSoundMonitors" |
                "ventDataMonitors" |
-               "other"          // didn't fall into at leasrt one of the previous buckets
+               "other"          // didn't fall into at least one of the previous buckets
 type SplitResults = {[key in Buckets] : IVentilator[]}
 
 interface IProps {
@@ -129,7 +129,11 @@ class Cluster extends Component<IProps, IState> {
       <React.Fragment>
         <h4>{cluster.name}</h4>
         {this.getVentAlarmSoundMonitorsJsx(split.ventAlarmSoundMonitors, results)}
-        {this.getVentDataMonitorsJsx(split.ventDataMonitors, results)}
+        {
+          // Temporarily removing for MVP
+          // this.getVentDataMonitorsJsx(split.ventDataMonitors, results)
+          // this.getVentDataMonitorsJsx(split.ventDataMonitors, results)
+        }
         {this.getCommErrorsJsx(split.commError, results)}
       </React.Fragment>
     )
@@ -180,7 +184,6 @@ class Cluster extends Component<IProps, IState> {
   }
 
   getVentAlarmSoundMonitorsJsx = (vents: IVentilator[], results: Results) => {
-
     let getRow = (v: IVentilator) => {
       let result: IDevicePollResult = results[v.id]
       let alert = getFirstAlert(result?.apiResponse?.ventilatorAlarmSoundMonitor?.alerts)
@@ -223,7 +226,6 @@ class Cluster extends Component<IProps, IState> {
   }
 
   getVentDataMonitorsJsx = (vents: IVentilator[], results: Results) => {
-
     return (
       <div className="group">
         <h4>Ventilator Data Monitors</h4>
@@ -272,7 +274,6 @@ class Cluster extends Component<IProps, IState> {
     if (! vents.length) {
       return null
     }
-
     let getRow = (v: IVentilator) => {
       let result: IDevicePollResult = results[v.id]
       let alert = getFirstAlert(result?.apiReceiveStatus?.alerts)
