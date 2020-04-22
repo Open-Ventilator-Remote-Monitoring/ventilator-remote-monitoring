@@ -11,7 +11,7 @@ This git repo is for the code on the **Heroku Cloud Server & Web Browser**
 ### Goal
 Our goal is to quickly develop a remote monitoring interface for low-cost rapidly-manufactured ventilators currently being developed to provide emergency relief in the Covid-19 Pandemic.  We strive for a lightweight, interoperable, and reliable interface. Currently the interface provides ventilator remote monitoring only (no control).
 
-This software is currently only a concept - it is neither approved nor intended to be used in any medical setting.
+This software is not approved to be used in a medical setting.
 
 ### Live Demo
 Check out the [live demo/concept](http://www.ventilatormonitor.com).
