@@ -9,7 +9,7 @@ require("turbolinks").start()
 require("channels")
 require("bootstrap/dist/js/bootstrap")
 
-import "@fortawesome/fontawesome-free/js/all";
+// import "@fortawesome/fontawesome-free/js/all";
 
 import '../dashboard'
 

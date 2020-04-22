@@ -1,8 +1,6 @@
 import React, { Component } from "react"
 import Jsona from 'jsona'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSpinner } from '@fortawesome/free-solid-svg-icons'
-
+import { Spinner} from './icons'
 import Organization from "./organization"
 import { get } from '../api'
 import { sortObjects } from '../utils'
@@ -121,7 +119,7 @@ class VentilatorTree extends Component<IProps, IState> {
 
     if (loading) {
       return (
-        <FontAwesomeIcon icon={faSpinner} size="4x" spin />
+        <Spinner size="4x" spin />
       )
     }
 

@@ -1,6 +1,5 @@
 import React, { Component } from "react"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircle, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
+import {ExclamationTriangle, Circle} from './icons'
 import { IVentilator, IDevicePollResult } from '../types'
 import { getFirstAlert } from '../utils'
 
@@ -49,8 +48,8 @@ class Ventilator extends Component<IProps, IState> {
     let alert = getFirstAlert(alerts)
 
     let statusJsx = ! alert
-      ? <FontAwesomeIcon icon={faCircle} size="lg" color={'LimeGreen'}/>
-      : <FontAwesomeIcon icon={faExclamationTriangle} size="lg" color={'red'} className="flash"/>
+      ? <Circle size="lg" color={'LimeGreen'}/>
+      : <ExclamationTriangle size="lg" color={'red'} className="flash"/>
 
     const display = (columnName: string) : JSX.Element => {
       if (alert) {
@@ -82,8 +81,8 @@ class Ventilator extends Component<IProps, IState> {
 
   getStatus = (ok: boolean) => {
     return ok
-      ? <FontAwesomeIcon icon={faCircle} size="lg" color={'LimeGreen'}/>
-      : <FontAwesomeIcon icon={faExclamationTriangle} size="lg" color={'red'} className="flash"/>
+      ? <Circle size="lg" color={'LimeGreen'}/>
+      : <ExclamationTriangle size="lg" color={'red'} className="flash"/>
   }
 }
 
