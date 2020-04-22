@@ -88,3 +88,5 @@ export interface IMeasurementFieldMeta {
   uom: string
 }
 
+export type DevicePollerCallback = (device: IVentilator, result: IDevicePollResult) => void
+

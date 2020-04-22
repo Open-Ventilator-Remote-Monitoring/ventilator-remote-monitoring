@@ -1,5 +1,4 @@
 const { environment } = require('@rails/webpacker')
-const typescript =  require('./loaders/typescript')
 
 const webpack = require('webpack')
 environment.plugins.prepend('Provide', new webpack.ProvidePlugin({
@@ -8,5 +7,4 @@ environment.plugins.prepend('Provide', new webpack.ProvidePlugin({
   Popper: ['popper.js', 'default']
 }))
 
-environment.loaders.prepend('typescript', typescript)
 module.exports = environment

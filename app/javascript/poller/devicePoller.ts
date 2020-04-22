@@ -2,6 +2,7 @@ import {
   IVentilator,
   IDevicePollResult,
   IDeviceApiResponse,
+  DevicePollerCallback
 } from '../types'
 import { get } from '../api'
 import { BaseDevicePoller } from './baseDevicePoller'
@@ -17,7 +18,7 @@ export class DevicePoller extends BaseDevicePoller {
   _url: string = null
   _headers: {} = null
 
-  constructor(device: IVentilator, callback: BaseDevicePoller.Callback) {
+  constructor(device: IVentilator, callback: DevicePollerCallback) {
     super(device, callback)
 
     this._url = getUrl(this._device.hostname)

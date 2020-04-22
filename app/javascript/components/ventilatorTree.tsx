@@ -11,7 +11,7 @@ import { IOrganization } from "../types"
 const VENTILATORS_API_URI = '/api/v1/ventilators'
 
 // create a demo org with two clusters
-let demoOrg : IOrganization = {
+let demoOrg: IOrganization = {
   id: 1,
   name: 'DEMO Hospital',
   clusters: [
@@ -70,7 +70,7 @@ class VentilatorTree extends Component<IProps, IState> {
       return
     }
 
-    let organization : IOrganization = null
+    let organization: IOrganization = null
     let success = false
 
     let response = await get<any>(VENTILATORS_API_URI)

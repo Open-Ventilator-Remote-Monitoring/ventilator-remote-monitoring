@@ -1,13 +1,13 @@
-import { IVentilator, IDevicePollResult, IMeasurementFieldMeta } from '../types'
+import { IVentilator, IDevicePollResult, IMeasurementFieldMeta, DevicePollerCallback } from '../types'
 import { generateRandomValueBetween } from '../utils'
 
 /** An instance of one of the subtypes of this class is
  *  responsible for polling a single device, or for simulating
  *  the polling of a single device. *
  */
-export abstract class BaseDevicePoller {
+ export abstract class BaseDevicePoller {
   _device: IVentilator = null
-  _callback: BaseDevicePoller.Callback = null
+  _callback: DevicePollerCallback = null
   _timeout = null
 
   // When the device is connected, poll this often
@@ -22,7 +22,7 @@ export abstract class BaseDevicePoller {
 
   // See other static fields at the bottom
 
-  constructor(device: IVentilator, callback: BaseDevicePoller.Callback) {
+  constructor(device: IVentilator, callback: DevicePollerCallback) {
     this._device = device
     this._callback = callback
 
@@ -81,13 +81,4 @@ export abstract class BaseDevicePoller {
   }
 
   static MeasurementFieldNames = Object.keys(BaseDevicePoller.MeasurementFieldMetadata)
-}
-
-// Ideally the type would be defined inside the class, but it can't be done yet.
-// https://www.typescriptlang.org/docs/handbook/declaration-merging.html#merging-namespaces-with-classes
-
-export namespace BaseDevicePoller {
-  // Any user of a subclass of BaseDevidcePoller should implement
-  // a function with the signiture which is called whenever a poll has completed
-  export type Callback = (device: IVentilator, result: IDevicePollResult) => void
 }
