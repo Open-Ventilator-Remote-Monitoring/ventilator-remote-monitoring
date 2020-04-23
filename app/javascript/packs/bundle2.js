@@ -6,12 +6,12 @@ const fadeOutFlashNotice = () => {
   var ele = $(".fade-msg").first()
   if (ele.length) {
     setTimeout(() => {
-      ele.animate({marginTop: '-='+42},{always: () => {ele.remove()}})
+      ele.animate({marginTop: '-=42'},
+                  {always: () => {ele.remove()}})
     }, 2000)
   }
 }
 
-// document.addEventListener("turbolinks:load", () => {
-$( document ).ready(() => {
+document.addEventListener("turbolinks:load", () => {
   fadeOutFlashNotice()
 })

@@ -75,6 +75,9 @@ class VentilatorTree extends Component<IProps, IState> {
 
     let response = await get<any>(VENTILATORS_API_URI)
 
+    // any time we are awaiting, things can happen in other parts of the code
+    // e.g. the user may have clicked on another link, causing an unmount
+
     if (! this._mounted) {
       // console.log(`Get returned, but component was unmounted`)
       return false
@@ -92,6 +95,7 @@ class VentilatorTree extends Component<IProps, IState> {
     }
 
     let errMsg = success ? null : 'There was an error while getting the Organization information from the server.'
+
     if (success) {
       // sort the cluster names
       sortObjects(organization.clusters, "name")
@@ -127,7 +131,9 @@ class VentilatorTree extends Component<IProps, IState> {
 
     if (errMsg) {
       return (
-        <div className="error">{errMsg}</div>
+        <section>
+          <div className="error">{errMsg}</div>
+        </section>
       )
     }
 

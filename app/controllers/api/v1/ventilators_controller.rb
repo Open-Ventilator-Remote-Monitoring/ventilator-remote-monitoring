@@ -15,7 +15,7 @@ class Api::V1::VentilatorsController < ApiController
       return
     end
 
-    render :json => {"error" => "User is not associated with an Organization."}
+    render :json => {"error" => "User is not associated with an Organization."}, status: 500
   end
 end
 
