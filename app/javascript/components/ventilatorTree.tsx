@@ -68,6 +68,8 @@ class VentilatorTree extends Component<IProps, IState> {
       return
     }
 
+    this.forceUpdate()
+
     let organization: IOrganization = null
     let success = false
 
@@ -119,7 +121,7 @@ class VentilatorTree extends Component<IProps, IState> {
 
     if (loading) {
       return (
-        <Spinner size="4x" spin />
+        <Spinner />
       )
     }
 
