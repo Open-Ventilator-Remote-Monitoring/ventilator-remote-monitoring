@@ -10,7 +10,7 @@ const VENTILATORS_API_URI = '/api/v1/ventilators'
 
 // create a demo org with two clusters
 let demoOrg: IOrganization = {
-  id: 1,
+  id: 0x7FFFFFFF,
   name: 'DEMO Hospital',
   clusters: [
     {
