@@ -17,7 +17,8 @@
     <meta property="og:site_name" content="<%= meta_title %>" />
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'bundle1', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'bundle2', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
@@ -29,6 +30,9 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
 
+        <li class="nav-item">
+            <a class="nav-link" href="/">Dashboard</a>
+        </li>
         <% if user_signed_in? %>
           <% if current_user.admin? || (current_user.org_admin? && current_user.organization) %>
             <li class="nav-item dropdown">

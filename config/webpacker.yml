@@ -56,7 +56,7 @@ development:
   compile: true
 
   # Verifies that correct packages and versions are installed by inspecting package.json, yarn.lock, and node_modules
-  check_yarn_integrity: true
+  check_yarn_integrity: false
 
   # Reference: https://webpack.js.org/configuration/dev-server/
   dev_server:
@@ -68,7 +68,7 @@ development:
     # Inline should be set to true if using HMR
     inline: true
     overlay: true
-    compress: true
+    compress: false
     disable_host_check: true
     use_local_ip: false
     quiet: false

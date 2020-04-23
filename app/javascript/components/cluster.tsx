@@ -4,8 +4,7 @@ import { DevicePoller } from '../poller/devicePoller'
 import { SimulatedDevicePoller } from '../poller/simulatedDevicePoller'
 import Ventilator from './ventilator'
 import { BaseDevicePoller } from "../poller/baseDevicePoller"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircle, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
+import {ExclamationTriangle, Circle} from './icons'
 import { getFirstAlert, camelCaseToWords } from "../utils"
 
 type Results = {[key: number] : IDevicePollResult}
@@ -315,8 +314,8 @@ class Cluster extends Component<IProps, IState> {
 
   getStatus = (ok: boolean) => {
     return ok
-      ? <FontAwesomeIcon icon={faCircle} size="lg" color={'LimeGreen'}/>
-      : <FontAwesomeIcon icon={faExclamationTriangle} size="lg" color={'red'} className="flash"/>
+      ? <Circle size="lg" color={'LimeGreen'}/>
+      : <ExclamationTriangle size="lg" color={'red'} className="flash"/>
   }
 
   static alertMapping = {

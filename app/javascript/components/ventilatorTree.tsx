@@ -1,8 +1,6 @@
 import React, { Component } from "react"
 import Jsona from 'jsona'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSpinner } from '@fortawesome/free-solid-svg-icons'
-
+import { Spinner} from './icons'
 import Organization from "./organization"
 import { get } from '../api'
 import { sortObjects } from '../utils'
@@ -11,8 +9,8 @@ import { IOrganization } from "../types"
 const VENTILATORS_API_URI = '/api/v1/ventilators'
 
 // create a demo org with two clusters
-let demoOrg : IOrganization = {
-  id: 1,
+let demoOrg: IOrganization = {
+  id: 0x7FFFFFFF,
   name: 'DEMO Hospital',
   clusters: [
     {
@@ -70,10 +68,15 @@ class VentilatorTree extends Component<IProps, IState> {
       return
     }
 
-    let organization : IOrganization = null
+    this.forceUpdate()
+
+    let organization: IOrganization = null
     let success = false
 
     let response = await get<any>(VENTILATORS_API_URI)
+
+    // any time we are awaiting, things can happen in other parts of the code
+    // e.g. the user may have clicked on another link, causing an unmount
 
     if (! this._mounted) {
       // console.log(`Get returned, but component was unmounted`)
@@ -92,6 +95,7 @@ class VentilatorTree extends Component<IProps, IState> {
     }
 
     let errMsg = success ? null : 'There was an error while getting the Organization information from the server.'
+
     if (success) {
       // sort the cluster names
       sortObjects(organization.clusters, "name")
@@ -121,13 +125,15 @@ class VentilatorTree extends Component<IProps, IState> {
 
     if (loading) {
       return (
-        <FontAwesomeIcon icon={faSpinner} size="4x" spin />
+        <Spinner />
       )
     }
 
     if (errMsg) {
       return (
-        <div className="error">{errMsg}</div>
+        <section>
+          <div className="error">{errMsg}</div>
+        </section>
       )
     }
 

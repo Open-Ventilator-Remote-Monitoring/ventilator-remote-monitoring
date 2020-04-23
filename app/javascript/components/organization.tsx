@@ -18,35 +18,61 @@ interface IState {
 }
 
 class Organization extends Component<IProps, IState> {
-  options
+  options: IOption[]
+  clusterNameKey: string
 
   constructor(props: IProps) {
-    super(props);
+    super(props)
 
-    this.options = []
+    console.assert(props.organization, "missing organization")
+
+        this.state = {selectedOption: null}
 
     // make an array for the select
-    if (props.organization) {
-      this.options = props.organization.clusters.map((cluster) => {
-        return {
-          value: cluster.id,
-          label: cluster.name
-        }
-      })
+    this.options = props.organization.clusters.map((cluster) => {
+      return {
+        value: cluster.id,
+        label: cluster.name
+      }
+    })
 
-    }
+    this.clusterNameKey = `ClusterName-${props.organization.id}`
 
-    let selectedOption = (this.options.length > 0)
-        ? this.options[0]
-        : null
-
-    this.state = {
-      selectedOption
-    }
+    this.setClusterSelection()
   }
 
-  changeSelection = (selectedOption) => {
+  /** Get the last cluster name selected from the drop-down for this organization
+   *  from localStorage. If it's not in local storage or there are no clusters
+   *  by that name, just select the first cluster. If there are no clusters, return null
+   */
+  setClusterSelection(): null {
+    if (! this.options.length) {
+      return null
+    }
+
+    let selectedClusterIndx = -1
+
+    // note: we store the cluster ID (for each specfic org-id), not the index
+    var storedClusterName = localStorage.getItem(this.clusterNameKey)
+
+    if (storedClusterName) {
+      selectedClusterIndx = this.options.findIndex((o) => o.label === storedClusterName)
+    }
+
+    selectedClusterIndx = selectedClusterIndx === -1 ? 0 : selectedClusterIndx
+
+    let selectedOption = this.options[selectedClusterIndx]
+
+    // called from the c'tor so needs to init state rather than call setState
+    this.state = {selectedOption}
+  }
+
+  changeSelection = (selectedOption: IOption) => {
     this.setState({ selectedOption })
+
+    // update localStorage each time the user selects a new option from the
+    // dropdown. When they refresh the page, the same option should be selected for them.
+    localStorage.setItem(this.clusterNameKey, selectedOption.label)
   }
 
   render() {
@@ -55,6 +81,15 @@ class Organization extends Component<IProps, IState> {
 
     if (! organization) {
       return null
+    }
+
+    if (! organization.clusters.length) {
+      return (
+        <section>
+          <h3>{organization.name}</h3>
+          <h4>This organization does not have any clusters.</h4>
+        </section>
+      )
     }
 
     let clusterDisplay = null
@@ -80,9 +115,7 @@ class Organization extends Component<IProps, IState> {
           />
         </div>
         <section>
-        {
-          clusterDisplay
-        }
+          {clusterDisplay}
         </section>
       </section>
     )
