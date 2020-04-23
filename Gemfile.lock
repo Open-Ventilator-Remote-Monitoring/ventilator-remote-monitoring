@@ -84,6 +84,7 @@ GEM
     email_validator (2.0.1)
       activemodel
     erubi (1.9.0)
+    execjs (2.7.0)
     fast_jsonapi (1.5)
       activesupport (>= 4.2)
     ffi (1.12.2)
@@ -93,6 +94,7 @@ GEM
       concurrent-ruby (~> 1.0)
     jbuilder (2.10.0)
       activesupport (>= 5.0.0)
+    json (2.3.0)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -194,6 +196,9 @@ GEM
     turbolinks-source (5.2.0)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
+    uglifier (2.7.2)
+      execjs (>= 0.3.0)
+      json (>= 1.8.0)
     validates_hostname (1.0.10)
       activerecord (>= 3.0)
       activesupport (>= 3.0)
@@ -242,6 +247,7 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   turbolinks (~> 5)
   tzinfo-data
+  uglifier (~> 2.7.2)
   validates_hostname (~> 1.0.10)
   web-console (>= 3.3.0)
   webdrivers
