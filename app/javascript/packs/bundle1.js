@@ -5,7 +5,25 @@
 
 require("@rails/ujs").start()
 require("turbolinks").start()
-require("bootstrap/dist/js/bootstrap")
+
+// Bootstrap
+// Note: Boostrap 4.2.2 collapse currently does not work with jQuery 3.5
+// Please stay on jQuery 3.4.1 until this is closed.
+// https://github.com/twbs/bootstrap/issues/30553
+
+//import 'bootstrap/js/dist/alert';
+import 'bootstrap/js/dist/button';
+//import 'bootstrap/js/dist/carousel';
+import 'bootstrap/js/dist/collapse';
+import 'bootstrap/js/dist/dropdown';
+//import 'bootstrap/js/dist/model';
+//import 'bootstrap/js/dist/popover';
+//import 'bootstrap/js/dist/scrollspy';
+//import 'bootstrap/js/dist/tab';
+//import 'bootstrap/js/dist/toast';
+//import 'bootstrap/js/dist/tooltip';
+import 'bootstrap/js/dist/util';
+
 
 // require("@rails/activestorage").start()
 // require("channels")

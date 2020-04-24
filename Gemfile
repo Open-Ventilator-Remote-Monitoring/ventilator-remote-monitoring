@@ -39,7 +39,7 @@ gem 'validates_hostname', '~> 1.0.10'
 
 gem 'email_validator', '~> 2.0.1'
 
-# there is a unique index on (cluster_id, hostname), so unused hostnames must be nill
+# there is a unique index on ventilators(cluster_id, hostname), so unused hostnames must be nill
 gem 'nilify_blanks', '~> 1.4.0'
 
 gem 'fast_jsonapi'
