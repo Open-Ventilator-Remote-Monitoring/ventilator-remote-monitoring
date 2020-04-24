@@ -23,6 +23,26 @@
         <td><%= form.label :description %></td>
         <td><%= form.text_area :description, size: "30x2" %></td>
       </tr>
+
+      <tr class="field">
+        <td><%= form.label "Cluster term - singular" %></td>
+        <td><%= form.text_field :cluster_term_singular, placeholder: "Floor" %></td>
+      </tr>
+
+      <tr class="field">
+        <td><%= form.label "Cluster term - plural" %></td>
+        <td><%= form.text_field :cluster_term_plural, placeholder: "Floors" %></td>
+      </tr>
+
+      <tr class="field">
+        <td><%= form.label "Ventilator location term - singular" %></td>
+        <td><%= form.text_field :ventilator_location_term_singular, placeholder: "Room/Bed" %></td>
+      </tr>
+
+      <tr class="field">
+        <td><%= form.label "Ventilator location term - plural" %></td>
+        <td><%= form.text_field :ventilator_location_term_plural, placeholder: "Rooms/Beds" %></td>
+      </tr>
     </table>
   </section>
 

@@ -13,7 +13,7 @@
   <table>
     <col style="width:25%">
     <tr class="field">
-      <td>Belongs to cluster</td>
+      <td>Belongs to <%= ventilator.cluster.organization.cluster_term_singular %></td>
       <td>
         <% if current_user.admin? %>
           <%= form.collection_select( :cluster_id, Cluster.all, :id, :name, {}, { class: "form-control" })  %>
@@ -61,7 +61,7 @@
 
   <section>
       <div class="actions">
-        <%= form.submit class: "btn btn-info"%>
+        <%= form.submit "Create Ventilator Monitor", class: "btn btn-info"%>
       </div>
     </section>
 <% end %>

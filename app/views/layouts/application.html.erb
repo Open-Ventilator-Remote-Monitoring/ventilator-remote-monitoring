@@ -37,7 +37,7 @@
         <% if user_signed_in? %>
           <% if current_user.organization %>
             <li class="nav-item">
-                <a class="nav-link" href="/clusters">My Clusters</a>
+                <a class="nav-link" href="/clusters">My <%= current_user.organization.cluster_term_plural %></a>
             </li>
           <% end %>
         <% end %>

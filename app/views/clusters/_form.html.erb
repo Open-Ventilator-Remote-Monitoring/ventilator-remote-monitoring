@@ -11,14 +11,16 @@
   <% end %>
 
   <table>
-    <col style="width:25%">
+    <colgroup>
+      <col style="width:25%">
+    </colgroup>
     <tr class="field">
       <td>Belongs to organization</td>
       <td>
         <% if current_user.admin? %>
           <%= form.collection_select( :organization_id, Organization.all, :id, :name, {}, { class: "form-control" })  %>
         <% else  %>
-          <input value="<%= current_user.organization.name %>" class="form-control" disabled></input>
+          <input value="<%= current_user.organization.name %>" class="form-control" disabled />
         <% end %>
       </td>
     </tr>
@@ -36,7 +38,7 @@
 
   <section>
     <div class="actions">
-      <%= form.submit class: "btn btn-info"%>
+      <%= form.submit "Update #{cluster.organization.cluster_term_singular}", class: "btn btn-info"%>
     </div>
   </section>
 <% end %>

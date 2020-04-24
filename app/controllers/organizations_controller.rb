@@ -11,13 +11,14 @@ class OrganizationsController < ApplicationController
   # GET /organizations/1
   # GET /organizations/1.json
   def show
-    p "in show"
     req_organization_id = params[:id].to_i
-    if current_user.admin? || (current_user.org_admin? && (current_user.organization.id == req_organization_id))
-      # show
-    else
+    unless current_user.admin? || (current_user.org_admin? && (current_user.organization.id == req_organization_id))
       flash.alert = "You must be an administrator to access that section"
-      redirect_to organizations_url current_user.organization.id
+      if user_signed_in? && current_user.organization.present?
+        redirect_to organizations_url current_user.organization.id
+      else
+        redirect_to "/"
+      end
     end
   end
 
@@ -78,7 +79,7 @@ class OrganizationsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def organization_params
-      params.require(:organization).permit(:name, :description)
+      params.require(:organization).permit(:name, :description, :cluster_term_singular, :cluster_term_plural, :ventilator_location_term_singular, :ventilator_location_term_plural)
     end
 
 end

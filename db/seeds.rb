@@ -11,7 +11,11 @@ Cluster.delete_all
 User.delete_all
 Organization.delete_all
 
-org1 = Organization.create( name: "Org #1", description: "Org #1 Description" )
+org1 = Organization.create( name: "Honnah Lee Medical Center",
+                            description: "Honnah Lee Medical Center",
+                            cluster_term_singular: "Building / Floor",
+                            cluster_term_plural: "Buildings / Floors"
+                          )
 
 c1 = org1.clusters.create( name: "Org #1 Cluster #1", description: "Org #1 Cluster #1 Description")
 org1.clusters.create( name: "Org #1 Cluster #2", description: "Org #1 Cluster #2 Description")

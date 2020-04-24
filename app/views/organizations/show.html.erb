@@ -1,5 +1,4 @@
 <h4>
-  <span class="label">Organization:</span>
   <%= @organization.name %>
 </h4>
 
@@ -19,9 +18,11 @@
 </section>
 
 <section>
-  <h4>Clusters in: <%=@organization.name %></h3>
+  <h4><%=@organization.cluster_term_plural%>:</h4>
   <table class="table">
-    <col style="width:25%">
+    <colgroup>
+      <col style="width:25%">
+    </colgroup>
     <thead>
       <tr>
         <th>Name</th>
@@ -45,7 +46,7 @@
   <% if current_user.admin? || current_user.org_admin? && (params[:id].to_i == current_user.organization.id) %>
       <a href="/clusters/new?organization_id=<%= @organization.id %>">
         <button class="btn btn-info">
-          + Add New Cluster
+          + Add New <%= @organization.cluster_term_singular %>
         </button>
       </a>
   <% end %>
