@@ -4,7 +4,6 @@ import { BaseDevicePoller } from './baseDevicePoller'
 import cloneDeep from 'lodash.clonedeep'
 
 const VENTILATOR_NAMES_WITH_SIMULATED_COMM_FAILURE = ["East-2", "West-4"]
-const VENTILATOR_NAMES_WITH_VENTILATOR_ALARM_SOUND_MONITORING = ["East-1", "East-4", "West-3"]
 const VENTILATOR_NAMES_WITH_AUDIO_ALARM_ALERT = ["East-4"]
 
 export class SimulatedDevicePoller extends BaseDevicePoller {
@@ -22,6 +21,10 @@ export class SimulatedDevicePoller extends BaseDevicePoller {
 
     let result = this.getFreshPollResultWithPreviousValues()
 
+    // because we are not simulating data monitors, we can skip this.
+    // we are not randomly changing alarm monitors from/to alerted/not alerted
+
+    /*
     // 50% of the time, don't change anything
     let change = generateRandomValueBetween(0, 1)
     if (change === 0) {
@@ -30,6 +33,7 @@ export class SimulatedDevicePoller extends BaseDevicePoller {
 
     // otherwise, get a new status object with the value of one measuement item changed
     this.updateOneMeasurementField(result)
+    */
 
     return Promise.resolve(result)
   }
@@ -52,21 +56,19 @@ export class SimulatedDevicePoller extends BaseDevicePoller {
       }
     }
 
-    if (VENTILATOR_NAMES_WITH_VENTILATOR_ALARM_SOUND_MONITORING.includes(this._device.name)) {
-      result.apiResponse.device.roles.ventilatorAlarmSoundMonitor = true
-    }
-
     if (VENTILATOR_NAMES_WITH_AUDIO_ALARM_ALERT.includes(this._device.name)) {
       result.apiResponse.ventilatorAlarmSoundMonitor.alerts.audioAlarm = true
     }
 
-    let status = result.apiResponse.ventilatorDataMonitor.status
+    if (result.apiResponse['ventilatorDataMonitor']) {
+      let status = result.apiResponse.ventilatorDataMonitor.status
 
-    status.ieRatio.value = this.generateRandomColumnValue('ieRatio')
-    status.peakInspiratoryPressure.value = this.generateRandomColumnValue('peakInspiratoryPressure')
-    status.peep.value = this.generateRandomColumnValue('peep')
-    status.respiratoryRate.value = this.generateRandomColumnValue('respiratoryRate')
-    status.tidalVolume.value = this.generateRandomColumnValue('tidalVolume')
+      status.ieRatio.value = this.generateRandomColumnValue('ieRatio')
+      status.peakInspiratoryPressure.value = this.generateRandomColumnValue('peakInspiratoryPressure')
+      status.peep.value = this.generateRandomColumnValue('peep')
+      status.respiratoryRate.value = this.generateRandomColumnValue('respiratoryRate')
+      status.tidalVolume.value = this.generateRandomColumnValue('tidalVolume')
+    }
 
     return result
   }
@@ -86,6 +88,8 @@ export class SimulatedDevicePoller extends BaseDevicePoller {
   // Get a new response (with fresh timestamps), copy over the measurement from the current state, and then
   // modify one of the measurement items. Pick one at random and pick the direction (+1 / -1) at random.
   // ieRatio is a special case becasue the value is 1:n, so just mack it 1:2 or 1:4
+
+  /*
   updateOneMeasurementField(result: IDevicePollResult) : void {
     let status = result.apiResponse.ventilatorDataMonitor.status
     let columnIndx = generateRandomValueBetween(0, BaseDevicePoller.MeasurementFieldNames.length - 1)
@@ -99,6 +103,7 @@ export class SimulatedDevicePoller extends BaseDevicePoller {
     status[key].value = newValue
     // console.log(`changed ${key} to ${newValue}`)
   }
+  */
 
   /**
    * This is used by SimulatedDevicePoller to initialize the result.
@@ -115,10 +120,11 @@ export class SimulatedDevicePoller extends BaseDevicePoller {
           id: `${this._device.id}-${this._device.name}`,
           currentTime: new Date(),
           roles: {
-            ventilatorAlarmSoundMonitor: false,
-            ventilatorDataMonitor: true
+            ventilatorAlarmSoundMonitor: true,
+            ventilatorDataMonitor: false
           }
         },
+        /*
         ventilatorDataMonitor: {
           timestamp: new Date(),
           status: {
@@ -145,6 +151,7 @@ export class SimulatedDevicePoller extends BaseDevicePoller {
           },
           alerts: {}
         },
+        */
         ventilatorAlarmSoundMonitor: {
             timestamp: new Date(),
             status: {

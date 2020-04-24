@@ -131,7 +131,6 @@ class Cluster extends Component<IProps, IState> {
         {
           // Temporarily removing for MVP
           // this.getVentDataMonitorsJsx(split.ventDataMonitors, results)
-          // this.getVentDataMonitorsJsx(split.ventDataMonitors, results)
         }
         {this.getCommErrorsJsx(split.commError, results)}
       </React.Fragment>
@@ -152,8 +151,8 @@ class Cluster extends Component<IProps, IState> {
       let result: IDevicePollResult = results[v.id]
 
       // We only know whether the device at the other end is a data monitor or an alarm
-      // monito based on what it tell us (at least one of the keys in
-      // result.apiResponse.device.roles should be true). So, if we had not had a response
+      // monitor based on what it tells us in a response (at least one of the keys in
+      // result.apiResponse.device.roles should be true). So, if we do not have a response
       // we can't be sure what it is.
 
       if (!result) {
@@ -169,6 +168,8 @@ class Cluster extends Component<IProps, IState> {
         return
       }
 
+      // We have a response ! - What role is the monitor in?
+
       let placed = false
 
       if (result.apiResponse.device.roles.ventilatorAlarmSoundMonitor) {
@@ -181,7 +182,8 @@ class Cluster extends Component<IProps, IState> {
         placed = true
       }
 
-      // we got a response, but neither key was true. This is a schema error.
+      // we got a response, but neither key was true. This is a schema error and should
+      // have resulted in a comm error.
       if (!placed) {
         split.other.push(v)
       }
@@ -195,7 +197,7 @@ class Cluster extends Component<IProps, IState> {
       let result: IDevicePollResult = results[v.id]
       let alert = getFirstAlert(result?.apiResponse?.ventilatorAlarmSoundMonitor?.alerts)
       let reason = this.getAlertText(alert)
-      let statusJsx = this.getStatus(!alert)
+      let statusJsx = this.getStatusJsx(!alert)
       return (
         <tr key={this.getKey(v)}>
             <td>{v.name}</td>
@@ -212,7 +214,7 @@ class Cluster extends Component<IProps, IState> {
           <table className='demo-ventilator-table narrow'>
             <thead>
               <tr className="tr-heading">
-                <th>Unit</th>
+                <th>{this.props.cluster.organization.ventilatorLocationTermSingular}</th>
                 <th>Status</th>
                 <th>Alert</th>
               </tr>
@@ -226,6 +228,7 @@ class Cluster extends Component<IProps, IState> {
     )
   }
 
+  /*
   getVentDataMonitorsJsx = (vents: IVentilator[], results: Results) => {
     return (
       <div className="group">
@@ -236,7 +239,7 @@ class Cluster extends Component<IProps, IState> {
               <table className='demo-ventilator-table'>
                 <thead>
                   <tr className="tr-heading">
-                    <th>Unit</th>
+                    <th>{this.props.cluster.organization.ventilatorLocationTermSingular}</th>
                     <th>Status</th>
                     <th>Tidal Volume </th>
                     <th>Respiratory Rate</th>
@@ -270,6 +273,7 @@ class Cluster extends Component<IProps, IState> {
       </div>
     )
   }
+  */
 
   getCommErrorsJsx = (vents: IVentilator[], results: Results) => {
     if (! vents.length) {
@@ -279,7 +283,7 @@ class Cluster extends Component<IProps, IState> {
       let result: IDevicePollResult = results[v.id]
       let alert = getFirstAlert(result?.apiReceiveStatus?.alerts)
       let reason = this.getAlertText(alert)
-      let statusJsx = this.getStatus(!alert)
+      let statusJsx = this.getStatusJsx(!alert)
       return (
         <tr key={this.getKey(v)}>
             <td>{v.name}</td>
@@ -295,7 +299,7 @@ class Cluster extends Component<IProps, IState> {
         <table className='demo-ventilator-table narrow'>
           <thead>
             <tr className="tr-heading">
-              <th>Unit</th>
+              <th>{this.props.cluster.organization.ventilatorLocationTermSingular}</th>
               <th>Status</th>
               <th>Reason</th>
             </tr>
@@ -314,7 +318,7 @@ class Cluster extends Component<IProps, IState> {
     return `${this.props.cluster.id}-${vent.id}`
   }
 
-  getStatus = (ok: boolean) => {
+  getStatusJsx = (ok: boolean) => {
     return ok
       ? <Circle size="lg" color={'LimeGreen'}/>
       : <ExclamationTriangle size="lg" color={'red'} className="flash"/>

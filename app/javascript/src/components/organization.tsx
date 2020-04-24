@@ -19,14 +19,14 @@ interface IState {
 
 class Organization extends Component<IProps, IState> {
   options: IOption[]
-  clusterNameKey: string
+  selectedClusterNameKey: string
 
   constructor(props: IProps) {
     super(props)
 
     console.assert(props.organization, "missing organization")
 
-        this.state = {selectedOption: null}
+    this.selectedClusterNameKey = `SelectedClusterName-${props.organization.id}`
 
     // make an array for the select
     this.options = props.organization.clusters.map((cluster) => {
@@ -36,7 +36,7 @@ class Organization extends Component<IProps, IState> {
       }
     })
 
-    this.clusterNameKey = `ClusterName-${props.organization.id}`
+    this.state = {selectedOption: null}
 
     this.setClusterSelection()
   }
@@ -53,10 +53,10 @@ class Organization extends Component<IProps, IState> {
     let selectedClusterIndx = -1
 
     // note: we store the cluster ID (for each specfic org-id), not the index
-    var storedClusterName = localStorage.getItem(this.clusterNameKey)
+    var storedClusterName = localStorage.getItem(this.selectedClusterNameKey)
 
     if (storedClusterName) {
-      selectedClusterIndx = this.options.findIndex((o) => o.label === storedClusterName)
+      selectedClusterIndx = this.options.findIndex((o) => o.label == storedClusterName)
     }
 
     selectedClusterIndx = selectedClusterIndx === -1 ? 0 : selectedClusterIndx
@@ -72,7 +72,7 @@ class Organization extends Component<IProps, IState> {
 
     // update localStorage each time the user selects a new option from the
     // dropdown. When they refresh the page, the same option should be selected for them.
-    localStorage.setItem(this.clusterNameKey, selectedOption.label)
+    localStorage.setItem(this.selectedClusterNameKey, selectedOption.label)
   }
 
   render() {
@@ -87,7 +87,7 @@ class Organization extends Component<IProps, IState> {
       return (
         <section>
           <h3>{organization.name}</h3>
-          <h4>This organization does not have any clusters.</h4>
+          <h4>{`This organization does not have any ${organization.clusterTermPlural}.`}</h4>
         </section>
       )
     }
