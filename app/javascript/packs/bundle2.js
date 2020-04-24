@@ -1,4 +1,4 @@
-import '../dashboard'
+import '../src/dashboard'
 
 // This will fade out the Rails flash notice.
 // Note that it does not remove error messages

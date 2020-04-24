@@ -151,11 +151,18 @@ class Cluster extends Component<IProps, IState> {
     vents.forEach((v) => {
       let result: IDevicePollResult = results[v.id]
 
-      // If we have not received a response, it could not be sorted elsewhere
+      // We only know whether the device at the other end is a data monitor or an alarm
+      // monito based on what it tell us (at least one of the keys in
+      // result.apiResponse.device.roles should be true). So, if we had not had a response
+      // we can't be sure what it is.
+
       if (!result) {
         split.other.push(v)
         return
       }
+
+      // If we get a communication error, we also can't tell what it is, but we'll display
+      // it because it might have been an alarm monitor.
 
       if (! result.apiReceiveStatus.ok) {
         split.commError.push(v)
@@ -174,6 +181,7 @@ class Cluster extends Component<IProps, IState> {
         placed = true
       }
 
+      // we got a response, but neither key was true. This is a schema error.
       if (!placed) {
         split.other.push(v)
       }
@@ -201,24 +209,18 @@ class Cluster extends Component<IProps, IState> {
       <section>
         <h4>Ventilator Alarm Sound Monitors</h4>
         {
-          vents.length
-          ? (
-              <table className='demo-ventilator-table narrow'>
-                <thead>
-                  <tr className="tr-heading">
-                    <th>Unit</th>
-                    <th>Status</th>
-                    <th>Alert</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {vents.map((v) => getRow(v))}
-                </tbody>
-              </table>
-            )
-          : (
-              <div>No Ventilator Alarm Sound Monitors</div>
-            )
+          <table className='demo-ventilator-table narrow'>
+            <thead>
+              <tr className="tr-heading">
+                <th>Unit</th>
+                <th>Status</th>
+                <th>Alert</th>
+              </tr>
+            </thead>
+            <tbody>
+              {vents.map((v) => getRow(v))}
+            </tbody>
+          </table>
         }
       </section>
     )
