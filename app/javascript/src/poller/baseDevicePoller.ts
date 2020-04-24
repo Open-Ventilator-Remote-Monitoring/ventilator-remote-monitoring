@@ -1,4 +1,9 @@
-import { IVentilator, IDevicePollResult, IMeasurementFieldMeta, DevicePollerCallback } from '../types'
+import {
+  IVentilator,
+  IDevicePollResult,
+  IMeasurementFieldMeta,
+  DevicePollerCallback
+} from '../types'
 import { generateRandomValueBetween } from '../utils'
 
 /** An instance of one of the subtypes of this class is

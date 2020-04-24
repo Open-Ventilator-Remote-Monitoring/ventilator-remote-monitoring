@@ -22,17 +22,34 @@
   </head>
 
   <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <a class="navbar-brand" href="/">Open Source Ventilator Remote Monitoring Project</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Dashboard</a>
+        </li>
+
+        <% if user_signed_in? %>
+          <% if current_user.organization %>
+            <li class="nav-item">
+                <a class="nav-link" href="/clusters">My Clusters</a>
+            </li>
+          <% end %>
+        <% end %>
 
         <li class="nav-item">
-            <a class="nav-link" href="/">Dashboard</a>
+          <a class="nav-link" href="/about">About</a>
         </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/contribute">Contribute</a>
+        </li>
+
         <% if user_signed_in? %>
           <% if current_user.admin? || (current_user.org_admin? && current_user.organization) %>
             <li class="nav-item dropdown">
@@ -49,20 +66,8 @@
               </div>
             </li>
           <% end %>
-
-          <% if current_user.organization %>
-            <li class="nav-item">
-                <a class="nav-link" href="/clusters">My Clusters</a>
-            </li>
-          <% end %>
         <% end %>
 
-        <li class="nav-item">
-          <a class="nav-link" href="/about">About</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/contribute">Contribute</a>
-        </li>
         <% if user_signed_in? %>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
