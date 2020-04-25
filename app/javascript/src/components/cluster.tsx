@@ -2,7 +2,6 @@ import React, { Component } from "react"
 import { ICluster, IVentilator, IDevicePollResult } from '../types'
 import { DevicePoller } from '../poller/devicePoller'
 import { SimulatedDevicePoller } from '../poller/simulatedDevicePoller'
-import Ventilator from './ventilator'
 import { BaseDevicePoller } from "../poller/baseDevicePoller"
 import {ExclamationTriangle, Circle} from './icons'
 import { getFirstAlert, camelCaseToWords } from "../utils"
@@ -117,7 +116,7 @@ class Cluster extends Component<IProps, IState> {
       return (
         <React.Fragment>
           <h4>{cluster.name}</h4>
-          <h6>This cluster has no ventilators.</h6>
+          <h6>{`This ${cluster.organization.clusterTermSingular} has no ventilator monitors.`}</h6>
         </React.Fragment>
       )
     }
