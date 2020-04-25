@@ -79,7 +79,9 @@ class OrganizationsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def organization_params
-      params.require(:organization).permit(:name, :description, :cluster_term_singular, :cluster_term_plural, :ventilator_location_term_singular, :ventilator_location_term_plural)
+      params
+        .require(:organization)
+        .permit(:name, :description, :cluster_term_singular, :cluster_term_plural, :ventilator_location_term_singular, :ventilator_location_term_plural)
     end
 
 end

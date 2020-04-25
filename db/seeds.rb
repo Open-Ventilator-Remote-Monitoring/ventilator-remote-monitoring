@@ -11,20 +11,18 @@ Cluster.delete_all
 User.delete_all
 Organization.delete_all
 
-org1 = Organization.create( name: "Honnah Lee Medical Center",
-                            description: "Honnah Lee Medical Center",
-                            cluster_term_singular: "Building / Floor",
-                            cluster_term_plural: "Buildings / Floors"
+org1 = Organization.create!( name: "Honnah Lee Medical Center",
+                            description: "Honnah Lee Medical Center Description",
                           )
 
-c1 = org1.clusters.create( name: "Org #1 Cluster #1", description: "Org #1 Cluster #1 Description")
-org1.clusters.create( name: "Org #1 Cluster #2", description: "Org #1 Cluster #2 Description")
-org1.clusters.create( name: "Org #1 Cluster #3", description: "Org #1 Cluster #2 Description")
+c1 = org1.clusters.create!( name: "1st Floor", description: "1st Floor Description")
+org1.clusters.create!( name: "2nd Floor", description: "2nd Floor Description")
+org1.clusters.create!( name: "3rd Floor", description: "3rd Floor Description")
 
 6.times do |i|
-  c1.ventilators.create(
+  c1.ventilators.create!(
     {
-      name: "Ventilator ##{i + 1}",
+      name: "Room #{i + 1}",
       serial_number: "J42#{i + 1}",
       hostname: "ventilator-#{i + 1}.local",
       api_key: "api_key",
@@ -33,9 +31,3 @@ org1.clusters.create( name: "Org #1 Cluster #3", description: "Org #1 Cluster #2
   )
 end
 
-org1.users.create({
-  email: "user1@gmail.com",
-  name: "User 1",
-  encrypted_password: "thisisnotanencryptedpassword",
-  role: 1
-})

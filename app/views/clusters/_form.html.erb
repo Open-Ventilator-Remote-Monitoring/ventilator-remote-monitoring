@@ -38,7 +38,8 @@
 
   <section>
     <div class="actions">
-      <%= form.submit "Create / Update #{cluster.organization.cluster_term_singular}", class: "btn btn-info"%>
+      <% action = cluster.persisted? ? "Update" : "Create" %>
+      <%= form.submit "#{action} #{cluster.organization.cluster_term_singular}", class: "btn btn-info"%>
     </div>
   </section>
 <% end %>

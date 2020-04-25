@@ -61,7 +61,8 @@
 
   <section>
       <div class="actions">
-        <%= form.submit "Create / Update Ventilator Monitor", class: "btn btn-info"%>
+        <% action = ventilator.persisted? ? "Update" : "Create" %>
+        <%= form.submit "#{action} Ventilator Monitor", class: "btn btn-info"%>
       </div>
     </section>
 <% end %>
