@@ -1,7 +1,7 @@
 import { IDevicePollResult } from '../types'
-import { clamp, generateRandomValueBetween } from '../utils'
 import { BaseDevicePoller } from './baseDevicePoller'
 import cloneDeep from 'lodash.clonedeep'
+// import { clamp, generateRandomValueBetween } from '../utils'
 
 const VENTILATOR_NAMES_WITH_SIMULATED_COMM_FAILURE = ["East-2", "West-4"]
 const VENTILATOR_NAMES_WITH_AUDIO_ALARM_ALERT = ["East-4"]
@@ -22,7 +22,7 @@ export class SimulatedDevicePoller extends BaseDevicePoller {
     let result = this.getFreshPollResultWithPreviousValues()
 
     // because we are not simulating data monitors, we can skip this.
-    // we are not randomly changing alarm monitors from/to alerted/not alerted
+    // we are not randomly changing alarm sound monitors from/to alerted/not alerted
 
     /*
     // 50% of the time, don't change anything
@@ -60,6 +60,7 @@ export class SimulatedDevicePoller extends BaseDevicePoller {
       result.apiResponse.ventilatorAlarmSoundMonitor.alerts.audioAlarm = true
     }
 
+    /*
     if (result.apiResponse['ventilatorDataMonitor']) {
       let status = result.apiResponse.ventilatorDataMonitor.status
 
@@ -69,6 +70,7 @@ export class SimulatedDevicePoller extends BaseDevicePoller {
       status.respiratoryRate.value = this.generateRandomColumnValue('respiratoryRate')
       status.tidalVolume.value = this.generateRandomColumnValue('tidalVolume')
     }
+    */
 
     return result
   }
@@ -80,7 +82,6 @@ export class SimulatedDevicePoller extends BaseDevicePoller {
       result = cloneDeep(this._lastPollResult) as IDevicePollResult
       result.apiResponse.device.currentTime = new Date()
       result.apiResponse.ventilatorAlarmSoundMonitor.timestamp = new Date()
-      result.apiResponse.ventilatorDataMonitor.timestamp = new Date()
     }
     return result
   }
@@ -166,6 +167,7 @@ export class SimulatedDevicePoller extends BaseDevicePoller {
     return result
   }
 
+  /*
   generateRandomColumnValue = (columnName: string) : string => {
     let column = BaseDevicePoller.MeasurementFieldMetadata[columnName]
     let value = generateRandomValueBetween(column.min, column.max).toString()
@@ -174,4 +176,5 @@ export class SimulatedDevicePoller extends BaseDevicePoller {
     }
     return value
   }
+  */
 }

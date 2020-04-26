@@ -1,0 +1,146 @@
+1a212f4 CSS Cleanup
+41b6e60 Created separate CSS for selectors for clusters
+47fb070 Added additional table display options
+919c957 Added Origin header on request to Ventilator monitors
+8a309dd Updated seed.rb for IDs on host
+624c5ea Updated CSS and seeds
+af5e90e Set max width of a ventilator status table
+6f6c528 Made improvements to table layout
+b1fd44a Changed dashboard to show two tables
+be79762 Added hidden ventilators warning
+a6cc583 Display all ventilator monitors in a single table
+a4bc6f7 Added show/hide for individual ventilator monitors
+27fe345 Replaced Cluster with the Cluster term
+da32d79 Added defaults for Organization
+c873257 Extend dynamic naming to dashboard
+8fa697c Add dynamic naming for clusters and monitors
+34015ee Merge pull request #14 from Open-Ventilator-Remote-Monitoring/feature-sticky-cluster
+716ebf1 Moved JS files into app/javascript/src directory
+64609da Fixed issue with bootstrap collapse
+94f6a4f Merge pull request #13 from Open-Ventilator-Remote-Monitoring/feature-sticky-cluster
+14b3419 Upgrades and fixes
+832fa28 Added path for Web Service to return 500
+736f193 Update DEMO Tree
+d90d07d Create a second JS bundle file
+8430576 Move to Ruby 2.6.6
+26ce065 Improve the spiiner in VentilatorTree
+625f165 Added uglify Gem
+d35b7ba Added uglifier for production build
+ef7d847 Turned off check_yarn_integrity
+7dc5229 Remove font-awesome to save space
+11e4785 Upgrade several Yarn packages
+38f2483 Remove ActiveStorage
+c50512f Add missing yarn dependencies
+3137097 Upgrade to Ruby 2.7.1
+15561b6 Add dashboard link to menu
+ef73bc4 Remeber the last cluster selection on reload
+3f46639 update static pages license and warnings
+3f59b76 update config/environments/production.rb to force ssl
+5d5ded7 Merge pull request #11 from Open-Ventilator-Remote-Monitoring/feature-new-api
+8cc6eb5 Removed Ventilator Data Monitor section
+c1cd747 Merge pull request #10 from Open-Ventilator-Remote-Monitoring/feature-new-api
+0a66dad Added typescript support for ES2017
+8ceb43f Fixed mispelled key in alertMapping
+1713008 Fixed forms permissions error
+aacef7c Moved Pollers into their own directory
+bae7914 removed bootstrap-sass gem
+60c2774 Clean-up Ventilator Alarm Sound feature
+fd3f2b2 Connection to all RPs now require https
+70bd2a3 Removed support for old API
+5415b32 Updated the UI
+32e6fc5 Changed polling to allow for many receive failure modes
+a788973 Refactored polling out into separate classes
+daa4b3b Implemented new API
+bcdbdcf Merge pull request #9 from Open-Ventilator-Remote-Monitoring/feature-metadata
+bae5f64 Add support for FB Open Graph
+7a76996 Merge pull request #8 from Open-Ventilator-Remote-Monitoring/feature-alarm-detection-mvp
+d3fdc16 Reworked for TurbLinks
+d50ed46 Improved logic to display the Ventilator sooner
+bab8687 Improve logic for unmounting Root component
+83d2ebd Change to send API key to RP
+60284e8 Merge pull request #7 from Open-Ventilator-Remote-Monitoring/feature-dashboard-improvements
+71420a2 Unmount React app upon navigation
+84bd5c8 Added sort of cluter and ventilator names
+093eb0d Fix field pop on change
+c4ddb19 Merge pull request #6 from Open-Ventilator-Remote-Monitoring/debug-ventilator-get
+4707ac4 Fixed shape of poll result type
+3f97fc1 Merge pull request #5 from Open-Ventilator-Remote-Monitoring/debug-ventilator-get
+63ebedb Removed mode key on get call and added debug call
+3f54f9e Merge pull request #4 from Open-Ventilator-Remote-Monitoring/ventilator-ui
+531fc82 Imrproved html and css for registration add and edit
+cc5e375 Chnaged flash alerts
+b58503d Changed flash messages
+fb31170 Updated README with instruction on adding first admin
+66a16c3 Change home page
+847a1f8 Dashboard styling
+40d536b Flash values when they change
+e1550d9 Only list vents with a hostname. Styling.
+4ad3db9 Added Cluster selection
+467fa17 CRUD improvements, styling
+628d91a Implemented Dashboard which shows org tree
+6e9539c Updated /api/va/ventilators to return tree.
+fde8802 Improved links
+10e64c5 Validate hostname is unique within cluster
+93295f8 View cleanup, validations
+fd606f9 Updated CRUD controller and forms
+d31aa3b fix permissions on users#create controller action
+81d2901 delete users#create controller action - the only correct way to create a user is with a devise registration
+d85d619 fix permissions on users#edit controller
+b72b660 remote users#new controller - the only correct way to add a new user is with a devise registration
+a72c820 update users#show controller to fix permissions
+76c0c27 install will_paginate gem and update users controller and index view
+4b5a938 clean up clusters and organizations index and show views
+06a0122 add Admin and My Clusters to top nav in application.html.erb
+51e529c clean up devise built-in views: passwords, registrations, sessions, shared
+cdac131 update devise/registrations/edit.html.erb
+e84a8c9 update user routes, fix users edit view, delete user form, delete user new view
+002c00e update users/show.html.erb
+67c3e08 udpate users index.html.erb view
+9742c83 add user roles: unassigned, org_admin, admin
+9a7eca8 update navbar to include sign_in / sign_out link
+691d468 add scoped controller for devise registrations
+73c837a add devise scoped views
+36889f1 create devise user model, update migration, run migration
+4c71df2 install devise
+7152595 CRUD view style changes
+7ac2e5c Applied revert from master
+7bc87f1 revert all react code
+e86c77a Got some forms working
+0660314 updated schema
+9a1665e Rename url to hostname
+558a9b6 Add scaffolding and DB seed
+b4695c8 bugfix - remove compile errors from ventilator.tsx
+6f37b64 Merge pull request #2 from Open-Ventilator-Remote-Monitoring/feature-react
+929af26 bugfix - update ventilator.tsx to get raspberry pi demo working
+6fa19d2 Fixed issue with awaiting polling properly
+d49a1c6 Update to display data sooner after page load
+cfa8a7d Convert to React UI
+8b5dbce Add typescript support
+78f97e6 Update readme
+15a9e33 add contribute page
+621dfa0 Update readme
+904c559 Update readme
+87c84d1 Update readme
+effab1a Update Readme - add architecture image
+f1a4dd7 Update Readme
+f539332 update README.md
+e066f8e Update README.md
+2ff3b31 Update Readme.md
+aca7077 update readme
+708f10e update readme
+fa75855 update demo.js to query raspberry pi for arduino stats - add 2 second polling interval
+52fdce2 add live demo page to grab ventilator values from a raspberry pi endpoint
+ff7a5ea update about page
+023dd2e update README.md
+c1ae0c2 Create LICENSE
+b42a97b update index page
+cf9c5f4 update demo page
+3683adc update demo page
+82d2897 add fontawesome
+d5f503e rename application.css to application.scss
+88eb328 update index page
+a820445 add navbar to application.html.erb layout
+7263064 add bootstrap
+d9d6730 add Procfile
+d94f4a9 create static_pages controller and index page
+1f2a99c initial commit - create new rails app

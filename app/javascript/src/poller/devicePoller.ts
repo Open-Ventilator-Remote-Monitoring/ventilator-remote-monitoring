@@ -31,7 +31,10 @@ export class DevicePoller extends BaseDevicePoller {
       this._device.apiKey = this._device.apiKey.trim()
     }
 
-    this._headers = {}
+    this._headers = {
+      Origin: location.hostname
+    }
+
     if (this._device.apiKey) {
       this._headers[API_KEY_HEADER] = `${API_KEY_PREFIX} ${this._device.apiKey}`
     }

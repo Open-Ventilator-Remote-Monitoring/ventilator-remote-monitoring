@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import Select from 'react-select'
 import { IOrganization } from '../types'
 import Cluster from './cluster'
+import { RowSpread, StyledSelect } from './shared'
 
 interface IOption {
   value: number,
@@ -102,21 +102,17 @@ class Organization extends Component<IProps, IState> {
 
     let result = (
       <section>
-        <div className="row-spread">
-          <h3>
-            {organization.name}
-          </h3>
+        <RowSpread className="container-left row-spread">
+          <h3>{organization.name}</h3>
 
-          <Select
+          <StyledSelect
             value={selectedOption}
             className="select"
             options={this.options}
             onChange={value => this.changeSelection(value)}
           />
-        </div>
-        <section>
-          {clusterDisplay}
-        </section>
+        </RowSpread>
+        {clusterDisplay}
       </section>
     )
 

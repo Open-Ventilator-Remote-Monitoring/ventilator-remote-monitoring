@@ -49,11 +49,11 @@ export class HiddenVentilatorsHelper {
     localStorage.setItem(this._key, json)
   }
 
-  /** Get the JSON-encoded list of hidden ventilators for the given organization/cluster
+  /** Gets the JSON-encoded list of hidden ventilators for the given organization/cluster
    * from local storage and converts it to a Set. Removes any ventilator IDs that are no
-   * longer in the cluster. Persist it to local storage. Returns the set.
+   * longer in the cluster. Persists the Set back to local storage. Returns the Set.
    *
-   * If the set is missing or corrupted, returns an empty set.
+   * If the set is missing or corrupted, returns an empty Set.
    */
   readCleanHiddenSet = (): Set<number> => {
     let set = this.readHiddenSet()

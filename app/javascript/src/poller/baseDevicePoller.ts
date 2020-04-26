@@ -29,7 +29,7 @@ import { generateRandomValueBetween } from '../utils'
   // See other static fields at the bottom
 
   constructor(device: IVentilator, callback: DevicePollerCallback) {
-    console.log(`${device.name}: Constructor.`)
+    // console.log(`${device.name}: Constructor.`)
 
     this._device = device
     this._callback = callback
@@ -42,11 +42,12 @@ import { generateRandomValueBetween } from '../utils'
   }
 
   release(): void {
-    console.log(`${this._device.name}: Released.`)
+    //console.log(`${this._device.name}: Released.`)
     this._running = false
     clearInterval(this._timeout)
   }
 
+  /*
   pause(): void {
     console.log(`${this._device.name}: Pausing`)
     this._running = false
@@ -59,6 +60,7 @@ import { generateRandomValueBetween } from '../utils'
     let startupDelay = generateRandomValueBetween(0, BaseDevicePoller.STARTUP_DELAY)
     this._timeout = setTimeout(this.poll, startupDelay)
   }
+  */
 
   async poll(): Promise<void> {
     // console.log(`${this._device.name}: Entering Poll.`)
@@ -76,19 +78,20 @@ import { generateRandomValueBetween } from '../utils'
       return
     }
 
-    console.log(`${this._device.name}: PollResult: ${JSON.stringify(pollResult)}`)
+    // console.log(`${this._device.name}: PollResult: ${JSON.stringify(pollResult)}`)
+
+    this.validate(pollResult)
 
     this._callback(this._device, pollResult)
 
-    // You have noticed this was checked in cluster.tsx before creating the poller.
-    // That was just a premature optimization.
     if (! pollResult.apiReceiveStatus.ok &&
           (pollResult.apiReceiveStatus.alerts.noHostName ||
-            pollResult.apiReceiveStatus.alerts.noApiKey))
+            pollResult.apiReceiveStatus.alerts.noApiKey ||
+            pollResult.apiReceiveStatus.alerts.notAnAlarmSoundMonitor))
     {
       // There is no reason to keep sending these results over and over
       // Now that we sent them once, we'll stop polling forever
-      console.log(`${this._device.name}: noHostname or noApiKey. Done polling forever.`)
+      console.log(`${this._device.name}: noHostname or noApiKey or notAnAlarmSoundMonitor. Done polling forever.`)
       return
     }
 
@@ -99,6 +102,22 @@ import { generateRandomValueBetween } from '../utils'
                             : BaseDevicePoller.BAD_POLL_PERIOD_MS
 
     this._timeout = setTimeout(this.poll, newPollingPeriod)
+  }
+
+  /**
+   * Validate the apiResponse within the pollResult and update the
+   * apiReceiveStatus within the pollResult to reflect the validation result
+   * @param pollResult
+   */
+  validate(pollResult: IDevicePollResult): void {
+
+    // if not in the role of AlarmSoundMonitor, it's a comm alert
+    if (pollResult.apiReceiveStatus.ok) {
+      if (! pollResult?.apiResponse?.device?.roles?.ventilatorAlarmSoundMonitor ) {
+        pollResult.apiReceiveStatus.ok = false
+        pollResult.apiReceiveStatus.alerts = {notAnAlarmSoundMonitor: true}
+      }
+    }
   }
 
   /** Gives an opportunity for the sub-class
