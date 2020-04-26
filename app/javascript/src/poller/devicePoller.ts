@@ -41,7 +41,7 @@ export class DevicePoller extends BaseDevicePoller {
     // console.log(`${this._device.name}: Getting from New API at: ${this._newUrl}`)
 
     let response = await get<IDeviceApiResponse>(this._url, this._headers)
-    console.log(`${this._device.name}: API Response: ${JSON.stringify(response)}`)
+    // console.log(`${this._device.name}: API Response: ${JSON.stringify(response)}`)
 
     if (response.ok) {
       // todo: validate response: schema, roles/keys, timestamps, UOMs, etc.

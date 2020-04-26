@@ -45,7 +45,7 @@ class Organization extends Component<IProps, IState> {
    *  from localStorage. If it's not in local storage or there are no clusters
    *  by that name, just select the first cluster. If there are no clusters, return null
    */
-  setClusterSelection(): null {
+  setClusterSelection(): void {
     if (! this.options.length) {
       return null
     }
@@ -102,7 +102,7 @@ class Organization extends Component<IProps, IState> {
 
     let result = (
       <section>
-        <div className="select-row">
+        <div className="row-spread">
           <h3>
             {organization.name}
           </h3>

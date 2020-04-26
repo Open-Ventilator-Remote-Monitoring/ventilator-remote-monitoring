@@ -3,8 +3,10 @@ import { ICluster, IVentilator, IDevicePollResult } from '../types'
 import { DevicePoller } from '../poller/devicePoller'
 import { SimulatedDevicePoller } from '../poller/simulatedDevicePoller'
 import { BaseDevicePoller } from "../poller/baseDevicePoller"
-import {ExclamationTriangle, Circle} from './icons'
+import { ExclamationTriangle, Circle } from './icons'
 import { getFirstAlert, camelCaseToWords } from "../utils"
+import { SelectVentilators } from './selectVentilators'
+import { HiddenVentilatorsHelper } from '../hiddenVentilatorsHelper'
 
 type Results = {[key: number] : IDevicePollResult}
 type Buckets = "commError"  |   // includes missing host name
@@ -20,30 +22,42 @@ interface IProps {
 
 interface IState {
   results: Results
+  selectVentilatorsMode: boolean
+  visibleVentilators: IVentilator[]
 }
 
 class Cluster extends Component<IProps, IState> {
   _mounted: boolean = false
   _pollers: BaseDevicePoller[] = []
+  _helper: HiddenVentilatorsHelper = null
 
   constructor(props: IProps) {
     super(props)
+
+    this._helper = new HiddenVentilatorsHelper(props.cluster)
+
+    let hiddenVentilatorIds = this._helper.readCleanHiddenSet()
+    let visibleVentilators = props.cluster.ventilators.filter((v) => ! hiddenVentilatorIds.has(v.id))
+
     this.state = {
-      results: {}
+      results: {},
+      selectVentilatorsMode: false,
+      visibleVentilators
     }
+
     this.callback = this.callback.bind(this)
-    this.checkConfigAndCreatePoller = this.checkConfigAndCreatePoller.bind(this)
+    this.createPoller = this.createPoller.bind(this)
   }
 
   componentDidMount() {
     // console.log(`Component mounted !`)
     this._mounted = true
 
-    this._pollers = []
-    this.props.cluster.ventilators.forEach(this.checkConfigAndCreatePoller)
+    // start a poller for all visible monitors
+    this.state.visibleVentilators.forEach((v) => {this.createPoller(v)})
   }
 
-  checkConfigAndCreatePoller(device: IVentilator) {
+  createPoller(device: IVentilator) {
     // Rather than start a poller for a device that has no hostname or api-key
     // we just create the reponse and call callback just as the poller would do.
     let response = this.checkForMissingHostnameOrToken(device)
@@ -97,26 +111,66 @@ class Cluster extends Component<IProps, IState> {
     // console.log(`${device.name}: callback called. Mounted: ${this._mounted}`)
 
     if (! this._mounted) {
-      console.log(`${device.name}: Callback called, but component was unmounted`)
+      // console.log(`${device.name}: Callback called, but component was unmounted`)
       return
     }
 
     this.setState((state) => {
-      let results = {...state.results}
-      results[device.id] = pollResult
+      let results = {...state.results, [device.id]: pollResult}
       return {results}
     })
   }
 
   render() {
     const { cluster } = this.props
-    const { results } = this.state
+    const { results, selectVentilatorsMode, visibleVentilators } = this.state
+
+    if (selectVentilatorsMode) {
+      return (
+        <React.Fragment>
+          <h4>{cluster.name}</h4>
+          <section>
+            <h6>{`Please select the ${cluster.organization.ventilatorLocationTermPlural} you would like to show`}</h6>
+            <SelectVentilators cluster={cluster} onClose={this.exitSelectVentilatorsMode}/>
+          </section>
+        </React.Fragment>
+      )
+    }
+
+    // selectVentilatorMode is false
 
     if (! cluster.ventilators.length) {
       return (
         <React.Fragment>
           <h4>{cluster.name}</h4>
-          <h6>{`This ${cluster.organization.clusterTermSingular} has no ventilator monitors.`}</h6>
+          <section>
+            <h6>{`This ${cluster.organization.clusterTermSingular} has no ventilator monitors.`}</h6>
+          </section>
+        </React.Fragment>
+      )
+    }
+
+    let headerJsx = (
+      <div className="row-spread">
+        <h4>{cluster.name}</h4>
+        <button className="btn btn-outline-primary" onClick={this.enterSelectVentilatorsMode}>
+          {`Hide/Show ${cluster.organization.ventilatorLocationTermPlural}`}
+        </button>
+      </div>
+    )
+
+    if (! visibleVentilators.length) {
+      return (
+        <React.Fragment>
+          {headerJsx}
+          <section>
+            <h6>
+              {
+                `This ${cluster.organization.clusterTermSingular} has ventilator monitors but they are all hidden.
+                Please click the 'Hide/Show ${cluster.organization.ventilatorLocationTermPlural}' button to make some of them visible`
+              }
+            </h6>
+          </section>
         </React.Fragment>
       )
     }
@@ -125,13 +179,13 @@ class Cluster extends Component<IProps, IState> {
 
     let result = (
       <React.Fragment>
-        <h4>{cluster.name}</h4>
-        {this.getVentAlarmSoundMonitorsJsx(split.ventAlarmSoundMonitors, results)}
+        { headerJsx }
+        { this.getVentAlarmSoundMonitorsJsx(split.ventAlarmSoundMonitors, results) }
         {
           // Temporarily removing for MVP
           // this.getVentDataMonitorsJsx(split.ventDataMonitors, results)
         }
-        {this.getCommErrorsJsx(split.commError, results)}
+        { this.getCommErrorsJsx(split.commError, results) }
       </React.Fragment>
     )
 
@@ -311,7 +365,7 @@ class Cluster extends Component<IProps, IState> {
     )
   }
 
-  // Must ensure ventilator objects are not reused when switching clusters
+  // Ensure ventilator objects are not reused when switching clusters
   // by ensuring the key has both the cluster id and ventilator id
   getKey = (vent: IVentilator) => {
     return `${this.props.cluster.id}-${vent.id}`
@@ -336,6 +390,31 @@ class Cluster extends Component<IProps, IState> {
   getAlertText = (key: string) => {
     let result = Cluster.alertMapping[key] || camelCaseToWords(key)
     return result
+  }
+
+  enterSelectVentilatorsMode = () => {
+    // kill all of the pollers while the user is selecting ventilators to show/hide
+    this._pollers.forEach((p) => p.release())
+    this._pollers = []
+    this.setState({selectVentilatorsMode: true})
+  }
+
+  exitSelectVentilatorsMode = () => {
+    // since we're exiting selection mode, we need to re-read the list of monitors to hide
+    let hiddenVentilatorIds = this._helper.readHiddenSet()
+    let visibleVentilators = this.props.cluster.ventilators.filter((v) => ! hiddenVentilatorIds.has(v.id))
+
+    // user could have been in select mode for several minutes. Previous results are outdated so we delete them.
+    // We don't want to create the pollers for the now-visable monitors until the state is updat
+    this.setState({
+      selectVentilatorsMode: false,
+      visibleVentilators,
+      results: {}
+      }
+    )
+
+      // start new pollers for all of the visible ventilators
+    visibleVentilators.forEach((v) => {this.createPoller(v)})
   }
 }
 

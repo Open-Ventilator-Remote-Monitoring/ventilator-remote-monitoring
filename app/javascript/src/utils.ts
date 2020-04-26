@@ -57,3 +57,30 @@ export const camelCaseToWords = (cc: string) => {
   result = result.charAt(0).toUpperCase() + result.slice(1)
 }
 
+export const makeSetFromAry = <T>(ary: Array<T>): Set<T> => {
+  let set: Set<T> = new Set()
+  ary.forEach((v) => set.add(v))
+  return set
+}
+
+export const makeSetFromObjMember = <O, T>(ary: O[], fn: (O) => T): Set<T> => {
+  let set: Set<T> = new Set()
+  ary.forEach((v) => {
+    let tmp: T = fn(v)
+    set.add(tmp)
+  })
+  return set
+}
+
+export const setIntersect = <T>(setA: Set<T>, setB: Set<T>): Set<T> => {
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
+
+  let result: Set<T> = new Set()
+    for (let elem of setB) {
+        if (setA.has(elem)) {
+            result.add(elem)
+        }
+    }
+    return result
+}
+

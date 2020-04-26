@@ -14,6 +14,7 @@ import { generateRandomValueBetween } from '../utils'
   _device: IVentilator = null
   _callback: DevicePollerCallback = null
   _timeout = null
+  _running: boolean = false
 
   // When the device is connected, poll this often
   static GOOD_POLL_PERIOD_MS = 3000
@@ -28,8 +29,11 @@ import { generateRandomValueBetween } from '../utils'
   // See other static fields at the bottom
 
   constructor(device: IVentilator, callback: DevicePollerCallback) {
+    console.log(`${device.name}: Constructor.`)
+
     this._device = device
     this._callback = callback
+    this._running = true
 
     this.poll = this.poll.bind(this)
 
@@ -38,17 +42,46 @@ import { generateRandomValueBetween } from '../utils'
   }
 
   release(): void {
-    // console.log(`${this._device.name}: Released.`)
+    console.log(`${this._device.name}: Released.`)
+    this._running = false
     clearInterval(this._timeout)
+  }
+
+  pause(): void {
+    console.log(`${this._device.name}: Pausing`)
+    this._running = false
+    clearInterval(this._timeout)
+  }
+
+  unpause(): void {
+    console.log(`${this._device.name}: Unpausing`)
+    this._running = true
+    let startupDelay = generateRandomValueBetween(0, BaseDevicePoller.STARTUP_DELAY)
+    this._timeout = setTimeout(this.poll, startupDelay)
   }
 
   async poll(): Promise<void> {
     // console.log(`${this._device.name}: Entering Poll.`)
 
+    // Timer was cleared so not expecting this to happen
+    if (!this._running) {
+      console.log(`${this._device.name}: poll called while not running`)
+      return
+    }
+
     let pollResult = await this.pollDevice()
+
+    if (!this._running) {
+      console.log(`${this._device.name}: pollDevice completed but poller is no longer running. Returning`)
+      return
+    }
+
+    console.log(`${this._device.name}: PollResult: ${JSON.stringify(pollResult)}`)
 
     this._callback(this._device, pollResult)
 
+    // You have noticed this was checked in cluster.tsx before creating the poller.
+    // That was just a premature optimization.
     if (! pollResult.apiReceiveStatus.ok &&
           (pollResult.apiReceiveStatus.alerts.noHostName ||
             pollResult.apiReceiveStatus.alerts.noApiKey))
