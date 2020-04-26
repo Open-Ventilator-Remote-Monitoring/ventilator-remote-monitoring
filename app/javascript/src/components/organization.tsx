@@ -24,7 +24,7 @@ class Organization extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
 
-    console.assert(props.organization, "missing organization")
+    console.assert(!!props.organization, "missing organization")
 
     this.selectedClusterNameKey = `SelectedClusterName-${props.organization.id}`
 
@@ -102,7 +102,7 @@ class Organization extends Component<IProps, IState> {
 
     let result = (
       <section>
-        <RowSpread className="container-left row-spread">
+        <RowSpread>
           <h3>{organization.name}</h3>
 
           <StyledSelect

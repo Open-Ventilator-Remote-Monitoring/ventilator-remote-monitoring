@@ -12,6 +12,7 @@
     "allowSyntheticDefaultImports": true,
     "downlevelIteration": true,
     "importHelpers": true,
+    "types": []
   },
   "exclude": [
     "**/*.spec.ts",

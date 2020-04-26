@@ -14,13 +14,13 @@ const wrapper: FunctionComponent<IProps> = ( {className, children} ) => (
 
 export const Error = styled(wrapper)`
   color: red;
-  margin: 1.5rem 0 0 0;
+  margin: 1rem 0 0 0;
   font-weight: bold;
 `
 
 export const RowSpread = styled(wrapper)`
   max-width: 1200px;
-  margin: 1.5rem 0 0 0;
+  margin: 1rem 0 0 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -29,7 +29,7 @@ export const RowSpread = styled(wrapper)`
 
 export const RowPack = styled(wrapper)`
   max-width: 1200px;
-  margin: 1.5rem 0 0 0;
+  margin: 1rem 0 0 0;
   display: flex;
   justify-content: flex-start;
   align-items: center;

@@ -1,6 +1,8 @@
 
 .allColumns {
   border-top: 2px black solid;
+  padding-top: 1rem;
+  margin-top: 1rem;
   display: flex;
   flex-flow: row nowrap;
   align-items: flex-start;
@@ -12,14 +14,21 @@
   justify-content: flex-start;
   align-items: stretch;
   width: 300px;
+  margin-left: 1rem;
+  &:first-child {
+    margin-left: 0px;
+  }
 }
 
 .vent {
-  margin: 10px 10px 0px 0px;
+  margin-top: 10px;
   padding: 10px;
   border-radius: 10px;
   font-size: 2rem;
   text-align: center;
+  &:first-child {
+    margin-top: 0px;
+  }
 }
 
 .commFail {
@@ -138,7 +147,7 @@ input:checked + .slider:before {
 
 .ventVisTables div {
   width: 400px;
-  margin-right: 1em;
+  margin-left: 1em;
 }
 
 .ventVisTable {

@@ -25,8 +25,8 @@ export class SelectVentilators extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
 
-    console.assert(props.cluster, "missing cluster")
-    console.assert(props.cluster.organization, "cluster.organization is null")
+    console.assert(!!props.cluster, "missing cluster")
+    console.assert(!!props.cluster?.organization, "cluster.organization is null")
 
     this._helper = new HiddenVentilatorsHelper(props.cluster)
 
