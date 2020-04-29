@@ -1,10 +1,15 @@
 export interface IOrganization {
   id: number
   name: string
+  clusterTermSingular: string
+  clusterTermPlural: string
+  ventilatorLocationTermSingular: string
+  ventilatorLocationTermPlural: string
   clusters: ICluster[]
 }
 
 export interface ICluster {
+  organization?: IOrganization
   id: number
   name: string
   ventilators: IVentilator[]

@@ -12,6 +12,10 @@ const VENTILATORS_API_URI = '/api/v1/ventilators'
 let demoOrg: IOrganization = {
   id: 0x7FFFFFFF,
   name: 'DEMO Hospital',
+  clusterTermSingular: 'Wing',
+  clusterTermPlural: 'Wings',
+  ventilatorLocationTermSingular: 'Room',
+  ventilatorLocationTermPlural: 'Rooms',
   clusters: [
     {
       id: 1,
@@ -28,8 +32,12 @@ let demoOrg: IOrganization = {
   ]
 }
 
-// Populate the clusters with 6 ventilators each
-for (let i = 0; i < 6; i ++) {
+// fix-up backpointers from cluster to org
+demoOrg.clusters[0].organization = demoOrg
+demoOrg.clusters[1].organization = demoOrg
+
+// Populate the clusters with ventilator monitors
+for (let i = 1; i < 5; i ++) {
   demoOrg.clusters[0].ventilators.push({id: i, name: `East-${i}`, hostname: 'n/a', apiKey: 'n/a'})
   demoOrg.clusters[1].ventilators.push({id: i, name: `West-${i}`, hostname: 'n/a', apiKey: 'n/a'})
 }
@@ -94,13 +102,18 @@ class VentilatorTree extends Component<IProps, IState> {
       }
     }
 
+    // console.log(`Organization: ${JSON.stringify(organization, null, 2)}`)
+
     let errMsg = success ? null : 'There was an error while getting the Organization information from the server.'
 
     if (success) {
       // sort the cluster names
       sortObjects(organization.clusters, "name")
-      // for each cluster, sort the ventilators
-      organization.clusters.forEach((c) => sortObjects(c.ventilators, "name"))
+      // for each cluster, sort the ventilators, and fix-up a back-pointer to organization
+      organization.clusters.forEach((c) => {
+        c.organization = organization
+        sortObjects(c.ventilators, "name")
+      })
     }
 
     this.setState({

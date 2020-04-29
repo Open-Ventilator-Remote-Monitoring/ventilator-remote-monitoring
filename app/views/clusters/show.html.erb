@@ -1,7 +1,6 @@
 <%= render 'shared/link_to_org', organization: @organization %>
 
 <h4>
-  <span class="label">Cluster:</span>
   <%= @cluster.name %>
 </h4>
 
@@ -14,19 +13,19 @@
     <a href="<%= edit_cluster_path %>">
       <button class="btn btn-info">
         <i class="fas fa-cog"></i>
-        Cluster Settings
+        <%= @organization.cluster_term_singular %> Settings
       </button>
     </a>
   </section>
 <% end %>
 
 <section>
-  <h4>Ventilators in cluster: <%=@cluster.name %></h4>
+  <h4><%= @cluster.name %></h4>
   <table class="table">
     <col style="width:25%">
     <thead>
       <tr>
-        <th>Name</th>
+        <th><%= @cluster.organization.ventilator_location_term_singular %></th>
         <th>Hostname</th>
       </tr>
     </thead>
@@ -49,7 +48,7 @@
   <section>
     <a href="/ventilators/new?cluster_id=<%= @cluster.id %>">
       <button class="btn btn-info">
-        + Add New Ventilator
+        + Add New Ventilator Monitor
       </button>
     </a>
   </section>
