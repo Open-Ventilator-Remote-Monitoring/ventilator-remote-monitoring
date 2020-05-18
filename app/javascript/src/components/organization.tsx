@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import Select from 'react-select'
 import { IOrganization } from '../types'
 import Cluster from './cluster'
+import { RowSpread, StyledSelect } from './shared'
 
 interface IOption {
   value: number,
@@ -24,7 +24,7 @@ class Organization extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
 
-    console.assert(props.organization, "missing organization")
+    console.assert(!!props.organization, "missing organization")
 
     this.selectedClusterNameKey = `SelectedClusterName-${props.organization.id}`
 
@@ -45,7 +45,7 @@ class Organization extends Component<IProps, IState> {
    *  from localStorage. If it's not in local storage or there are no clusters
    *  by that name, just select the first cluster. If there are no clusters, return null
    */
-  setClusterSelection(): null {
+  setClusterSelection(): void {
     if (! this.options.length) {
       return null
     }
@@ -102,21 +102,17 @@ class Organization extends Component<IProps, IState> {
 
     let result = (
       <section>
-        <div className="select-row">
-          <h3>
-            {organization.name}
-          </h3>
+        <RowSpread>
+          <h3>{organization.name}</h3>
 
-          <Select
+          <StyledSelect
             value={selectedOption}
             className="select"
             options={this.options}
             onChange={value => this.changeSelection(value)}
           />
-        </div>
-        <section>
-          {clusterDisplay}
-        </section>
+        </RowSpread>
+        {clusterDisplay}
       </section>
     )
 

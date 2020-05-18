@@ -1,23 +1,18 @@
 
-// sort an array if objects by one of the members which must be a string
-
+/**
+ * Sort an array of objects using the value at [key] in each object.
+ * When numners are encountered within the string (such as Room10 and Room2),
+ * sort by the number value of the numbers (so Room2 comes before Room10).
+ * @param ary The array to sort
+ * @param key The name of a key within the object to sort on
+ */
 export const sortObjects = (ary: {}[], key: string): void => {
-  // Instead of converting every key to upper case for every compare,
-  // we just do it once by making an object where the key is the original
-  // value for key, and the value is the upperCase value for key
-  // (obviously this assumes it is cheaper to do the object lookup than
-  // to convert every letter to uppercase - TBD)
-
-  let cased = {}
-  ary.forEach(obj => {
-    let value : string = obj[key]
-    cased[value] = value.toUpperCase()
-  })
+  var collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base', ignorePunctuation: true});
 
   let compare = (objA: {}, objB: {}) => {
-    var a = cased[objA[key]]
-    var b = cased[objB[key]]
-    return (a < b) ? -1 : (a > b) ? 1 : 0
+    var a = objA[key]
+    var b = objB[key]
+    return collator.compare(a, b)
   }
 
   ary.sort(compare)
@@ -56,4 +51,64 @@ export const camelCaseToWords = (cc: string) => {
   let result = cc.replace( /([A-Z])/g, " $1" )
   result = result.charAt(0).toUpperCase() + result.slice(1)
 }
+
+export const makeSetFromAry = <T>(ary: Array<T>): Set<T> => {
+  let set: Set<T> = new Set()
+  ary.forEach((v) => set.add(v))
+  return set
+}
+
+export const makeSetFromObjMember = <O, T>(ary: O[], fn: (O) => T): Set<T> => {
+  let set: Set<T> = new Set()
+  ary.forEach((v) => {
+    let tmp: T = fn(v)
+    set.add(tmp)
+  })
+  return set
+}
+
+export const setIntersect = <T>(setA: Set<T>, setB: Set<T>): Set<T> => {
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
+
+  let result: Set<T> = new Set()
+    for (let elem of setB) {
+        if (setA.has(elem)) {
+            result.add(elem)
+        }
+    }
+    return result
+}
+
+/** Find a number of rows and columns that will contain count items,
+   * ideally within the limits of width and height. It is OK to exceed
+   * height, but not width.
+   * */
+export const getLayout = (count: number, width: number, height: number, itemWidth: number): {rows: number, cols: number}=> {
+  console.log(`getLayout called with width: ${width} height: ${height} count: ${count}`)
+
+  let rows, cols  = 0
+
+  if (! count || ! width || ! height) {
+    console.log('count or width or height is zero, returning [0, 0]')
+    return {rows, cols}
+  }
+
+  cols = Math.floor(width / itemWidth) || 1
+
+  rows = count % cols === 0
+      ? count / cols
+      : Math.floor(count / cols) + 1
+
+  // We compute columns again. Consider this: We have 48 items
+  // and width allows for 9 columns. This will result in rows = 6 (Math.floor(48/9) + 1)
+  // Yet with rows of 6, we only need 8 columns.
+  cols = count % rows === 0 ? count / rows : Math.floor(count / rows) + 1
+
+  console.log(`cols is ${cols} and rows is ${rows}`)
+
+  console.assert(rows * cols >= count, "Not enought rows and columns to hold all of the monitors")
+
+  return {rows, cols}
+}
+
 

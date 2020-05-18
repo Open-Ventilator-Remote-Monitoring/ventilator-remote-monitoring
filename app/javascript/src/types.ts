@@ -21,6 +21,7 @@ export interface IVentilator {
   name: string
   hostname?: string
   apiKey?: string
+  status?: number   // added for ClusterC option, so we can sort the vents based on status
 }
 
 // Following types define the result of calling either /api/ventilator or /api/v1/device
@@ -44,6 +45,7 @@ export interface IApiReceiveStatus {
     schemaValidation?: boolean
     uomMismatch?: boolean
     staleTimeStamp?: boolean
+    notAnAlarmSoundMonitor?: boolean
   }
 }
 
