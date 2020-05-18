@@ -13,7 +13,7 @@ require("turbolinks").start()
 // Please stay on jQuery 3.4.1 until this is closed.
 // https://github.com/twbs/bootstrap/issues/30553
 
-//import 'bootstrap/js/dist/alert'
+import 'bootstrap/js/dist/alert'
 import 'bootstrap/js/dist/button'
 //import 'bootstrap/js/dist/carousel'
 import 'bootstrap/js/dist/collapse'
