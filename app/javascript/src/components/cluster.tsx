@@ -231,7 +231,7 @@ class Cluster extends Component<IProps, IState> {
 
     let headerJsx = (
       <RowSpread>
-        <h4>{cluster.name} (b)</h4>
+        <h4>{cluster.name}</h4>
         {hiddenMonitorsJsx}
         <button className="btn btn-info" onClick={this.enterSelectVentilatorsMode}>
           {`Hide/Show ${cluster.organization.ventilatorLocationTermPlural}`}
