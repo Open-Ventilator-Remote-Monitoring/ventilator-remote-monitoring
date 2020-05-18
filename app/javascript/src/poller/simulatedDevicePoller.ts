@@ -3,8 +3,8 @@ import { BaseDevicePoller } from './baseDevicePoller'
 import cloneDeep from 'lodash.clonedeep'
 // import { clamp, generateRandomValueBetween } from '../utils'
 
-const VENTILATOR_NAMES_WITH_SIMULATED_COMM_FAILURE = ["East-2", "West-4"]
-const VENTILATOR_NAMES_WITH_AUDIO_ALARM_ALERT = ["East-4"]
+const VENTILATOR_NAMES_WITH_SIMULATED_COMM_FAILURE = ["Room E-4", "Room E-4"]
+const VENTILATOR_NAMES_WITH_AUDIO_ALARM_ALERT = ["Room E-2", "Room W-1"]
 
 export class SimulatedDevicePoller extends BaseDevicePoller {
   // We save the last result so we can change just one measurement field

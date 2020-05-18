@@ -32,6 +32,6 @@ DemoOrg.clusters[1].organization = DemoOrg
 
 // Populate the clusters with ventilator monitors
 for (let i = 1; i < 5; i ++) {
-  DemoOrg.clusters[0].ventilators.push({id: i, name: `East-${i}`, hostname: 'n/a', apiKey: 'n/a'})
-  DemoOrg.clusters[1].ventilators.push({id: i, name: `West-${i}`, hostname: 'n/a', apiKey: 'n/a'})
+  DemoOrg.clusters[0].ventilators.push({id: i, name: `Room E-${i}`, hostname: 'n/a', apiKey: 'n/a'})
+  DemoOrg.clusters[1].ventilators.push({id: i, name: `Room W-${i}`, hostname: 'n/a', apiKey: 'n/a'})
 }
